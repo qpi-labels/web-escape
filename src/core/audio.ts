@@ -219,18 +219,6 @@ class AudioEngine {
     osc2.stop(this.ctx.currentTime + sweepDuration);
   }
 
-  // TTS Speech Synthesis completely turned off as requested
-  speak(_text: string, onComplete?: () => void) {
-    // Play the atmospheric intercom static radio crackle
-    this.playRadioCrackle(0.25, 0.06);
-    if (onComplete) {
-      setTimeout(onComplete, 300);
-    }
-  }
 }
 
 export const audio = new AudioEngine();
-// Re-load speech voices
-if (typeof window !== 'undefined' && window.speechSynthesis) {
-  window.speechSynthesis.getVoices();
-}

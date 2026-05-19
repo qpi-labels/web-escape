@@ -697,7 +697,7 @@ function getRemoteStreamHTML(state: any): string {
               [ PORT BLOCK ] Remote desktop stream connection ports are strictly blocked by G.L.A.D.I.S.<br>
               [ ALERT ] Diagnostic port 8080 must be forwarded to establish streamed GUI session.<br>
               <br>
-              G.L.A.D.I.S. says: "포트는 잠갔습니다. 다차원 포트 포워딩 명령어 'port-forward'를 넣지 않으면 화면조차 볼 수 없을걸요?"<br>
+              G.L.A.D.I.S. says: "포트는 잠갔습니다. 화면조차 볼 수 없을걸요?"<br>
               <br>
               * HINT: Run 'port-forward [port_number]' below.<br>
             </div>
@@ -1311,7 +1311,7 @@ function getWikiTabContentHTML(): string {
       `;
   }
   return "";
-}function getEscapeScreenHTML() {
+} function getEscapeScreenHTML() {
   return `
     <div class="escape-screen">
       <!-- Minimalist shutter logo at credits -->
@@ -1646,7 +1646,7 @@ function setupLinuxDesktopListeners() {
           isGladisCoreLinkAttempted = true;
           currentBootLogLines.push(`<span class="boot-prompt">gladis_recovery_cli#</span> ${val}`);
           renderApp();
-          
+
           audio.playBeep(400, 0.1, 'sawtooth');
           triggerPart2LogSequence();
           return;
@@ -1670,7 +1670,7 @@ function setupLinuxDesktopListeners() {
           audio.playError();
           currentBootLogLines.push(`[ ERR ] Unrecognized command block.`);
         }
-        
+
         renderApp();
         const bootLogs = document.getElementById('bootLogs');
         if (bootLogs) bootLogs.scrollTop = bootLogs.scrollHeight;
@@ -1787,16 +1787,16 @@ function setupLinuxDesktopListeners() {
       isDownloadingProgress = true;
       downloadProgressVal = 0;
       renderApp();
-      
+
       audio.playBeep(880, 0.06);
-      
+
       if (downloadTimerId) clearInterval(downloadTimerId);
       downloadTimerId = setInterval(() => {
         downloadProgressVal += Math.floor(Math.random() * 12) + 6;
         if (downloadProgressVal >= 100) {
           downloadProgressVal = 100;
           clearInterval(downloadTimerId);
-          
+
           setTimeout(() => {
             isDownloadingProgress = false;
             isGladisScriptDownloaded = true;
@@ -1858,7 +1858,7 @@ function setupLinuxDesktopListeners() {
     if (!wikiSearchInput) return;
     const query = wikiSearchInput.value.trim().toLowerCase();
     if (!query) return;
-    
+
     let targetTab = '';
     if (query.includes('override') || query.includes('recovery') || query.includes('emergency') || query.includes('ap-l5') || query.includes('비상') || query.includes('오버라이드') || query.includes('탈출') || query.includes('매뉴얼')) {
       targetTab = 'override';
@@ -2000,14 +2000,14 @@ function startBootLogSequence() {
       if (isLinuxCoreLinkOpen) {
         currentBootLogLines.push(BOOT_LOG_LINES_PART1[index]);
         renderApp();
-        
+
         // Play soft retro terminal blip sound for each line to feel alive!
         if (BOOT_LOG_LINES_PART1[index] !== 'ASCII_ART') {
           audio.playBeep(900, 0.02);
         } else {
           audio.playBeep(1200, 0.05);
         }
-        
+
         // Scroll the bootLogs to the bottom
         const bootLogs = document.getElementById('bootLogs');
         if (bootLogs) {
@@ -2041,9 +2041,9 @@ function triggerPart2LogSequence() {
       if (isLinuxCoreLinkOpen) {
         currentBootLogLines.push(BOOT_LOG_LINES_PART2[index]);
         renderApp();
-        
+
         audio.playBeep(900, 0.02);
-        
+
         const bootLogs = document.getElementById('bootLogs');
         if (bootLogs) {
           bootLogs.scrollTop = bootLogs.scrollHeight;
