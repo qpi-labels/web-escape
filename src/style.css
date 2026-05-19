@@ -632,6 +632,16 @@ html, body {
   color: #000;
 }
 
+.wiki-link {
+  color: #1a73e8;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+}
+.wiki-link:hover {
+  color: #1557b0;
+}
+
 /* ==========================================================
    STAGE 2 RESIZE PUZZLE
    ========================================================== */

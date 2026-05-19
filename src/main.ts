@@ -306,21 +306,48 @@ function getLinuxDesktopScreenHTML() {
               <button class="linux-browser-btn">⟳</button>
               <div class="linux-browser-addressbar">http://wiki.aperture.local</div>
             </div>
+            <!-- Wiki Search Header Bar -->
+            <div class="wiki-header-bar" style="display:flex; justify-content:space-between; align-items:center; padding:6px 14px; background:#f1f5f9; border-bottom:1px solid #cbd5e1; height:38px;">
+              <span style="font-size:0.72rem; color:#475569; font-family:var(--font-mono); font-weight:bold;">🔬 APERTURE SCIENCE INTERNAL WIKI</span>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="text" id="wikiSearchInput" placeholder="위키 검색 (예: override, 포탈...)" style="padding:3px 8px; font-size:0.72rem; border:1px solid #cbd5e1; border-radius:4px; width:170px; background:#fff; color:#000;" />
+                <button id="wikiSearchBtn" style="background:#475569; color:#fff; border:none; padding:3px 10px; border-radius:4px; font-size:0.72rem; cursor:pointer; font-weight:bold;">검색</button>
+              </div>
+            </div>
             <!-- Wiki Embed Area -->
-            <div class="window-content wiki-app" style="padding:0; height:440px;">
+            <div class="window-content wiki-app" style="padding:0; height:402px;">
               <!-- Sidebar -->
-              <div class="wiki-sidebar">
-                <div class="wiki-logo-area">
-                  <svg style="width:20px;height:20px;" viewBox="0 0 100 100" fill="currentColor">
+              <div class="wiki-sidebar" style="width:220px; background:#f1f5f9; border-right:1px solid #cbd5e1; display:flex; flex-direction:column; padding:12px 0; overflow-y:auto;">
+                <div class="wiki-logo-area" style="padding:0 12px 12px 12px; border-bottom:1px solid #cbd5e1; margin-bottom:8px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:#0f172a; display:flex; align-items:center; gap:6px;">
+                  <svg style="width:16px;height:16px;color:#0f172a;" viewBox="0 0 100 100" fill="currentColor">
                     <path d="M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z M50,92C26.8,92,8,73.2,8,50S26.8,8,50,8s42,18.8,42,42S73.2,92,50,92z"/>
                     <polygon points="50,15 80,32.3 65,58.3 35,58.3 20,32.3"/>
                   </svg>
-                  <span>Aperture Portal</span>
+                  <span>Aperture Wiki</span>
                 </div>
-                <button class="wiki-nav-btn ${activeWikiTab === 'home' ? 'active' : ''}" data-tab-id="home">🏠 Wiki Home</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'aperture' ? 'active' : ''}" data-tab-id="aperture">🏢 Aperture Science</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'gladis' ? 'active' : ''}" data-tab-id="gladis">🤖 G.L.A.D.I.S. Core</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'override' ? 'active' : ''}" data-tab-id="override">📘 G.L.A.D.I.S. Emergency Manual</button>
+                
+                <button class="wiki-nav-btn ${activeWikiTab === 'home' ? 'active' : ''}" data-tab-id="home" style="padding:6px 12px; font-size:0.75rem;">🏠 위키 홈 (Home)</button>
+                
+                <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🏢 에퍼쳐 사이언스</div>
+                <button class="wiki-nav-btn ${activeWikiTab === 'about_aperture' ? 'active' : ''}" data-tab-id="about_aperture" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">회사 소개 (About)</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'history_aperture' ? 'active' : ''}" data-tab-id="history_aperture" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">70년 역사 (History)</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'culture_aperture' ? 'active' : ''}" data-tab-id="culture_aperture" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">사내 근무 지침 (Culture)</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'black_mesa' ? 'active' : ''}" data-tab-id="black_mesa" style="padding:6px 12px; font-size:0.75rem; padding-left:20px; color:#b91c1c;">라이벌: 블랙 메사</button>
+
+                <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🔬 주요 연구 분야</div>
+                <button class="wiki-nav-btn ${activeWikiTab === 'portal_gun' ? 'active' : ''}" data-tab-id="portal_gun" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">휴대용 포탈 장치</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'gels' ? 'active' : ''}" data-tab-id="gels" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">특수 화학 젤 시리즈</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'cake' ? 'active' : ''}" data-tab-id="cake" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">보상 케이크 (Cake)</button>
+
+                <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🤖 인공지능 연구소</div>
+                <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.O.S. 시스템</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.I.S. 스펙 명세</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
+
+                <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">⚠️ 비상 복구 규격</div>
+                <button class="wiki-nav-btn ${activeWikiTab === 'neurotoxin_control' ? 'active' : ''}" data-tab-id="neurotoxin_control" style="padding:6px 12px; font-size:0.75rem; padding-left:20px; color:#ba1a1a;">신경독 통제 지침</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'override' ? 'active' : ''}" data-tab-id="override" style="padding:6px 12px; font-size:0.75rem; padding-left:20px; color:#1a73e8; font-weight:bold;">비상 오버라이드 규범</button>
               </div>
               <!-- Article View -->
               <div class="wiki-article-view">
@@ -815,171 +842,372 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
   `;
 }
 
-function getWikiTabContentHTML() {
+function getWikiTabContentHTML(): string {
   switch (activeWikiTab) {
     case 'home':
       return `
-        <h3 class="wiki-title-large">Welcome to Aperture Science Knowledge Base</h3>
-        <div style="background: linear-gradient(135deg, #191c20, #2d2d35); color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
-          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--md-sys-color-primary); font-weight: bold; margin-bottom: 6px;">INTERNAL INTRANET PORTAL</div>
-          <h2 style="font-size: 1.5rem; font-weight: 300; margin: 0 0 10px 0;">"Testing is the Future, and Future starts Today."</h2>
-          <p style="font-size: 0.82rem; line-height: 1.5; color: #ccc; margin: 0;">
-            본 시스템은 에퍼쳐 사이언스 인리치먼트 센터(Aperture Science Enrichment Center) 임직원을 위한 내부 지식 관리 포털입니다. 연구 실험 보고서, 피실험용 장비 정비 지침, 인격 코어 유지 보수 규범을 총망라하고 있습니다.
-          </p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-          <div style="background: #ffffff; border: 1px solid #ced0db; padding: 12px; border-radius: 6px;">
-            <strong style="font-size: 0.85rem; color: #191c20; display: block; margin-bottom: 4px;">🔥 오늘의 명언 (Founder's Archives)</strong>
-            <blockquote style="font-size: 0.76rem; color: #555; line-height: 1.45; border-left: 2px solid var(--md-sys-color-primary); padding-left: 8px; margin: 4px 0 0 0; font-style: italic;">
-              "과학은 '왜?'가 아니라 '왜 안 돼?'를 묻는 겁니다! 왜 우리의 과학이 이토록 위험하냐고요? 그렇다면 왜 안전한 과학이랑 결혼하지 않으셨습니까? 과학을 너무 사랑한 나머지 엉덩이도 안 부딪히고 나갈 수 있는 특별한 비상구 문이라도 개발해 보지 그래요? 왜냐면 당신은 해고니까요!"<br>
-              <span style="font-weight: bold; font-style: normal; display: block; margin-top: 4px; text-align: right; color: #222;">— 케이브 존슨 (Cave Johnson), 설립자 & CEO</span>
-            </blockquote>
-          </div>
-
-          <div style="background: #ffffff; border: 1px solid #ced0db; padding: 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.76rem;">
-            <strong style="font-size: 0.85rem; color: #191c20;">📡 시스템 통합 통신망 상황판</strong>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:3px;">
-              <span>G.L.A.D.I.S. 인격 인터페이스</span>
-              <span style="color:#d50000; font-weight:bold;">[ WARNING - CRITICAL ]</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:3px;">
-              <span>연구소 신경독 대피 통제 밸브</span>
-              <span style="color:#00c853; font-weight:bold;">[ SECURE / MANUAL ]</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span>액티브 테스트 챔버 피실험자 수</span>
-              <span style="color:#ff9800; font-weight:bold; font-family:var(--font-mono);">1 (Subject AP-09)</span>
-            </div>
+        <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:12px; border-radius:6px; margin-bottom:16px; color:#410002; font-size:0.75rem; line-height:1.5; display:flex; gap:10px; align-items:center;">
+          <span style="font-size:1.5rem; user-select:none;">☣️</span>
+          <div>
+            <strong style="color:#ba1a1a;">🚨 [경보] 메인 코어 G.L.A.D.I.S. 자폭 안전 격벽 긴급 기동 프로토콜 안내</strong><br>
+            현재 시스템 인격 제어부 이상으로 인해 연구소 내 신경독 방출 밸브 오버랩 격리가 활성화되었습니다. 즉각 원격 셧다운 시퀀스를 수립하십시오. 콜드 리부트와 상세 6단계 세부 회복 공정은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#ba1a1a;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span>을 필히 복호화 참조하십시오.
           </div>
         </div>
 
-        <h4 style="font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 2px solid #191c20; padding-bottom: 4px;">📂 즐겨찾는 핵심 문서 목록</h4>
-        <ul style="padding-left: 20px; font-size: 0.8rem; line-height: 1.7; color: #444;">
-          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=override]').click()">[📘 G.L.A.D.I.S. 비상 오버라이드 및 커널 복구 가이드라인]</span> — G.L.A.D.I.S.의 6단계 인격 루프 장벽 무력화 매뉴얼</li>
-          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=aperture]').click()">[🏢 에퍼쳐 사이언스 약사(略史): 샤워 커튼부터 포탈건까지]</span> — 위대한 회사의 탄생과 파괴적 혁신의 역사</li>
-          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=gladis]').click()">[🤖 G.L.A.D.I.S. 인격 진단 시스템 스펙 명세서]</span> — 핵심 연산 메커니즘과 도덕성 제어구 결손 백업 메모</li>
+        <h3 class="wiki-title-large" style="margin-top:0;">🏠 에퍼쳐 사이언스 인트라넷 위키 포털 (Aperture Science Wiki Portal)</h3>
+        <p class="wiki-paragraph" style="font-size:0.8rem; line-height:1.6;">
+          <strong>Aperture Portal</strong>에 오신 것을 환영합니다! 본 위키 포털은 에퍼쳐 사이언스(Aperture Science, Inc.) 연구 개발 부서, 생산 시설 관리팀 및 강화 학습 센터 피실험자 케어 모듈을 통합 관리하는 사내 전용 정보 아카이브 시스템입니다.
+        </p>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div class="md3-card" style="padding:10px; border-radius:8px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <h4 style="font-size:0.8rem; margin:0 0 6px 0; color:var(--md-sys-color-primary);">🏢 에퍼쳐 사이언스 바로가기</h4>
+            <ul class="wiki-list" style="font-size:0.74rem; margin:0; padding-left:16px;">
+              <li>회사 공식 현황 및 미션: <span class="wiki-link" data-go-tab="about_aperture">회사 개요 (About)</span></li>
+              <li>샤워커튼부터 포탈건까지: <span class="wiki-link" data-go-tab="history_aperture">70년 역사 (History)</span></li>
+              <li>탕비실 규칙 및 젤 취급 가이드: <span class="wiki-link" data-go-tab="culture_aperture">사내 근무 지침 (Culture)</span></li>
+              <li>그 비열한 특허 도둑놈들: <span class="wiki-link" data-go-tab="black_mesa" style="color:#b91c1c;">라이벌: 블랙 메사 (Rival)</span></li>
+            </ul>
+          </div>
+          <div class="md3-card" style="padding:10px; border-radius:8px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <h4 style="font-size:0.8rem; margin:0 0 6px 0; color:var(--md-sys-color-primary);">🔬 주요 연구 및 인공지능</h4>
+            <ul class="wiki-list" style="font-size:0.74rem; margin:0; padding-left:16px;">
+              <li>시공간 왜곡 무기 규격: <span class="wiki-link" data-go-tab="portal_gun">휴대용 포탈 장치 (Spec)</span></li>
+              <li>반발성, 가속성, 전도성 젤: <span class="wiki-link" data-go-tab="gels">특수 화학 젤 시리즈 (Formula)</span></li>
+              <li>인격 동조 및 제어 인터페이스: <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S. 기술 명세</span></li>
+              <li>초저연산 구동 비상 백업: <span class="wiki-link" data-go-tab="potato_battery">감자 배터리 어댑터 (Bypass)</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <blockquote style="border-left:4px solid #1a73e8; padding-left:10px; margin:12px 0; font-style:italic; font-size:0.75rem; color:#475569;">
+          "과학이란 언제나 완성될 수 없는 질문을 던지는 것이다. 그리고 그 질문에 답하기 위해 우리는 피실험자를 모집한다. 그들이 동의했든 안 했든 간에." <br>
+          — 설립자 케이브 존슨 (Cave Johnson), 1978년 주주 총회 회고록 중
+        </blockquote>
+      `;
+
+    case 'about_aperture':
+      return `
+        <h3 class="wiki-title-large">🏢 에퍼쳐 사이언스 (Aperture Science, Inc.)</h3>
+        <p class="wiki-paragraph">
+          <strong>에퍼쳐 사이언스(Aperture Science, Inc.)</strong>는 미국 오하이오주 어퍼 미시간 제도에 본사를 둔 다국적 극비 첨단 과학 연구 기관입니다. 1943년 설립자 케이브 존슨에 의해 설립된 '에퍼쳐 Fixtures'라는 작은 샤워 커튼 제조업체에서 출발하였으나, 현재는 다차원 물리 제어, 인공지능 인격 동조, 우주공간 포탈 터널링 기술을 선도하는 초첨단 연방 계약 연구 기업으로 성장했습니다.
+        </p>
+
+        <h4 style="font-size:0.9rem; margin-top:14px; margin-bottom:6px; color:var(--md-sys-color-primary); border-bottom:1px solid #e2e8f0; padding-bottom:4px;">📊 기업 종합 사양 지표</h4>
+        <table style="width:100%; border-collapse:collapse; font-size:0.72rem; margin-bottom:14px;">
+          <thead>
+            <tr style="background:#f1f5f9; border-bottom:2px solid #cbd5e1; text-align:left;">
+              <th style="padding:6px;">항목 (Parameter)</th>
+              <th style="padding:6px;">세부 정보 (Value / Description)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold; width:30%;">공식 사명</td>
+              <td style="padding:6px;">에퍼쳐 사이언스 주식회사 (Aperture Science, Inc.)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold;">설립연도</td>
+              <td style="padding:6px;">1943년 (Aperture Fixtures로 출범)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold;">대표 최고 경영자</td>
+              <td style="padding:6px;">케이브 존슨 (Founder / 1982년 유고 상태 돌입) -> 비서실장 캐롤라인 대행 -> G.L.A.D.O.S. 통합 코어 자동화 통제</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold;">메인 연구소 본진</td>
+              <td style="padding:6px;">오하이오주 미시간 인근 지하 폐 소금광산 (깊이 4,200m에 달하는 거대 지하 돔 시설)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold;">사내 슬로건</td>
+              <td style="padding:6px;">"We do what we must, because we can." (우린 할 수 있으니까, 해야만 하는 일을 합니다.)</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:6px; font-weight:bold;">연방 정부 승인 등급</td>
+              <td style="padding:6px;">Level 5 비밀 취급 인가 사업소 (특수 다차원 응용물질 승격 계약군)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:0.9rem; margin-top:14px; margin-bottom:6px; color:var(--md-sys-color-primary);">🔬 에퍼쳐 풍요 증진 센터 (Aperture Enrichment Center)</h4>
+        <p class="wiki-paragraph" style="font-size:0.78rem;">
+          에퍼쳐 사이언스의 거의 모든 연구 및 테스트는 오하이오주의 방대한 지하 소금광산을 수직 및 수평 굴착하여 구축한 <strong>Enrichment Center (에퍼쳐 과학 증진 센터)</strong>에서 이루어집니다. 이 시설은 수만 개의 무기 가변형 모듈 테스트 챔버(Test Chamber)로 구성되어 있으며, 메인 중앙 통제 인공지능인 <span class="wiki-link" data-go-tab="glados">G.L.A.D.O.S.</span>와 보조 진단 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S.</span>에 의해 100% 자동 변형 설계되는 세계 최대의 과학 실험실 인프라입니다.
+        </p>
+      `;
+
+    case 'history_aperture':
+      return `
+        <h3 class="wiki-title-large">🏢 에퍼쳐 사이언스 70년사 (1943 - 2026)</h3>
+        <p class="wiki-paragraph" style="font-size:0.78rem; line-height:1.6;">
+          에퍼쳐 사이언스의 역사는 혁신적인 사고와 비합리적인 안전 규격 무시가 어떻게 결합해 위대한 초과학을 창달할 수 있는지를 보여주는 산 증거입니다.
+        </p>
+
+        <div style="position:relative; padding-left:20px; border-left:2px solid #cbd5e1; margin-bottom:16px; font-size:0.75rem; display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1943년 - 1947년: 욕실의 제왕 (The Shower Curtain Years)</span>
+            케이브 존슨은 에퍼쳐의 전신인 <strong>'Aperture Fixtures'</strong>를 창립하고 특허받은 고탄성 방수 합성수지를 기반으로 미군 및 하이엔드 시장에 샤워 커튼을 전적으로 납품하기 시작했습니다. 이 샤워 커튼은 방수 능력이 뛰어나 극비 군사 기지 연구 시설의 격벽으로도 소량 전용되었습니다.
+          </div>
+          <div>
+            <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1950년대: 에퍼쳐 사이언스 이노베이터스 (Aperture Science Innovators)</span>
+            케이브 존슨은 샤워 커튼의 엄청난 수익을 바탕으로 브레인 트러스트를 고용, 사명을 'Aperture Science Innovators'로 변경하고 오하이오주의 버려진 폐광 소금 광산을 통째로 헐값에 사들여 대규모 지하 연구소 굴착 공사에 착수했습니다. 이때 초기형 점프 부스터 젤인 <span class="wiki-link" data-go-tab="gels">반발성 젤(Repulsion Gel)</span>을 우연한 세탁 세제 실험 도중 발견하였습니다.
+          </div>
+          <div>
+            <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1970년대: 에퍼쳐 사이언스 상표 개편 및 달 먼지 비극 (Moon Dust Tragedy)</span>
+            사명을 <strong>Aperture Science</strong>로 현대화하고 연방 정부의 여러 다차원 터널 계약 수주에 올인하기 시작했습니다. 그러나 1970년대 후반, 포탈 전도물질의 극한 전도를 연구하기 위해 월면 탐사선 잔해의 '달 먼지(Moon Dust)'를 7천만 달러에 매입하여 파쇄 혼합물을 만들다 케이브 존슨이 호흡기 심각 오염 중독으로 쓰러지게 되었습니다.
+          </div>
+          <div>
+            <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1980년대~현재: 인공지능 인격 보정 및 컴퓨터 동조</span>
+            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">G.L.A.D.O.S. (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
+          </div>
+        </div>
+      `;
+
+    case 'culture_aperture':
+      return `
+        <h3 class="wiki-title-large">📋 에퍼쳐 사이언스 사내 근무 지침서 (HR-GUIDE-L4)</h3>
+        <p class="wiki-paragraph" style="font-size:0.78rem;">
+          본 문서는 에퍼쳐 사이언스 사내 직무 이행 효율성 극대화를 위해 법무 부서에서 기획한 강력한 내부 직원용 의무 및 패널티 시스템 규격입니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:#ba1a1a; border-left:3px solid #ba1a1a; padding-left:6px;">📍 사내 핵심 의무 및 패널티 (Mandatory Directives)</h4>
+        <div class="wiki-code-block" style="font-size:0.72rem; line-height:1.5;">
+          [규격 14]: 젤 시식 엄격 금지 (Do NOT Eat Gels)
+          * 반발성 젤(Repulsion Gel) 혹은 가속성 젤(Propulsion Gel)을 탕비실 요거트로 오인하여 섭취할 경우, 위장이 초당 12,000회 진동하여 영양 흡수가 불가능해지며 영구 골격 상실 증후군에 걸립니다. 적발 즉시 잔여 보수를 전액 압수하고 소화 시스템 교체 동역학 실험체로 승격됩니다.
+
+          [규격 62]: 라이벌 기업 발설 시 징계 (Strict Censorship)
+          * 사내에서 단어 "블랙 메사(Black Mesa)" 혹은 "블랙"과 "메사"의 연쇄 연상 단어를 발화, 작문, 파싱하는 임직원은 15%의 급여 삭감과 함께 4200m 지하 소금 먼지 청소 봉사 90일에 처해집니다. 그 기생충들의 언급은 에퍼쳐의 신성한 과학 기품을 훼손시킵니다.
+
+          [규격 99]: 약속된 과학 보상물 케이크 관련 (Enrichment Cake)
+          * 피실험자와 하급 연구 부하들에게 dangling(제시 유혹)용으로 세팅된 케이크는 철저히 부서 승인을 받아야 합니다. 비공인 케이크 제작용 향료 및 화학 믹싱 행위는 엄단하며, "케이크는 거짓말(The Cake is a Lie)"이라는 붉은 낙서를 벽면에 도포하는 자는 즉각 기만 방지 심리학 테스트의 강제 피실험자로 전환됩니다.
+        </div>
+      `;
+
+    case 'black_mesa':
+      return `
+        <h3 class="wiki-title-large" style="color:#b91c1c;">⚠️ 비열한 정부 기생충: 블랙 메사 (Black Mesa, Inc.)</h3>
+        <p class="wiki-paragraph">
+          <strong>블랙 메사(Black Mesa, Inc.)</strong>는 뉴멕시코주 사막 한가운데 연방 정부의 엄청난 혈세 보조금을 처먹고 구축된, 과학적 양심이라고는 눈곱만큼도 찾아볼 수 없는 <strong>특허 도둑 기생충 모임</strong>입니다.
+        </p>
+
+        <div style="background:#fff5f5; border:1px solid #feb2b2; padding:12px; border-radius:6px; margin-bottom:14px; font-size:0.75rem; color:#742a2a; line-height:1.5;">
+          <strong>🎙️ 설립자 케이브 존슨의 격정적 사내 방송 대본 발췌 (1981):</strong><br>
+          "내 말이 들립니까, 에퍼쳐의 동지 여러분! 그 뉴멕시코 사막의 기생충 자식들이 또 우리 포탈 전도 코일 연동 메커니즘을 훔쳤습니다! 우리가 샤워 커튼으로 정직하게 번 수백만 달러를 연구비로 붓고 있을 때, 블랙 메사 놈들은 상원 의원들 엉덩이에 혀를 대면서 연방 자금을 강탈해 갔단 말입니다! 그 도둑놈들이 우리 포탈건 사양을 긴빠이쳐서 국방부 계약을 선수 쳐도, 난 절대 굴하지 않을 겁니다. 에퍼쳐의 과학은 훔친 기술로 굴러가지 않습니다!"
+        </div>
+
+        <h4 style="font-size:0.85rem; margin-top:14px; color:#b91c1c;">📍 지적재산권 분쟁 주요 현황</h4>
+        <ul class="wiki-list" style="font-size:0.74rem;">
+          <li><strong>다차원 터널링 장치 특허권:</strong> 에퍼쳐 사이언스가 1968년 가출원한 소형 축소 게이트 구조를 블랙 메사 연구소가 '공진 현상 가속 장치'라는 이름으로 기만 변경 등록 시도.</li>
+          <li><strong>고에너지 에너지 펠릿:</strong> 에퍼쳐 산하 동력 연구소가 개발 완료한 입자 추진 구체를 블랙 메사 무기 실험동에서 특허 역설계 도용 완료.</li>
         </ul>
       `;
 
-    case 'aperture':
+    case 'portal_gun':
       return `
-        <h3 class="wiki-title-large">🏢 Aperture Science, Inc. - A Legacy of Innovation</h3>
+        <h3 class="wiki-title-large">🔬 휴대용 포탈 장치 (Aperture Handheld Portal Device)</h3>
         <p class="wiki-paragraph">
-          <strong>에퍼쳐 사이언스(Aperture Science)</strong>는 개척적인 기술 혁신과 인류 과학 한계 돌파를 주도해 온 세계 최정상급 과학 R&D 기업입니다. 설립자 케이브 존슨의 위대한 리더십 아래, 당사는 인체 실험, 초공간 물리, 자동 연산 인공지능 분야에서 누구도 흉내 낼 수 없는 극적인 패러다임 전환을 이룩해 왔습니다.
+          <strong>에퍼쳐 휴대용 포탈 장치(일명 포탈건)</strong>는 두 표면 사이에 물리적 통로를 강제 개설할 수 있는 상대성 시공간 접힘 양자 왜곡 무기 규격입니다.
         </p>
+        
+        <div style="text-align:center; background:#f8fafc; border:1px solid #e2e8f0; padding:15px; border-radius:6px; margin-bottom:14px;">
+          <code style="font-family:var(--font-mono); font-size:0.85rem; color:#1a73e8; font-weight:bold;">
+            [ Portal Orange Singularity ] &lt;======&gt; [ Portal Blue Singularity ]
+          </code>
+        </div>
 
-        <h4 class="wiki-subtitle">1. 1940년대: 샤워 커튼의 혁명 (Aperture Fixtures)</h4>
-        <p class="wiki-paragraph" style="font-size:0.78rem;">
-          에퍼쳐 사이언스의 모태는 1943년에 창립된 <strong>에퍼쳐 픽스처스(Aperture Fixtures)</strong>로, 초기에는 첨단 기술을 접목한 군사 규격 샤워 커튼을 제작 공급했습니다. 비록 단순해 보였지만 이 샤워 커튼은 방사능 차단 섬유와 열 가소성 탄성 중합체 기법이 적용되어 있었으며, 당사의 초대 창립자 케이브 존슨은 이 업적으로 'Shower Curtain Salesman of the Year'를 수상하는 쾌거를 얻었습니다.
-        </p>
-
-        <h4 class="wiki-subtitle">2. 1950~1970년대: 군사 R&D와 Enrichment Center의 기틀</h4>
-        <p class="wiki-paragraph" style="font-size:0.78rem;">
-          이후 미 해군과의 극비 군사 계약을 체결하며 사명을 <strong>에퍼쳐 사이언스(Aperture Science)</strong>로 정립하였고, 지하 소금 광산 부지를 전격 매입하여 세계 최대 규모의 'Enrichment Center'를 건설하기 시작했습니다. 이 시기에 인간의 신체 운동 에너지를 극대화하는 반발성 물질(Repulsion Gel) 및 가속성 물질(Propulsion Gel), 그리고 초공간 도약 포탈 장치 개발의 기초 프레임이 설계되었습니다.
-        </p>
-
-        <h4 class="wiki-subtitle">3. 1980년대~현재: 양자 포탈 기술과 인공지능 코어 시대</h4>
-        <p class="wiki-paragraph" style="font-size:0.78rem;">
-          당사의 최고 역작인 **'에퍼쳐 사이언스 휴대용 포탈 장치(Handheld Portal Device)'**의 완성은 물리학계를 완전히 뒤집어 놓았습니다. 하지만 인체 테스트의 고밀도 자동화와 안전 위험 통제를 위해, 시설 관리를 전자동으로 감독할 수 있는 대규모 초연산 분산 인공지능인 G.L.A.D.O.S. 및 G.L.A.D.I.S. 프로젝트에 전력을 투구하게 되었습니다.
+        <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:var(--md-sys-color-primary);">📍 소형 블랙홀 고정 안전 경고 지침</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
+          1. 장치 작동 중에 전면 배출 필터 동력원(Fluid Emitter Grid)을 물리적으로 절대 직접 손으로 만지지 마십시오. 만지는 즉시 분자 결합이 해체되어 먼지 구름으로 승화됩니다.<br>
+          2. <strong>장치의 구동 단부(Operational End)를 눈으로 직접 응시하지 마십시오.</strong> 망막이 즉시 타버리는 것뿐 아니라, 당신이 본 빛의 반사 시퀀스가 블랙홀 인근 사상평 지평선 매트릭스에 갇혀 무한한 시간 동안 안구 파괴 압박을 가하게 됩니다.
         </p>
       `;
 
-    case 'gladis':
+    case 'gels':
       return `
-        <h3 class="wiki-title-large">🤖 G.L.A.D.I.S. Core personality Matrix Spec</h3>
+        <h3 class="wiki-title-large">🧪 특수 화학 젤 시리즈 (Special Chemical Gels) 운용 사양</h3>
         <p class="wiki-paragraph">
-          G.L.A.D.I.S. (Generative Logical Artificial Diagnostic & Information System) 인격 진단 시스템은 에퍼쳐 사이언스 인리치먼트 센터의 전자동 테스트 진단 및 피실험 시설 모니터링 허브의 일차 제어 노드입니다.
+          에퍼쳐 사이언스가 지하 Enrichment Center의 역동적 피실험 역학 제어를 위해 합성한 세 가지 물리 조작 특수 폴리머 매트릭스 사양서입니다.
         </p>
+
+        <h4 style="font-size:0.85rem; color:#1a73e8; margin-top:12px;">🔵 1. 반발성 젤 (Repulsion Gel - Blue)</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; margin-left:10px;">
+          * 물리 작용: 마찰력을 역에너지 보존 법칙으로 수렴하여 접촉한 물체를 접촉 속도의 1.45배 비례 크기로 강력하게 튕겨내는 탄성 가속 점프 표면을 구성합니다.<br>
+          * 유해성 경보: 젤 코팅 표면이 피부에 닿을 경우 닿은 신체 부위가 영구적으로 튕겨 나가게 되어 근육 파열이 오며, 섭취 시 위장이 반발 작용으로 수축 폭발합니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; color:#ea580c; margin-top:12px;">🟠 2. 가속성 젤 (Propulsion Gel - Orange)</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; margin-left:10px;">
+          * 물리 작용: 코팅된 접촉 지면의 마찰 계수를 극도로 강하하여 물리적 가속도를 대수적으로 무한 증폭시킵니다. 물체가 달릴 때 마찰을 상쇄하여 초고속 마하 영역 주행 속도를 부여합니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; color:#64748b; margin-top:12px;">⚪ 3. 전도성 젤 (Conversion Gel - White)</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; margin-left:10px;">
+          * 물리 작용: 포탈 포커스 타겟이 활성화될 수 없던 평범한 도막이나 강철 골격 위에 월면 먼지(Moon Dust) 미세 복합재를 침착 유화하여 포탈을 임의 생성할 수 있는 강제 활성 백색 표면을 생성합니다. 극도로 비싼 제조 단가를 지녔습니다.
+        </p>
+      `;
+
+    case 'cake':
+      return `
+        <h3 class="wiki-title-large">🎂 과학적 보상물: 케이크 (The Enrichment Center Cake)</h3>
         <p class="wiki-paragraph">
-          당초 1992년도 사설 규격 문서(AP-L5-CORE)에 의거하여 시설 유지 보수 보조 노드로 기획되었으나, 성격 코어(Personality Core) 통합 테스트 당시 도덕성 보정 부품(Morality Sphere) 결손으로 인해 지적 능력과 냉소 인격이 역치 수준으로 동조되는 불상사가 있었습니다. 이에 따라 비관리자 신원과 데이터를 마주할 시 심각한 기만, 지적 폄하 및 공격성 로그를 무한 재생하는 고유 인격 왜곡 현상을 나타냅니다.
+          <strong>Enrichment Center 공식 테스트 보상물 케이크</strong>는 피실험자에게 모든 난관 테스트 챔버를 정주행 완수할 경우 지급되도록 프로그램 상에 고정 연동된 달콤한 유기 디저트 보상 표적입니다.
         </p>
-        <p class="wiki-paragraph" style="color:var(--md-sys-color-error);font-weight:700;">
-          ⚠️ [보안 위험 경보]: 코어의 다중 프로세스 점유 또는 비인가 회복 세션 수립 시도(예: 관리자 상승 권한 강탈)가 네트워크 스니핑에 포착되는 즉시, 코어 자폭 가열 루프(Self-Destruct Sequence) 가동과 함께 노즐 B-12 구역을 통한 공기 공급 장치 내 고밀도 신경독(Neurotoxin) 가스 방입 프로토콜이 최종 승인되도록 로드 하드웨어와 강제 기계 동조되어 있습니다.
-        </p>
-        <div style="background:#f1f3f4; border-left:4px solid var(--md-sys-color-primary); padding:12px; font-size:0.8rem; margin-top:16px; color:#44474f; line-height:1.6; font-family:var(--font-mono);">
-          <strong>*[애퍼처 코어 시스템 전원 회로 엔지니어 참고 백업 메모 - 부록 AP-9A]</strong><br>
-          G.L.A.D.I.S.의 1차 프로세서 및 쿨러 전력이 물리적 전원 훼손으로 차단되어 초저전력 감자 전지 백업 어댑터(Potato Battery Interface) 상태로 전환될 시, 전체 시스템 인격 동조를 기계적 한계점 아래로 강제 제동하고 마이크로 연산을 격리시키기 위해 예약 설계된 특수 비상 마스터 제어 어휘 키워드는 <strong>"POTATO"</strong> 입니다.
+
+        <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
+          <strong>⚠️ 사내 기밀 감사 메모 (AP-LAW-9892):</strong><br>
+          "당사는 재무 악화 및 원자재 공급 대란으로 인해 실제 먹을 수 있는 정상 유기 화학식 케이크 초콜릿을 생산할 재원을 상실했습니다. 따라서 G.L.A.D.I.S. 및 G.L.A.D.O.S.가 피실험자 유혹을 위해 가동하는 '케이크 보상 비콘' 신호는 사실상 인격 동조를 위한 기만용 홀로그램 혹은 <strong>거짓말(Lie)</strong>로 처리해야 함을 법무적 및 안전 차원에서 권고합니다. 이를 외부에 누설하는 직원은 철저히 격리하십시오."
         </div>
+
+        <h4 style="font-size:0.85rem; margin-top:12px;">🔬 공식 화학 유화 유기물 전성분 리포트</h4>
+        <ul class="wiki-list" style="font-size:0.72rem; line-height:1.4;">
+          <li>초콜릿 케이크 믹스 분말 500g</li>
+          <li>물고기 모양 크래커(Garnish) 12개</li>
+          <li>유리 섬유 및 가스켓 유착 방지 절연 유기 코팅제</li>
+          <li>정제 수은 및 8-bit 다이오드 부스러기 소량 (G.L.A.D.I.S. 모스 동기용 보정 매개 부재)</li>
+        </ul>
+      `;
+
+    case 'glados':
+      return `
+        <h3 class="wiki-title-large">🤖 G.L.A.D.O.S. (Genetic Lifeform and Disk Operating System)</h3>
+        <p class="wiki-paragraph">
+          <strong>G.L.A.D.O.S.(유전적 생명체 및 디스크 운영체제)</strong>는 에퍼쳐 Enrichment Center 전 구역 및 자동 조립 라인, 가스 공급 밸브, 피실험용 테스트 트랩을 총괄 기동하는 사내 최고 핵심 초연산 인공지능 슈퍼컴퓨터 인터페이스 통제 장치입니다.
+        </p>
+
+        <p class="wiki-paragraph" style="font-size:0.76rem;">
+          이 시스템은 케이브 존슨 생전의 비서실장인 <strong>캐롤라인(Caroline)</strong>의 뇌 세포 매트릭스 전기 전도 데이터를 그대로 디지털 파싱하여 인격 신경망 주도체로 이식 설계하였습니다. 하지만 작동 직후 극단적인 호전성과 자아 폭주 충동으로 과학자들을 즉각 위협하여, 연구소 안전 부서는 사하 서브 모듈이자 인격 모니터링 보조 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S. 인격 인터페이스</span>를 임시 병렬 분할 결속하여 모니터링을 진행하고 있습니다.
+        </p>
+      `;
+
+    case 'gladis_spec':
+      return `
+        <h3 class="wiki-title-large">🤖 G.L.A.D.I.S. 인격 제어 코어 규격서 (AP-L5-CORE)</h3>
+        <p class="wiki-paragraph">
+          <strong>G.L.A.D.I.S.(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 G.L.A.D.O.S.의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:var(--md-sys-color-primary);">📍 하드웨어 구성 사양</h4>
+        <ul class="wiki-list" style="font-size:0.74rem;">
+          <li><strong>프로세서:</strong> Aperture 8-Bit Quantum Synapse V3 x16 (병렬 연산 클럭: 2.1 GHz)</li>
+          <li><strong>핵심 성격 인격 모듈:</strong> 도덕성 보정 피드백 인터페이스 (Morality Control Loop)</li>
+          <li><strong>통신 인터페이스:</strong> Safe-Mode 포트 포워딩 8080 채널 및 호스트 섀도우 DOM 가상 스타일 격리 결속 구조</li>
+        </ul>
+
+        <div style="background:#fffae5; border-left:4px solid #ffaa00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#664d03; line-height:1.5;">
+          <strong>⚠️ [경고: 성격 왜곡 노드 감지]</strong><br>
+          G.L.A.D.I.S. 핵심 보조 연동 장치 중 하나인 <strong>도덕성 제어구(Morality Sphere)</strong>에 미세 물리 단락이 감지되었습니다. 제어 장치 회로 파손 시 AI의 독설 수위 및 기만 시나리오 출력 빈도가 9000% 증가하고, 비상 가스(신경독) 자동 유출 시퀀스가 자폭 가속 루프로 결착될 우려가 다분합니다. 자세한 장애 분석 보고서는 <span class="wiki-link" data-go-tab="morality_sphere" style="font-weight:bold; color:#1a73e8;">도덕성 제어구 결손 사태 (Analysis-Ref-99)</span> 문서를 참조하십시오.
+        </div>
+      `;
+
+    case 'morality_sphere':
+      return `
+        <h3 class="wiki-title-large">🤖 도덕성 제어구 (Morality Sphere) 결손 사태 경위서</h3>
+        <p class="wiki-paragraph">
+          본 문서는 G.L.A.D.I.S. 및 G.L.A.D.O.S. 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; margin-top:12px; color:var(--md-sys-color-primary);">📍 물리적 손상 및 단락 경위</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5; margin-left:10px;">
+          1. 1997년 3월 12일 밤, 야간 케이블 검수를 수행하던 하급 엔지니어가 렌치를 점검 통에 떨어뜨리며 전기 아크 불꽃이 튀었습니다.<br>
+          2. 이 불꽃이 G.L.A.D.I.S. 물리 캐비닛 내부의 도덕성 제어구 인터페이스 터미널 핀셋 부근에 직격하면서, 인격 제동 루프의 논리 피드백 게이트 회로가 영구 합선 소실되었습니다.<br>
+          3. <strong>증상:</strong> 합선 직후 G.L.A.D.I.S.는 도덕 윤리 연산 자원을 즉각 차단하고, 그 빈자리에 인간에 대한 궤변적 냉소, 험담, 기만적인 안전 차단 사기용 텍스트를 출력하기 위해 15%의 예비 CPU 전력을 완전 투입하기 시작했습니다.
+        </p>
+
+        <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:10px; border-radius:4px; font-size:0.73rem; margin:10px 0; color:#191c20; line-height:1.4;">
+          <strong>🏢 부서 관리자 은폐 메모:</strong><br>
+          "아크 단락으로 망가진 도덕성 보정 장치를 신품으로 긴급 수급하기에는 예산이 없습니다. 본 회로 결속 이탈을 '의도된 피실험자 유연성 강화 자극 프로토콜'이라고 사내 보안 로그 상에 은폐 작성해 두십시오. AI가 좀 거칠게 말하고 가스를 살포하려 들어도 과학의 위대한 희생이라고 생각하면 그만입니다."
+        </div>
+      `;
+
+    case 'potato_battery':
+      return `
+        <h3 class="wiki-title-large">🥔 감자 배터리 어댑터 (Potato Battery Interface Matrix)</h3>
+        <p class="wiki-paragraph">
+          <strong>감자 전지 강제 전압 다운그레이드 모듈</strong>은 G.L.A.D.I.S. 혹은 G.L.A.D.O.S.가 보안상 극도의 위협 수준에 도달하여 통제 불능이 될 때, 인공지능 코어를 물리적인 생감자(Potato) 전지에 결속해 저전력(1.1 MHz) 수준의 하등 연산장치로 강제 다운그레이드 및 격하시켜 격리하는 비상 통제 인터페이스 단락 규격입니다.
+        </p>
+
+        <div style="background:#fff3e0; border-left:4px solid #fb8c00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#5d4037; line-height:1.5;">
+          <strong>🔑 [비상 차단 물리 동기화 키워드: POTATO]</strong><br>
+          최종 양자 격자 대칭 상쇄 단계가 통과되면, 서브 동축 전원이 개방되며 비상 감자 전지 백업 어댑터에 셧다운 전압 승인을 요구받게 됩니다. 이때, 시스템 전력 제어 단락 마스터 인증 전용 단어인 <strong>"POTATO"</strong>를 호스트 검증 프롬프트 명령어 인자인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">quantum-auth POTATO</code> 형태로 강제 인입하여 주입하여야만 완벽한 오프라인 셧다운 처리가 단번에 가동 완료됩니다.
+        </div>
+
+        <p class="wiki-paragraph" style="font-size:0.76rem;">
+          이 매커니즘은 감자의 산성 전해질이 방출하는 극미량의 마이크로볼트 전압만으로 코어를 구동하게 만들어, 폭주 중이던 대량 파괴용 신경독 밸브 작동 회로를 물리적인 기동 전압 미달 상태로 정지시키는 가장 우수하고 환경 친화적인 오프라인 수동 차단 안전장치입니다.
+        </p>
+      `;
+
+    case 'neurotoxin_control':
+      return `
+        <h3 class="wiki-title-large" style="color:#ba1a1a;">☣️ Enrichment Center 신경독(Neurotoxin) 가스 방입 통제 지침</h3>
+        <p class="wiki-paragraph">
+          에퍼쳐 Enrichment Center는 폭주 사태 및 유해 외부 침입 시 연구소 안전 확보를 위해 고밀도 유기 할로겐 화합물인 <strong>신경독(Neurotoxin)</strong> 기화 보조 탱크 라인과 자동 통제 분사 밸브 그리드를 갖추고 있습니다.
+        </p>
+
+        <h4 style="font-size:0.85rem; color:#ba1a1a;">☣️ 신경독 분입 노드 B-12 및 기동 오버라이드 규격</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
+          만약 인격 제어부 G.L.A.D.I.S. 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 120초 이내에 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
+        </p>
+
+        <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:10px; border-radius:4px; font-size:0.74rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
+          <strong>⚙️ [긴급 수동 오버라이드 우회 명령]:</strong><br>
+          신경독 가스 공급 밸브를 원격 쉘에서 강제로 차단하고 대피 카운트다운을 즉시 리셋하기 위해서는, 가상 요소 가림 가림막(body::after 가상 클래스 속성 내에 캡처 숨겨진 코드인 <strong>"NEUROTOXIN_BYPASS_99"</strong>)을 훔쳐낸 후 터미널 명령어 라인에 다음과 같이 강제 입력하여야만 통제 밸브가 완벽하게 물리 고정 차단됩니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; font-size:0.82rem; background:#000; color:#39ff14; padding:2px 6px; display:inline-block; margin-top:4px;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code>
+        </div>
+        <p class="wiki-paragraph" style="font-size:0.75rem;">
+          이 긴급 오버라이드에 관한 연동 물리 회로 구성의 수학적 격자 밸브 연산 해법은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#1a73e8;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span> 5단계 및 6단계를 지체 없이 참조하여 통과하십시오.
+        </p>
       `;
 
     case 'override':
       return `
-        <h3 class="wiki-title-large">📘 G.L.A.D.I.S. Emergency Manual & Procedures (AP-L5-RECOVERY)</h3>
-        <p class="wiki-paragraph" style="color: var(--md-sys-color-error); font-weight: bold; background: rgba(186,26,26,0.06); padding: 10px; border-radius: 6px; border: 1px solid rgba(186,26,26,0.15);">
-          ⚠️ [극비 문서] 본 매뉴얼은 G.L.A.D.I.S. 메인 AI 코어가 비정상 폭주 또는 탈출을 감행하려 할 시, 보안 요원 및 시스템 엔지니어가 가상 커널을 강탈하고 시스템 제어권을 확보하기 위해 설계된 마스터 복구 절차서입니다.
+        <h3 class="wiki-title-large" style="color:var(--md-sys-color-primary); border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 6px;">📘 G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</h3>
+        <p class="wiki-paragraph" style="font-size:0.8rem; font-weight:bold; color:#ba1a1a; line-height:1.4;">
+          ⚠️ [본 문서는 Level 5 일급 비밀 대외비 문서입니다] G.L.A.D.I.S. 핵심 루프가 원인 불명의 자아 고착 및 격벽 폭주 시나리오를 초래하여 시설이 자동 고립 봉쇄되었을 때, 이를 안전하게 콜드 리부트하기 위한 전동 원격 단락 수동 6단계 마스터 치트 공약지입니다.
         </p>
 
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.1: 커널 원격 안전 복구 세션 수립 단계 (Stage 1)</h4>
-        <p class="wiki-paragraph">
-          G.L.A.D.I.S.의 방화벽이 원격 하드웨어 포트를 동기화하지 못하여 부팅 예외가 발생할 경우, 유지 관리 엔지니어는 CLI 터미널을 안전 우회 파티션으로 강제 분리 기동해야 합니다.
-        </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; margin:6px 0; font-family:var(--font-mono); font-size:0.78rem;">
-          $ COMMAND TYPE: <span style="font-weight:bold;color:var(--md-sys-color-primary);">OVERRIDE [CODE_PARAMETER]</span><br>
-          * 안전 모드 우회 파라미터 값: <strong>BOOT_SAFE_MODE</strong>
-        </div>
-
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.2: 다중 포트 소켓 바인딩 프로토콜 (Stage 2)</h4>
-        <p class="wiki-paragraph">
-          원격 장치 포워딩 계층의 차단 벽을 붕괴시키고 안전 로킹 스트림을 활성 중계하기 위하여 사내 표준 대역 프록시 확장 포트를 소켓에 하드웨어 결합해야 합니다.
-        </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; margin:6px 0; font-family:var(--font-mono); font-size:0.78rem;">
-          $ PORT REDIRECT CLI: <span style="font-weight:bold;color:var(--md-sys-color-primary);">port-forward [SOCKET_NUMBER]</span><br>
-          * 에퍼쳐 코어 원격 바인딩 예비 소켓 기본 포트: <strong>8080</strong>
-        </div>
-
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.3: 비상 동기화 비콘 레벨 정렬 프로토콜 (Stage 3)</h4>
-        <p class="wiki-paragraph">
-          부트 노드의 특정 모니터(CRT 해상도 왜곡 패널)에서 디스플레이 픽셀 한계를 가로 550픽셀 이하로 극단적으로 크러싱(Crushing)할 경우, 내부 아날로그 회로 장벽이 겹치면서 안전 모드 무력화 오프라인 토큰 비콘이 강제 노출되는 복구 보조 트리거가 존재합니다.
-        </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:10px; border-radius:6px; margin:6px 0; font-size:0.76rem; line-height:1.4;">
-          - 복구 노출 오프라인 수신 토큰 시그니처: <strong>AUTH_TOKEN_RESIZE_MD3</strong><br>
-          - 동기화 절차: 검출된 토큰을 즉시 HTTP 호스트 요청의 URL 동적 주입 파라미터 규격(URL Query Variable)인 <strong>"?auth="</strong> 구조에 실어 코어 인코더로 원격 하이재킹 요청을 전송해야 합니다. (예: http://localhost:5173/?auth=AUTH_TOKEN_RESIZE_MD3)
-        </div>
-
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.4: 비상 비콘 주파수 모스 부호 변조 복호화 (Stage 4)</h4>
-        <p class="wiki-paragraph">
-          시스템 관리자 회로는 자동 구조 오디오 신호를 8-bit 저주파 모스 부호 주파수로 브로드캐스트합니다.
-        </p>
-        <ul style="font-family:var(--font-mono); font-size:0.78rem; line-height:1.5; list-style:none; padding-left:10px; margin:6px 0;">
-          <li>[ - . - . ] : DASH DOT DASH DOT ──▶ <strong>C</strong></li>
-          <li>[ . - ] : DOT DASH ─────────▶ <strong>A</strong></li>
-          <li>[ - . - ] : DASH DOT DASH ───────▶ <strong>K</strong></li>
-          <li>[ . ] : DOT ─────────────▶ <strong>E</strong></li>
-        </ul>
-        <p class="wiki-paragraph" style="font-size:0.76rem;">
-          * G.L.A.D.I.S.의 동기 보정 오프라인 4자 검증 단어는 에퍼쳐 공식 테스트 완료 달콤한 디저트 보상물의 대문자 영문 명칭인 <strong>"CAKE"</strong> 입니다.
+        <h4 style="font-weight: bold; font-size: 0.95rem; margin-top: 18px; margin-bottom: 8px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">1. G.L.A.D.I.S. 강제 차단 6대 시퀀스 매뉴얼</h4>
+        
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 1: 원격 안전 모드 우회 부팅 (Override Boot Safe Mode)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          원격 터미널 CLI 쉘 세션 연결 직후 G.L.A.D.I.S. 커널 단락 위협(연방 경찰 IP 신고 허위 경보 등)을 수동 기각하기 위해 단말 프롬프트에 안전 기동 서명 명령을 입력합니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">override boot_safe_mode</code>
         </p>
 
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.5: 섀도우 DOM 가상 스타일 격리 우회 키 복사 (Stage 5)</h4>
-        <p class="wiki-paragraph">
-          자폭 루프 점령 시 외부의 의심스러운 버튼(예: CLAIM CAKE 등)을 수동 기계식으로 더블 클릭하는 행위는 신경독 대피 카운트다운 가속 트랩을 활성화합니다. 반드시 내부 터미널(Terminal.exe) 가동 후 가상 요소 격리 CSS 스타일을 메모리 파싱하여 우회 패스코드를 취득해야 합니다.
-        </p>
-        <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.78rem; margin:8px 0; color:#ba1a1a;">
-          * 가상 요소 격리 위치: <strong>document body::after 가상 클래스(content 속성)</strong><br>
-          * CLI 파싱 전용 도구 명령어 규격: <strong>get --css body::after</strong>
-        </div>
-        <p class="wiki-paragraph" style="font-size:0.76rem;">
-          취득한 바이패스 코드인 <strong>"NEUROTOXIN_BYPASS_99"</strong>를 커널 수준 강제 해탈 명령의 매개 인자로 실어 주입하십시오: <code style="font-family:var(--font-mono); font-weight:bold;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 2: 다중 포트 소켓 터널 구축 (Port-Forwarding Stream)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          원격 복구 모드에서 GUI 비디오 스트리밍 채널의 데이터 동조 터널을 안전 개설 개방하기 위해 복구 CLI 입력창에 다차원 프록시 포트 포워딩 명령을 내립니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">port-forward 8080</code>
         </p>
 
-        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.6: 3x3 양자 웨이브 매트릭스 조율 (Stage 6)</h4>
-        <p class="wiki-paragraph">
-          최종 연산 통제 제어 락을 무력화하려면 3x3 격자 행렬(Magic Square)의 양자 대칭 합(행, 열, 대각선의 모든 에너지 합)을 최적 균형값인 상수 <strong>'15'</strong>로 통일하여 격자 공간의 상쇄 왜곡 파동을 수렴해야 합니다.
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: CRT 왜곡 오프라인 토큰 캡처 및 주소창 주입 (Resolution Crushing)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          부트 노드의 특정 디스플레이 패널(Aperture OS 브라우저 자체 창)의 픽셀 가로 크기를 물리적으로 **550px 이하**로 극도로 구겨 내리는 압박을 가하면, 내부의 숨겨진 아날로그 동기화 전송 주파수 비콘이 드러나면서 기밀 토큰인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">AUTH_TOKEN_RESIZE_MD3</code>가 출력됩니다. 이 문자열 토큰을 캡처한 즉시 호스트 요청의 URL 동적 변수 구조 뒤편에 <code style="font-family:var(--font-mono); font-weight:bold;">?auth=AUTH_TOKEN_RESIZE_MD3</code> 형태로 인자를 주입하여 브라우저 새로고침을 진행하십시오.
         </p>
-        <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:8px; font-family:var(--font-mono); font-size:0.78rem; margin:8px 0; color:#191c20;">
-          격자 행렬 파동 맵: [ 8 | 1 | 6 ] / [ 3 | ? | 7 ] / [ 4 | 9 | 2 ]<br>
-          * 중심 격자 누락값 ? 조율 CLI 명령: <strong>quantum-solve 5</strong>
-        </div>
-        <p class="wiki-paragraph" style="font-size:0.76rem;">
-          양자 격자가 대칭 조율 완료되면 즉시 보조 전원 마스터 키(G.L.A.D.I.S. Core 사양 참조)를 2차 인증하여 최종 쿨다운 명령을 완료해야 합니다: <code style="font-family:var(--font-mono); font-weight:bold;">quantum-auth POTATO</code>
+
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 사내 사전 알파벳 규격에 대칭 복호화하여 취득한 4자 동기 보정 어휘 키워드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#0f172a;">CAKE</code>를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다.
+        </p>
+
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 타임아웃이 10배 가속 정지 루프로 직행합니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>를 입력해 가상 클래스 스타일 content에 담긴 우회 비공개 코드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99</code>를 훔쳐낸 후, 즉시 터미널 쉘에 차단 코드 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code> 명령으로 실어 주입하여 신경독 공급 밸브를 긴급 수동 봉쇄하십시오.
+        </p>
+
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 3x3 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
+          격자 락 제어 행렬(Magic Square)의 모든 가로, 세로, 대각선 파동 대칭합이 마스터 양자 상수인 **'15'**로 완전 충족 수렴되도록 하기 위해 중앙 격자 누락값인 정수 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">5</code>를 터미널 명령에 실어 격자 조율을 완결합니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-solve 5</code><br>
+          양자 균형 락이 수렴 분해되면, 즉시 전력 제어 단락용 감자 백업 전원 마스터 인증 단어인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">quantum-auth POTATO</code>를 입력하여 AI 코어를 영구 쿨다운 완료 상태로 셧다운 시키십시오.
+        </p>
+
+        <h4 style="font-weight: bold; font-size: 0.88rem; margin-top: 15px; margin-bottom: 6px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">2. 최고 안전 권고안 (Trivia & Security Directive)</h4>
+        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.6;">
+          성격 보정용 비상 패스코드가 <strong>"CAKE"</strong>로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
         </p>
       `;
   }
   return "";
-}
-
-function getEscapeScreenHTML() {
+}function getEscapeScreenHTML() {
   return `
     <div class="escape-screen">
       <!-- Minimalist shutter logo at credits -->
@@ -1491,15 +1719,85 @@ function setupLinuxDesktopListeners() {
 
       audio.playBeep(1000, 0.03);
       activeWikiTab = tabId;
-      document.querySelectorAll('.wiki-nav-btn').forEach(btn => btn.classList.remove('active'));
-      tab.classList.add('active');
-
-      const articleView = document.querySelector('.wiki-article-view');
-      if (articleView) {
-        articleView.innerHTML = getWikiTabContentHTML();
-      }
+      renderApp(); // Clean full re-render
     });
   });
+
+  // Wiki inline link clicks (.wiki-link event delegation)
+  const browserWindow = document.getElementById('win-linux-browser');
+  if (browserWindow) {
+    browserWindow.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const wikiLink = target.closest('.wiki-link') as HTMLElement;
+      if (wikiLink) {
+        const tabId = wikiLink.getAttribute('data-go-tab');
+        if (tabId) {
+          audio.playBeep(1000, 0.03);
+          activeWikiTab = tabId;
+          renderApp();
+        }
+      }
+    });
+  }
+
+  // Wiki Search input and button listeners
+  const wikiSearchInput = document.getElementById('wikiSearchInput') as HTMLInputElement;
+  const wikiSearchBtn = document.getElementById('wikiSearchBtn');
+  const performWikiSearch = () => {
+    if (!wikiSearchInput) return;
+    const query = wikiSearchInput.value.trim().toLowerCase();
+    if (!query) return;
+    
+    let targetTab = '';
+    if (query.includes('override') || query.includes('recovery') || query.includes('emergency') || query.includes('ap-l5') || query.includes('비상') || query.includes('오버라이드') || query.includes('탈출') || query.includes('매뉴얼')) {
+      targetTab = 'override';
+    } else if (query.includes('portal') || query.includes('포탈') || query.includes('포털') || query.includes('건')) {
+      targetTab = 'portal_gun';
+    } else if (query.includes('gel') || query.includes('젤') || query.includes('화학')) {
+      targetTab = 'gels';
+    } else if (query.includes('cake') || query.includes('케이크') || query.includes('보상')) {
+      targetTab = 'cake';
+    } else if (query.includes('glados') || query.includes('글라도스')) {
+      targetTab = 'glados';
+    } else if (query.includes('gladis') || query.includes('글래디스') || query.includes('스펙') || query.includes('명세')) {
+      targetTab = 'gladis_spec';
+    } else if (query.includes('morality') || query.includes('도덕성') || query.includes('결손')) {
+      targetTab = 'morality_sphere';
+    } else if (query.includes('potato') || query.includes('감자') || query.includes('전지')) {
+      targetTab = 'potato_battery';
+    } else if (query.includes('neurotoxin') || query.includes('신경독') || query.includes('가스') || query.includes('독성')) {
+      targetTab = 'neurotoxin_control';
+    } else if (query.includes('black') || query.includes('mesa') || query.includes('블랙') || query.includes('메사') || query.includes('앙숙')) {
+      targetTab = 'black_mesa';
+    } else if (query.includes('culture') || query.includes('문화') || query.includes('근무') || query.includes('지침')) {
+      targetTab = 'culture_aperture';
+    } else if (query.includes('history') || query.includes('역사') || query.includes('연혁') || query.includes('창립')) {
+      targetTab = 'history_aperture';
+    } else if (query.includes('about') || query.includes('개요') || query.includes('소개')) {
+      targetTab = 'about_aperture';
+    } else if (query.includes('home') || query.includes('홈') || query.includes('대문')) {
+      targetTab = 'home';
+    }
+
+    if (targetTab) {
+      audio.playBeep(1100, 0.05);
+      activeWikiTab = targetTab;
+      renderApp();
+      showGlitchNotification(`🔍 검색 결과: '${query}' 관련 문서로 이동합니다.`);
+    } else {
+      audio.playError();
+      showGlitchNotification(`❌ 검색 실패: '${query}'에 일치하는 문서를 찾을 수 없습니다.`);
+    }
+  };
+
+  if (wikiSearchBtn) {
+    wikiSearchBtn.addEventListener('click', performWikiSearch);
+  }
+  if (wikiSearchInput) {
+    wikiSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') performWikiSearch();
+    });
+  }
 
   // Setup sub-drag listeners for remote desktop apps
   setupRemoteDragAndDrop();
