@@ -1574,11 +1574,6 @@ function getWikiTabContentHTML(): string {
           만약 인격 제어부 G.L.A.D.I.S. 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 지체 없이 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
         </p>
 
-        <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:10px; border-radius:4px; font-size:0.74rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
-          <strong>⚙️ [긴급 수동 오버라이드 우회 명령]:</strong><br>
-          신경독 가스 공급 밸브를 원격 쉘에서 강제로 차단하고 대피 카운트다운을 즉시 리셋하기 위해서는, 가상 요소 body::after, #app::after, .window-frame::after 가상 클래스 content 내부에 파편화된 Base64 토큰 조각들을 차례로 디코딩한 뒤 결합하여 만든 <strong>"NEUROTOXIN_BYPASS_99_SECURE"</strong>를 터미널 명령어 라인에 다음과 같이 강제 입력하여야만 통제 밸브가 완벽하게 물리 고정 차단됩니다:<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; font-size:0.82rem; background:#000; color:#39ff14; padding:2px 6px; display:inline-block; margin-top:4px;">aperture-override --force --code NEUROTOXIN_BYPASS_99_SECURE</code>
-        </div>
         <p class="wiki-paragraph" style="font-size:0.75rem;">
           이 긴급 오버라이드에 관한 연동 물리 회로 구성의 수학적 격자 밸브 연산 해법은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#1a73e8;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span> 5단계 및 6단계를 지체 없이 참조하여 통과하십시오.
         </p>
