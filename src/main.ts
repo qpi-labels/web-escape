@@ -102,7 +102,7 @@ let shownVanceStage5Toast = false;
 
 function getToastText(stage: string, gladisUpdateState: string): string {
   if (stage === 'SELF_DESTRUCT') {
-    return "자폭 타이머 작동! [CLAIM CAKE]는 기만 단추니 절대 무시하게! 바탕화면에 생성된 'diagnostics.lnk' 파일을 cat 명령어로 읽고 우회법을 확인하게!";
+    return "자폭 타이머 작동! [CLAIM CAKE]는 기만 단추니 절대 무시하게! 바탕화면에 생성된 'diagnostics.lnk' 파일을 읽고 우회법을 확인하게!";
   }
   if (stage === 'DESKTOP' && gladisUpdateState === 'UPDATED') {
     return "G.L.A.D.I.S.가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
@@ -193,7 +193,7 @@ function renderApp() {
     shownVanceStage5Toast = true;
     showMessengerToast = true;
     audio.playBeep(880, 0.08);
-    showGlitchNotification("☣️ [경고] 가스 실시간 유출! 바탕화면에 'diagnostics.lnk' 파일이 수신되었습니다.");
+    showGlitchNotification("☣️ [경고] 가스 실시간 유출!");
   }
   if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' && !shownVanceStage3Toast) {
     shownVanceStage3Toast = true;
@@ -1516,11 +1516,11 @@ function getWikiTabContentHTML(): string {
   const minutes = Math.floor(elapsed / 60000);
   const seconds = Math.floor((elapsed % 60000) / 1000);
   const milliseconds = elapsed % 1000;
-  
+
   const minStr = String(minutes).padStart(2, '0');
   const secStr = String(seconds).padStart(2, '0');
   const msStr = String(milliseconds).padStart(3, '0');
-  
+
   const formattedTime = `${minStr}분 ${secStr}초 ${msStr}`;
   const rawFormattedTime = `${minStr}:${secStr}.${msStr}`;
 
