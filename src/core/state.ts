@@ -39,7 +39,7 @@ function gladisSpeak(msg: string) {
 class StateManager {
   private state: GameState = {
     stage: 'LINUX_DESKTOP',
-    timerRemaining: 200,
+    timerRemaining: 300,
     unlockedApps: ['notes.txt', 'terminal.exe'],
     devToolsWarningsCount: 0,
     gladisUpdateState: 'NONE',
@@ -80,7 +80,7 @@ class StateManager {
       this.lockoutInterval = null;
     }
     this.state.stage = 'LINUX_DESKTOP';
-    this.state.timerRemaining = 200;
+    this.state.timerRemaining = 300;
     this.state.unlockedApps = ['notes.txt', 'terminal.exe'];
     this.state.isFailed = false;
     this.state.stage4Attempts = 0;
@@ -313,7 +313,7 @@ class StateManager {
   // Start self destruct timer
   private startCountdown() {
     this.stopCountdown();
-    this.state.timerRemaining = 200;
+    this.state.timerRemaining = 300;
     audio.playSelfDestructAlarm();
 
     this.timerInterval = setInterval(() => {
