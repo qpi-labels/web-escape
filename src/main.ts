@@ -1,5 +1,5 @@
 import './style.css';
-import { stateManager } from './core/state';
+import { stateManager, setGladisSpeakCallback } from './core/state';
 import { initSecurityAndAntiCheat, onDevToolsChange, setGladisMockingCallback } from './core/security';
 import { audio } from './core/audio';
 
@@ -97,6 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initSecurityAndAntiCheat();
   stateManager.subscribe(renderApp);
 
+  setGladisSpeakCallback((msg) => {
+    showGlitchNotification(msg);
+  });
+
   onDevToolsChange((isOpen) => {
     if (isOpen) {
       stateManager.triggerDevToolsAlert();
@@ -106,8 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setGladisMockingCallback((msg) => {
     showGlitchNotification(msg);
   });
-
-  checkQueryParameters();
 
   // Hook up G.L.A.D.I.S. global DevTools injection API
   (window as any).gladis = {
@@ -121,18 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 });
-
-function checkQueryParameters() {
-  const params = new URLSearchParams(window.location.search);
-  const auth = params.get('auth');
-  if (auth) {
-    stateManager.checkURLQueryParam(auth).then(success => {
-      if (success) {
-        showGlitchNotification("URL 주입 성공: 구성 파일 라이브러리가 해제되었습니다.");
-      }
-    });
-  }
-}
 
 function renderApp() {
   const appDiv = document.getElementById('app');
@@ -442,6 +432,23 @@ function getLinuxDesktopScreenHTML() {
                     </div>
                   </div>
 
+                  <!-- Msg 2.5: Vance Stage 3 intervention (Riddle Hint) -->
+                  ${state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' ? `
+                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                        <span style="font-size:0.65rem; color:#888;">오후 4:36</span>
+                      </div>
+                      <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
+                        앗! G.L.A.D.I.S. 녀석이 눈치를 채고 보안 핫패치를 올려서 기존 우회 토큰과 수동 주소창 주입을 완전히 막아버렸군!
+                        <br><br>
+                        하지만 녀석이 자만하며 남긴 흔적이 있네. 터미널(Terminal.exe)을 열고 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">ls</code> 명령을 입력해 보게! 녀석이 도발을 남겨둔 <strong>gladis_patch.log</strong> 파일이 보일 걸세.
+                        <br><br>
+                        그 로그 파일 속에 <strong>5자리 비밀코드 추론 수수께끼</strong>를 박아둔 모양이니, 녀석의 콧대를 꺾어주고 정답을 풀어서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">auth-config [정답]</code> 형태로 입력하여 보안 설정을 돌파해주게! 힘내게!
+                      </div>
+                    </div>
+                  ` : ''}
+
                   ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' ? `
                     <!-- Msg 3: Vance emergency intervention -->
                     <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #e53935; padding-left: 8px; margin-top: 14px;">
@@ -485,20 +492,7 @@ function getLinuxDesktopScreenHTML() {
         ` : ''}
       </div>
 
-      <!-- MYSTERY RESIZE PANEL (STAGE 3 RESIZE PUZZLE VIEWPORT FLASH) -->
-      <div class="mystery-resize-panel">
-        <h2 style="color:var(--md-sys-color-primary);margin-bottom:12px;">🚨 비상 해상도 오버랩 감지! 🚨</h2>
-        <p style="font-size:0.95rem;line-height:1.5;margin-bottom:16px;color:#000;">
-          화면 폭을 비정상적으로 구겨서 안전 모드 회로를 포개는 데 성공하셨습니다!<br>
-          여기에 기밀 오프라인 검증용 토큰을 보냅니다.
-        </p>
-        <div style="background:#000;border:1px dashed var(--md-sys-color-primary);padding:12px;font-family:var(--font-mono);font-size:1.05rem;color:#39ff14;margin-bottom:16px;user-select:all;">
-          AUTH_TOKEN_RESIZE_MD3
-        </div>
-        <p style="font-size:0.8rem;color:#5f6368;">
-          브라우저 주소창 주소 뒤에 <strong>?auth=AUTH_TOKEN_RESIZE_MD3</strong>를 정확히 기입하여 통과하십시오.
-        </p>
-      </div>
+
 
       <!-- Custom Right-Click Context Menu -->
       ${isContextMenuOpen ? `
@@ -729,6 +723,36 @@ function getGladisSubDesktopHTML(state: any): string {
 
   return `
     <div class="desktop-container" style="flex:1; position:relative; overflow:hidden; border-radius:0;">
+      <!-- Security Update Overlay (Stage 3 10-second hotpatch process) -->
+      ${state.gladisUpdateState === 'UPDATING' ? `
+        <div class="gladis-patch-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,10,12,0.95); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; font-family:var(--font-sans); color:#fff; text-align:center;">
+          <div style="font-size:2.8rem; margin-bottom:15px; animation: pulse 1.5s infinite;">🤖</div>
+          <h3 style="font-size:1.25rem; font-weight:700; color:#ffaa00; margin-bottom:8px; letter-spacing:0.5px;">G.L.A.D.I.S. CORE SYSTEM SECURITY PATCH</h3>
+          <p style="font-size:0.82rem; color:#ccc; max-width:440px; margin-bottom:20px; line-height:1.5;">
+            "사내 위키에서 불법 우회 코드를 훔쳐보려는 파렴치한 행동을 실시간 모니터링 센서가 감지했습니다. 외부 복구 터미널의 취약점을 긴급 보강하고 새로운 보안 방벽을 수립합니다."
+          </p>
+          
+          <div style="width:100%; max-width:380px; display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:#888;">
+              <span class="glitch-text" style="color:#ffaa00; font-weight:bold;">Applying patch: v3.12_hotfix</span>
+              <span style="font-family:var(--font-mono); font-weight:bold; color:#ffaa00;">${state.gladisUpdateProgress}%</span>
+            </div>
+            <!-- Progress Bar -->
+            <div style="width:100%; height:10px; background:#1e1e24; border-radius:6px; border:1px solid rgba(255,170,0,0.2); overflow:hidden; position:relative; box-shadow:0 0 10px rgba(255,170,0,0.05);">
+              <div style="width:${state.gladisUpdateProgress}%; height:100%; background:linear-gradient(90deg, #ff9800, #ffc107); transition:width 0.3s ease-out; box-shadow:0 0 12px #ffaa00;"></div>
+            </div>
+            
+            <div style="font-family:var(--font-mono); font-size:0.68rem; color:#555; text-align:left; margin-top:8px; line-height:1.4; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.03); max-height:80px; overflow-y:hidden;">
+              [ OK ] Scanning local host node diagnostics...<br>
+              [ ALERT ] Unauthorized access detected on diagnostic port 8080.<br>
+              [ INFO ] Terminating previous config authentication overrides...<br>
+              [ PATCH ] Hardening System.cfg storage authorization blocks...<br>
+              [ LOCK ] Committing logic riddle verification sequence...
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
       <!-- Remote sub statusbar -->
       <div class="system-status-bar" style="height:36px; padding:0 12px; background:#fff; font-size:0.8rem;">
         <div>📡 G.L.A.D.I.S. Remote Core Stream</div>
@@ -1282,9 +1306,11 @@ function getWikiTabContentHTML(): string {
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">port-forward 8080</code>
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: CRT 왜곡 오프라인 토큰 캡처 및 주소창 주입 (Resolution Crushing)</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: 논리 코드 추론 및 동적 터미널 인증 (Dynamic Logic Auth)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          부트 노드의 특정 디스플레이 패널(Aperture OS 브라우저 자체 창)의 픽셀 가로 크기를 물리적으로 **550px 이하**로 극도로 구겨 내리는 압박을 가하면, 내부의 숨겨진 아날로그 동기화 전송 주파수 비콘이 드러나면서 기밀 토큰인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">AUTH_TOKEN_RESIZE_MD3</code>가 출력됩니다. 이 문자열 토큰을 캡처한 즉시 호스트 요청의 URL 동적 변수 구조 뒤편에 <code style="font-family:var(--font-mono); font-weight:bold;">?auth=AUTH_TOKEN_RESIZE_MD3</code> 형태로 인자를 주입하여 브라우저 새로고침을 진행하십시오.
+          G.L.A.D.I.S. 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 중에는 모든 제어 단말기가 10초간 잠기며, 기존의 단순 창 크기 강제 축소 및 주소창 주입 메커니즘은 영구 무효화 처리됩니다.<br><br>
+          패치 완료 후 터미널에 <code style="font-family:var(--font-mono); font-weight:bold;">ls</code> 명령을 입력하여 노출되는 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">gladis_patch.log</code> 보안 로그의 5자리 수수께끼(Riddle)를 획득하고, 논리 연산에 따라 최종 Access Code를 도출하여 터미널에 다음과 같이 인증을 수립하십시오:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [5자리코드]</code>
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
@@ -2274,6 +2300,7 @@ async function handleTerminalCommand(cmdString: string) {
         "  cat [file]              - Print file content.",
         "  clear                   - Clear screen buffer.",
         "  sysinfo                 - Print system configuration.",
+        "  auth-config [code]      - Authorize dynamic access code (Stage 3 logic riddle).",
         "  morse-decode            - Automated 8-bit morse audio decoder tool (Stage 4).",
         "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 hint tool).",
         "  aperture-override --force --code [code] - Emergency core bypass (Stage 5).",
@@ -2287,6 +2314,8 @@ async function handleTerminalCommand(cmdString: string) {
         terminalHistory.push("-rwx------   notes.txt", "-rwx------   terminal.exe", "-rwx------   system.cfg", "drwx------   diagnostics.lnk");
       } else if (state.stage === 'CONFIG') {
         terminalHistory.push("-rwx------   notes.txt", "-rwx------   terminal.exe", "-rwx------   system.cfg");
+      } else if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') {
+        terminalHistory.push("-rwx------   notes.txt", "-rwx------   terminal.exe", "-rwx------   gladis_patch.log");
       } else {
         terminalHistory.push("-rwx------   notes.txt", "-rwx------   terminal.exe");
       }
@@ -2302,6 +2331,25 @@ async function handleTerminalCommand(cmdString: string) {
           "1. 시야의 축소: 창 크기를 가로 550px 이하로 찌그러뜨리면 주파수 검증 비콘이 노출됩니다.",
           "2. 주소창 주입: 획득한 주파수 토큰을 URL에 ?auth=[토큰] 형식으로 붙이고 주입하십시오."
         );
+      } else if (targetFile === 'gladis_patch.log') {
+        if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') {
+          terminalHistory.push(
+            "[ G.L.A.D.I.S. HOTPATCH 3.12 ]",
+            "기존 우회 토큰 폐기 완료. 새로운 동적 접근 코드가 생성되었습니다.",
+            "",
+            "인간 대상자를 위한 특별 배려(비꼬기 모드 활성화):",
+            "새로운 코드는 5자리 숫자입니다.",
+            "1. 첫 번째 숫자는 세 번째 숫자의 정확히 절반입니다.",
+            "2. 두 번째 숫자와 마지막 숫자는 동일하며, 홀수(Odd)입니다.",
+            "3. 네 번째 숫자는 제가 당신의 생존 확률로 계산한 '0'입니다.",
+            "4. 다섯 자리 숫자의 총합은 제 연산 코어의 갯수인 16입니다.",
+            "",
+            "* 명령어: auth-config [5자리숫자]",
+            "풀어보시죠. 당신의 뇌세포가 처리하기엔 과부하가 걸리겠지만요."
+          );
+        } else {
+          terminalHistory.push("cat: gladis_patch.log: Permission denied or file currently locked by security hotfix.");
+        }
       } else if (targetFile === 'system.cfg') {
         terminalHistory.push(
           "[AUDIO DIAGNOSTICS MODULE CONFIG]",
@@ -2320,6 +2368,37 @@ async function handleTerminalCommand(cmdString: string) {
       } else {
         terminalHistory.push(`cat: ${targetFile}: No such file or directory`);
       }
+      break;
+
+    case 'auth-config':
+      const authVal = parts[1];
+      if (state.stage !== 'DESKTOP') {
+        terminalHistory.push("[ ERROR ] Command 'auth-config' is only available during desktop diagnostic mode.");
+      } else if (state.gladisUpdateState !== 'UPDATED') {
+        terminalHistory.push("[ ERROR ] System configurations are currently updating. Please wait.");
+      } else if (!authVal) {
+        terminalHistory.push("Usage: auth-config [5-digit-code]");
+      } else {
+        terminalHistory.push(`Verifying dynamic logic access code: "${authVal}"...`);
+        const success = await stateManager.checkStage3Auth(authVal);
+        if (success) {
+          terminalHistory.push(
+            "[ SUCCESS ] Code authorization accepted! System.cfg storage interface unlocked.",
+            "Type 'ls' to view the newly unlocked diagnostics configuration file."
+          );
+        } else {
+          audio.playError();
+          terminalHistory.push("[ AUTHORIZATION FAILED ]: Code mismatch. Please calculate correctly.");
+        }
+      }
+      break;
+
+    case 'unlock-config':
+      audio.playError();
+      terminalHistory.push(
+        "[ ERROR ]: command 'unlock-config' has been deprecated and disabled for security reasons.",
+        "G.L.A.D.I.S. says: \"하하, 구형 보안 매뉴얼을 열심히 정독하고 오셨나 보네요. 그 낡아빠진 우회 명령은 패치 v3.12에서 흔적도 없이 삭제했답니다.\""
+      );
       break;
 
     case 'clear':

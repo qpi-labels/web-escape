@@ -645,31 +645,10 @@ html, body {
 /* ==========================================================
    STAGE 2 RESIZE PUZZLE
    ========================================================== */
-.mystery-resize-panel {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #ffffff;
-  border: 3px solid #000000;
-  border-radius: var(--md-shape-corner-large);
-  padding: 30px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  z-index: 999;
-  width: 90%;
-  max-width: 400px;
-}
-
-@media (max-width: 550px) {
-  .mystery-resize-panel {
-    display: block !important;
-  }
-  .workspace {
-    filter: blur(8px);
-    pointer-events: none;
-  }
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* ==========================================================
