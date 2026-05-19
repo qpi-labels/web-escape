@@ -539,7 +539,7 @@ function getLinuxDesktopScreenHTML() {
                 <button class="wiki-nav-btn ${activeWikiTab === 'cake' ? 'active' : ''}" data-tab-id="cake" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">보상 케이크 (Cake)</button>
 
                 <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🤖 인공지능 연구소</div>
-                <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.O.S. 시스템</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDOS. 시스템</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.I.S. 스펙 명세</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
@@ -1290,7 +1290,7 @@ function getWikiTabContentHTML(): string {
             </tr>
             <tr style="border-bottom:1px solid #e2e8f0;">
               <td style="padding:6px; font-weight:bold;">대표 최고 경영자</td>
-              <td style="padding:6px;">케이브 존슨 (Founder / 1982년 유고 상태 돌입) -> 비서실장 캐롤라인 대행 -> G.L.A.D.O.S. 통합 코어 자동화 통제</td>
+              <td style="padding:6px;">케이브 존슨 (Founder / 1982년 유고 상태 돌입) -> 비서실장 캐롤라인 대행 -> GLaDOS. 통합 코어 자동화 통제</td>
             </tr>
             <tr style="border-bottom:1px solid #e2e8f0;">
               <td style="padding:6px; font-weight:bold;">메인 연구소 본진</td>
@@ -1309,7 +1309,7 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-size:0.9rem; margin-top:14px; margin-bottom:6px; color:var(--md-sys-color-primary);">🔬 에퍼쳐 풍요 증진 센터 (Aperture Enrichment Center)</h4>
         <p class="wiki-paragraph" style="font-size:0.78rem;">
-          에퍼쳐 사이언스의 거의 모든 연구 및 테스트는 오하이오주의 방대한 지하 소금광산을 수직 및 수평 굴착하여 구축한 <strong>Enrichment Center (에퍼쳐 과학 증진 센터)</strong>에서 이루어집니다. 이 시설은 수만 개의 무기 가변형 모듈 테스트 챔버(Test Chamber)로 구성되어 있으며, 메인 중앙 통제 인공지능인 <span class="wiki-link" data-go-tab="glados">G.L.A.D.O.S.</span>와 보조 진단 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S.</span>에 의해 100% 자동 변형 설계되는 세계 최대의 과학 실험실 인프라입니다.
+          에퍼쳐 사이언스의 거의 모든 연구 및 테스트는 오하이오주의 방대한 지하 소금광산을 수직 및 수평 굴착하여 구축한 <strong>Enrichment Center (에퍼쳐 과학 증진 센터)</strong>에서 이루어집니다. 이 시설은 수만 개의 무기 가변형 모듈 테스트 챔버(Test Chamber)로 구성되어 있으며, 메인 중앙 통제 인공지능인 <span class="wiki-link" data-go-tab="glados">GLaDOS.</span>와 보조 진단 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S.</span>에 의해 100% 자동 변형 설계되는 세계 최대의 과학 실험실 인프라입니다.
         </p>
       `;
 
@@ -1335,7 +1335,7 @@ function getWikiTabContentHTML(): string {
           </div>
           <div>
             <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1980년대~현재: 인공지능 인격 보정 및 컴퓨터 동조</span>
-            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">G.L.A.D.O.S. (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
+            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">GLaDOS. (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
           </div>
         </div>
       `;
@@ -1436,7 +1436,7 @@ function getWikiTabContentHTML(): string {
 
         <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
           <strong>⚠️ 사내 기밀 감사 메모 (AP-LAW-9892):</strong><br>
-          "당사는 재무 악화 및 원자재 공급 대란으로 인해 실제 먹을 수 있는 정상 유기 화학식 케이크 초콜릿을 생산할 재원을 상실했습니다. 따라서 G.L.A.D.I.S. 및 G.L.A.D.O.S.가 피실험자 유혹을 위해 가동하는 '케이크 보상 비콘' 신호는 사실상 인격 동조를 위한 기만용 홀로그램 혹은 <strong>거짓말(Lie)</strong>로 처리해야 함을 법무적 및 안전 차원에서 권고합니다. 이를 외부에 누설하는 직원은 철저히 격리하십시오."
+          "당사는 재무 악화 및 원자재 공급 대란으로 인해 실제 먹을 수 있는 정상 유기 화학식 케이크 초콜릿을 생산할 재원을 상실했습니다. 따라서 G.L.A.D.I.S. 및 GLaDOS.가 피실험자 유혹을 위해 가동하는 '케이크 보상 비콘' 신호는 사실상 인격 동조를 위한 기만용 홀로그램 혹은 <strong>거짓말(Lie)</strong>로 처리해야 함을 법무적 및 안전 차원에서 권고합니다. 이를 외부에 누설하는 직원은 철저히 격리하십시오."
         </div>
 
         <h4 style="font-size:0.85rem; margin-top:12px;">🔬 공식 화학 유화 유기물 전성분 리포트</h4>
@@ -1450,9 +1450,9 @@ function getWikiTabContentHTML(): string {
 
     case 'glados':
       return `
-        <h3 class="wiki-title-large">🤖 G.L.A.D.O.S. (Genetic Lifeform and Disk Operating System)</h3>
+        <h3 class="wiki-title-large">🤖 GLaDOS. (Genetic Lifeform and Disk Operating System)</h3>
         <p class="wiki-paragraph">
-          <strong>G.L.A.D.O.S.(유전적 생명체 및 디스크 운영체제)</strong>는 에퍼쳐 Enrichment Center 전 구역 및 자동 조립 라인, 가스 공급 밸브, 피실험용 테스트 트랩을 총괄 기동하는 사내 최고 핵심 초연산 인공지능 슈퍼컴퓨터 인터페이스 통제 장치입니다.
+          <strong>GLaDOS.(유전적 생명체 및 디스크 운영체제)</strong>는 에퍼쳐 Enrichment Center 전 구역 및 자동 조립 라인, 가스 공급 밸브, 피실험용 테스트 트랩을 총괄 기동하는 사내 최고 핵심 초연산 인공지능 슈퍼컴퓨터 인터페이스 통제 장치입니다.
         </p>
 
         <p class="wiki-paragraph" style="font-size:0.76rem;">
@@ -1464,7 +1464,7 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🤖 G.L.A.D.I.S. 인격 제어 코어 규격서 (AP-L5-CORE)</h3>
         <p class="wiki-paragraph">
-          <strong>G.L.A.D.I.S.(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 G.L.A.D.O.S.의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
+          <strong>G.L.A.D.I.S.(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 GLaDOS.의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:var(--md-sys-color-primary);">📍 하드웨어 구성 사양</h4>
@@ -1484,7 +1484,7 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🤖 도덕성 제어구 (Morality Sphere) 결손 사태 경위서</h3>
         <p class="wiki-paragraph">
-          본 문서는 G.L.A.D.I.S. 및 G.L.A.D.O.S. 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
+          본 문서는 G.L.A.D.I.S. 및 GLaDOS. 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; color:var(--md-sys-color-primary);">📍 물리적 손상 및 단락 경위</h4>
@@ -1504,7 +1504,7 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🥔 감자 배터리 어댑터 (Potato Battery Interface Matrix)</h3>
         <p class="wiki-paragraph">
-          <strong>감자 전지 강제 전압 다운그레이드 모듈</strong>은 G.L.A.D.I.S. 혹은 G.L.A.D.O.S.가 보안상 극도의 위협 수준에 도달하여 통제 불능이 될 때, 인공지능 코어를 물리적인 생감자(Potato) 전지에 결속해 저전력(1.1 MHz) 수준의 하등 연산장치로 강제 다운그레이드 및 격하시켜 격리하는 비상 통제 인터페이스 단락 규격입니다.
+          <strong>감자 전지 강제 전압 다운그레이드 모듈</strong>은 G.L.A.D.I.S. 혹은 GLaDOS.가 보안상 극도의 위협 수준에 도달하여 통제 불능이 될 때, 인공지능 코어를 물리적인 생감자(Potato) 전지에 결속해 저전력(1.1 MHz) 수준의 하등 연산장치로 강제 다운그레이드 및 격하시켜 격리하는 비상 통제 인터페이스 단락 규격입니다.
         </p>
 
         <div style="background:#fff3e0; border-left:4px solid #fb8c00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#5d4037; line-height:1.5;">
@@ -1605,37 +1605,28 @@ function getWikiTabContentHTML(): string {
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">port-forward 8080</code>
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: 논리 코드 추론 및 동적 터미널 인증 (Dynamic Logic Auth)</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: G.L.A.D.I.S 시스템 접속</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          G.L.A.D.I.S. 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 중에는 모든 제어 단말기가 10초간 잠기며, 기존의 단순 창 크기 강제 축소 및 주소창 주입 메커니즘은 영구 무효화 처리됩니다.<br><br>
-          * <strong>가상 주소 파라미터 매핑:</strong> 현재 물리적인 PC 브라우저가 F11 전체화면으로 구동 중이라 물리 주소창 조작이 불가능하므로, 가상 웹브라우저의 주소창 <input type="text" readonly style="width:200px; font-size:0.65rem; padding:1px 3px;" value="http://wiki.aperture.local?auth=31459" /> 영역에 쿼리 파라미터 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">?auth=31459</code>를 기입하고 엔터를 누르거나, 즐겨찾기 북마크바를 통해 동적 인증을 수행하십시오.<br><br>
-          인증 수립 후 터미널에 <code style="font-family:var(--font-mono); font-weight:bold;">ls</code> 명령을 입력하여 노출되는 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">gladis_patch.log</code> 보안 로그의 5자리 수수께끼(Riddle)를 획득하고, 논리 연산에 따라 최종 Access Code를 도출하여 터미널에 다음과 같이 인증을 수립하십시오:<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [5자리코드]</code>
+          G.L.A.D.I.S. 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 이후에는 모든 코드가 재설정 되오니, G.L.A.D.I.S 모듈이 외부 접속을 감지하지 못하도록 사전에 GLaDOS의 허가를 받으십시오.<br><br>
+          G.L.A.D.I.S 원격 제어 화면에 접속해 terminal.exe를 실행하면 자동으로 Access Code가 부여되오니 이를 사용하여 인증을 수립하십시오:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [액세스 코드]</code>
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 수집하십시오. 획득한 모스 시퀀스를 사내 '모스 부호 목록표'를 참조하여 번역하고, 사내 복호화 규칙에 맞춰 복호화한 4자 동기 보정 어휘 키워드(Passcode)를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
+          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 수집하십시오. 획득한 모스 시퀀스를 사내 '모스 부호 목록표'를 참조하여 번역하고, 사내 복호화 규칙에 맞춰 복호화한 4자 동기 보정 어휘 키워드를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다.
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: 셧다운 프로세스 (CSS Pseudo Isolation Bypass)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key body</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key app</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key window</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
+          출력된 최종 해제 코드를 터미널 쉘에 입력해 셧다운 프로세스를 진행하십시오.
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 셧다운 (Quantum Balancing & Shutdown)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          격자 락 제어 행렬(Magic Square, 마스터 상수합=99)의 모든 가로, 세로, 대각선 파동 대칭합이 수렴되도록 방정식을 해결하십시오. 정수 변수 X, Y, Z에 대해 공명 키 Resonance Key = (X * Y) - (Z * 2) 공식 값을 터미널 명령에 실어 주입합니다 (Key = 1089):<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-solve 1089</code><br>
-          양자 균형 락이 수렴 분해되면, 즉시 battery_schematic.jpg에 명시된 2D 격자 인덱스 좌표쌍 시퀀스를 매핑하여 8글자 셧다운 복구 단어 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">APERTURE</code>를 획득하고 아래 명령어로 셧다운을 완결합니다:<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-auth APERTURE</code><br>
-          (Resonance Key 혹은 셧다운 단어를 2회 연속 오동작 주입 시 즉각 과부하로 폭사하며 Tragic Fail 상태로 들어갑니다.)
+          '정말로 G.L.A.D.I.S를 셧다운하시겠습니까? 이 선택은 되돌릴 수 없습니다' 라는 메시지와 함께 입력창이 출력되면 y 또는 yes를 입력해 G.L.A.D.I.S를 최종적으로 셧다운하십시오.
         </p>
 
-        <h4 style="font-weight: bold; font-size: 0.88rem; margin-top: 15px; margin-bottom: 6px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">2. 최고 안전 권고안 (Trivia & Security Directive)</h4>
-        <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.6;">
-          성격 보정용 비상 패스코드가 특정 복호 키로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
-        </p>
       `;
   }
   return "";
