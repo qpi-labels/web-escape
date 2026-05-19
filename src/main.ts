@@ -1989,6 +1989,15 @@ function setupLinuxDesktopListeners() {
     });
   }
 
+  // Stage 5 Close emergency overlay
+  const closeEmergencyOverlayBtn = document.getElementById('closeEmergencyOverlayBtn');
+  if (closeEmergencyOverlayBtn) {
+    closeEmergencyOverlayBtn.addEventListener('click', () => {
+      showStage5EmergencyOverlay = false;
+      renderApp();
+    });
+  }
+
   // E2EE Messenger Attachment Downloader Listener
   const downloadGladisScriptBtn = document.getElementById('downloadGladisScriptBtn');
   if (downloadGladisScriptBtn) {
