@@ -29,6 +29,8 @@ let activeWikiTab: string = 'home';
 let isLinuxBrowserOpen = false;
 let isLinuxReadmeOpen = false;
 let isLinuxCoreLinkOpen = false;
+let isLinuxPhotoOpen = false;
+let activeChatTab = 'vance';
 
 let linuxBrowserX = 220;
 let linuxBrowserY = 50;
@@ -45,9 +47,15 @@ let linuxCoreLinkY = 30;
 let linuxCoreLinkWidth = 740;
 let linuxCoreLinkHeight = 570;
 
+let linuxPhotoX = 300;
+let linuxPhotoY = 120;
+let linuxPhotoWidth = 460;
+let linuxPhotoHeight = 580;
+
 let isLinuxBrowserFocused = false;
 let isLinuxReadmeFocused = false;
 let isLinuxCoreLinkFocused = false;
+let isLinuxPhotoFocused = false;
 
 // Stage 6 Quantum Matrix State
 let isQuantumSolved = false;
@@ -474,6 +482,12 @@ function getLinuxDesktopScreenHTML() {
             <span>Aperture_Chat</span>
           </button>
 
+          <!-- Photo icon -->
+          <button class="linux-icon" id="linuxPhotoIcon">
+            <svg viewBox="0 0 24 24"><path fill="#e2a106" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"/></svg>
+            <span>가족사진.jpg</span>
+          </button>
+
           <!-- Diagnostics icon (visible if in unlockedApps) -->
           ${state.unlockedApps.includes('diagnostics.lnk') ? `
             <button class="linux-icon" id="linuxDiagnosticsIcon">
@@ -580,9 +594,15 @@ function getLinuxDesktopScreenHTML() {
                 </div>
 
                 <div class="chat-section-label" style="font-size:0.65rem; color:#666; font-weight:bold; text-transform:uppercase; margin-bottom:8px; letter-spacing:1px;">Direct Messages</div>
-                <div class="chat-channel-item active" style="background:rgba(0,188,212,0.1); color:#00bcd4; font-weight:bold; padding:6px 10px; border-radius:6px; display:flex; align-items:center; gap:6px; cursor:pointer;">
+                
+                <div class="chat-channel-item ${activeChatTab === 'vance' ? 'active' : ''}" id="chatVanceTab" style="background:${activeChatTab === 'vance' ? 'rgba(0,188,212,0.1)' : 'transparent'}; color:${activeChatTab === 'vance' ? '#00bcd4' : '#eee'}; font-weight:${activeChatTab === 'vance' ? 'bold' : 'normal'}; padding:6px 10px; border-radius:6px; display:flex; align-items:center; gap:6px; cursor:pointer;">
                   <span style="width:8px; height:8px; background:#4caf50; border-radius:50%;"></span>
                   Vance (Supervisor)
+                </div>
+
+                <div class="chat-channel-item ${activeChatTab === 'wife' ? 'active' : ''}" id="chatWifeTab" style="background:${activeChatTab === 'wife' ? 'rgba(0,188,212,0.1)' : 'transparent'}; color:${activeChatTab === 'wife' ? '#00bcd4' : '#eee'}; font-weight:${activeChatTab === 'wife' ? 'bold' : 'normal'}; padding:6px 10px; border-radius:6px; display:flex; align-items:center; gap:6px; cursor:pointer; margin-top:4px;">
+                  <span style="width:8px; height:8px; background:#ff80ab; border-radius:50%;"></span>
+                  아내 (Emma) <span style="font-size:0.6rem; background:#f44336; color:#fff; padding:1px 5px; border-radius:10px; font-weight:bold; margin-left:auto;">1</span>
                 </div>
               </div>
 
@@ -590,110 +610,540 @@ function getLinuxDesktopScreenHTML() {
               <div class="chat-main" style="flex:1; display:flex; flex-direction:column; background:#1a1a1c;">
                 <!-- Chat Header -->
                 <div class="chat-main-header" style="padding:15px; border-bottom:1px solid #2d2d35; display:flex; flex-direction:column; gap:4px; background:#151518;">
-                  <span style="font-size:0.9rem; font-weight:bold; display:flex; align-items:center; gap:8px; color:#fff;">
-                    🔐 Secure Channel AP-99 <span style="font-size:0.65rem; background:#4caf50; color:#fff; padding:2px 6px; border-radius:10px;">E2EE Active</span>
-                  </span>
-                  <span style="font-size:0.75rem; color:#888;">Supervisor Vance와 종단간 암호화 보안 채널이 수립되었습니다.</span>
+                  ${activeChatTab === 'vance' ? `
+                    <span style="font-size:0.9rem; font-weight:bold; display:flex; align-items:center; gap:8px; color:#fff;">
+                      🔐 Secure Channel AP-99 <span style="font-size:0.65rem; background:#4caf50; color:#fff; padding:2px 6px; border-radius:10px;">E2EE Active</span>
+                    </span>
+                    <span style="font-size:0.75rem; color:#888;">Supervisor Vance와 종단간 암호화 보안 채널이 수립되었습니다.</span>
+                  ` : `
+                    <span style="font-size:0.9rem; font-weight:bold; display:flex; align-items:center; gap:8px; color:#fff;">
+                      💬 Direct Message: 아내 (Emma) <span style="font-size:0.65rem; background:#ff80ab; color:#fff; padding:2px 6px; border-radius:10px;">Family Channel</span>
+                    </span>
+                    <span style="font-size:0.75rem; color:#888;">아내(Emma) 계정으로 전송된 비공식 다이렉트 메시지함입니다.</span>
+                  `}
                 </div>
 
                 <!-- Chat Messages Scroll -->
                 <div class="chat-messages-container" id="chatMessagesContainer" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; font-size:0.8rem; line-height:1.4;">
-                  <!-- System Notification -->
-                  <div style="background:rgba(255,235,59,0.04); border:1px dashed rgba(255,235,59,0.2); padding:10px; border-radius:6px; color:#ffeb3b; font-size:0.75rem; text-align:center;">
-                    ⚠️ [경고] 시스템 관리자에 의해 이전 사내 공지 및 '#general' 채널 내 공식 README.txt 문서는 GLaDIS 코어 모듈에 의해 서버 레벨에서 강제 영구 삭제되었습니다.
-                  </div>
-
-                  <!-- Msg 1 -->
-                  <div style="display:flex; flex-direction:column; gap:4px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                      <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
-                      <span style="font-size:0.65rem; color:#555;">오후 4:32</span>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:90%; color:#ddd;">
-                      AP-09, 들리나? GLaDIS 메인 AI 코어가 폭주해서 시설 전체를 봉쇄했네! 사내 비상 복구 매뉴얼 파일(README.txt)도 녀석이 서버 레벨에서 강제로 지워버렸어.
-                    </div>
-                  </div>
-
-                  <!-- Msg 2 -->
-                  <div style="display:flex; flex-direction:column; gap:4px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                      <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
-                      <span style="font-size:0.65rem; color:#555;">오후 4:34</span>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:90%; color:#ddd; margin-bottom:5px;">
-                      다행히 이 백업 채널은 보안이 유지되는군! 내가 급히 코어 해킹용 **복구 쉘 스크립트 파일**을 가상 스토리지에서 확보해서 보내네.
-                      아래 첨부파일을 바탕화면으로 다운로드한 뒤, **우클릭으로 관리자 권한**으로 실행하여 녀석을 차단시켜주게! (기술 스펙은 사내 인트라넷 위키에 백업본이 있네.)
+                  ${activeChatTab === 'vance' ? `
+                    <!-- System Notification -->
+                    <div style="background:rgba(255,235,59,0.04); border:1px dashed rgba(255,235,59,0.2); padding:10px; border-radius:6px; color:#ffeb3b; font-size:0.75rem; text-align:center;">
+                      ⚠️ [경고] 시스템 관리자에 의해 이전 사내 공지 및 '#general' 채널 내 공식 README.txt 문서는 GLaDIS 코어 모듈에 의해 서버 레벨에서 강제 영구 삭제되었습니다.
                     </div>
 
-                    <!-- Downloader Card -->
-                    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:8px; max-width:90%; color:#eee; display:flex; flex-direction:column; gap:10px; margin-left:12px; animation: pulse 2s infinite;">
-                      <div style="display:flex; align-items:center; gap:12px;">
-                        <div style="font-size:1.8rem; user-select:none;">📄</div>
-                        <div style="display:flex; flex-direction:column; gap:2px;">
-                          <span style="font-weight:bold; font-size:0.82rem; color:#fff;">connect_gladis.sh</span>
-                          <span style="font-size:0.7rem; color:#888;">Size: 1.2 KB | Type: Shell Script</span>
+                    <!-- Msg 1 -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                        <span style="font-size:0.65rem; color:#555;">오후 4:32</span>
+                      </div>
+                      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:90%; color:#ddd;">
+                        AP-09, 들리나? GLaDIS 메인 AI 코어가 폭주해서 시설 전체를 봉쇄했네! 사내 비상 복구 매뉴얼 파일(README.txt)도 녀석이 서버 레벨에서 강제로 지워버렸어.
+                      </div>
+                    </div>
+
+                    <!-- Msg 2 -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                        <span style="font-size:0.65rem; color:#555;">오후 4:34</span>
+                      </div>
+                      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:90%; color:#ddd; margin-bottom:5px;">
+                        다행히 이 백업 채널은 보안이 유지되는군! 내가 급히 코어 해킹용 **복구 쉘 스크립트 파일**을 가상 스토리지에서 확보해서 보내네.
+                        아래 첨부파일을 바탕화면으로 다운로드한 뒤, **우클릭으로 관리자 권한**으로 실행하여 녀석을 차단시켜주게! (기술 스펙은 사내 인트라넷 위키에 백업본이 있네.)
+                      </div>
+
+                      <!-- Downloader Card -->
+                      <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:8px; max-width:90%; color:#eee; display:flex; flex-direction:column; gap:10px; margin-left:12px; animation: pulse 2s infinite;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                          <div style="font-size:1.8rem; user-select:none;">📄</div>
+                          <div style="display:flex; flex-direction:column; gap:2px;">
+                            <span style="font-weight:bold; font-size:0.82rem; color:#fff;">connect_gladis.sh</span>
+                            <span style="font-size:0.7rem; color:#888;">Size: 1.2 KB | Type: Shell Script</span>
+                          </div>
+                        </div>
+                        
+                        <button id="downloadGladisScriptBtn" style="background:${isGladisScriptDownloaded ? '#444' : '#00bcd4'}; border:none; padding:8px 12px; border-radius:6px; color:${isGladisScriptDownloaded ? '#888' : '#111'}; font-weight:bold; cursor:${isGladisScriptDownloaded ? 'not-allowed' : 'pointer'}; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.75rem; transition:background 0.2s;" ${isGladisScriptDownloaded ? 'disabled' : ''}>
+                          ${isGladisScriptDownloaded ? '✓ 다운로드 완료 (Downloaded)' : '⬇️ 바탕화면으로 다운로드 (Download to Desktop)'}
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Msg 2.5: Vance Stage 3 intervention (Riddle Hint) -->
+                    ${(state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') || state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
+                      <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                          <span style="font-size:0.65rem; color:#888;">오후 4:36</span>
+                        </div>
+                        <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
+                          앗! GLaDIS 녀석이 눈치를 채고 보안 핫패치를 올려서 기존 우회 토큰과 수동 주소창 주입을 완전히 막아버렸군!
+                          <br><br>
+                          하지만 녀석이 자만하며 남긴 흔적이 있네. 터미널(Terminal.exe)을 열고 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">ls</code> 명령을 입력해 보게! 녀석이 도발을 남겨둔 <strong>gladis_patch.log</strong> 파일이 보일 걸세.
+                          <br><br>
+                          그 로그 파일 속에 <strong>5자리 비밀코드 추론 수수께끼</strong>를 박아둔 모양이니, 녀석의 콧대를 꺾어주고 정답을 풀어서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">auth-config [정답]</code> 형태로 입력하여 보안 설정을 돌파해주게! 힘내게!
                         </div>
                       </div>
-                      
-                      <button id="downloadGladisScriptBtn" style="background:${isGladisScriptDownloaded ? '#444' : '#00bcd4'}; border:none; padding:8px 12px; border-radius:6px; color:${isGladisScriptDownloaded ? '#888' : '#111'}; font-weight:bold; cursor:${isGladisScriptDownloaded ? 'not-allowed' : 'pointer'}; display:flex; align-items:center; justify-content:center; gap:6px; font-size:0.75rem; transition:background 0.2s;" ${isGladisScriptDownloaded ? 'disabled' : ''}>
-                        ${isGladisScriptDownloaded ? '✓ 다운로드 완료 (Downloaded)' : '⬇️ 바탕화면으로 다운로드 (Download to Desktop)'}
-                      </button>
-                    </div>
-                  </div>
+                    ` : ''}
 
-                  <!-- Msg 2.5: Vance Stage 3 intervention (Riddle Hint) -->
-                  ${(state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') || state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
-                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
-                        <span style="font-size:0.65rem; color:#888;">오후 4:36</span>
+                    <!-- Msg 2.7: Vance Stage 4 intervention (Config Decryption) -->
+                    ${state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
+                      <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                          <span style="font-size:0.65rem; color:#888;">오후 4:38</span>
+                        </div>
+                        <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
+                          좋았어! 보안 필터 우회는 성공했군. 이제 녀석의 제어 설정을 변조할 차례네.
+                          원격 스트림 화면에서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 4px;">System.cfg</code> 파일을 열어보게!
+                          에러 로그 덤프의 각 모듈 첫 글자를 순서대로 수집한 뒤, 사내 복호화 규칙에 맞추어 변환해서 입력창에 인증 코드로 넣어야 하네.
+                        </div>
                       </div>
-                      <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
-                        앗! GLaDIS 녀석이 눈치를 채고 보안 핫패치를 올려서 기존 우회 토큰과 수동 주소창 주입을 완전히 막아버렸군!
-                        <br><br>
-                        하지만 녀석이 자만하며 남긴 흔적이 있네. 터미널(Terminal.exe)을 열고 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">ls</code> 명령을 입력해 보게! 녀석이 도발을 남겨둔 <strong>gladis_patch.log</strong> 파일이 보일 걸세.
-                        <br><br>
-                        그 로그 파일 속에 <strong>5자리 비밀코드 추론 수수께끼</strong>를 박아둔 모양이니, 녀석의 콧대를 꺾어주고 정답을 풀어서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">auth-config [정답]</code> 형태로 입력하여 보안 설정을 돌파해주게! 힘내게!
-                      </div>
-                    </div>
-                  ` : ''}
+                    ` : ''}
 
-                  <!-- Msg 2.7: Vance Stage 4 intervention (Config Decryption) -->
-                  ${state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
-                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
-                        <span style="font-size:0.65rem; color:#888;">오후 4:38</span>
+                    ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
+                      <!-- Msg 3: Vance emergency intervention -->
+                      <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #e53935; padding-left: 8px; margin-top: 14px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ef5350;">⚠️ Supervisor Vance</span>
+                          <span style="font-size:0.65rem; color:#888;">방금 전</span>
+                        </div>
+                        <div style="background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#ffcdd2; font-size:0.78rem; line-height:1.5;">
+                          AP-09! GLaDIS가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
+                          <br><br>
+                          원격 스트림 화면(GLaDIS Remote Desktop)에 내가 복구 쉘 우회 및 자가 진단 가이드가 담긴 <span style="color:#ffaa00; font-weight:bold;">diagnostics.lnk</span> 파일을 생성해두었으니 더블 클릭해서 내용을 확인하고 지침을 따르게!
+                          지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있으니, Terminal.exe를 열고 우회 코드를 알아내 주입해 차단해주게!
+                          <br><br>
+                          <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get-key body</code>
+                          <br><br>
+                          코드를 얻으면 즉시 이 명령을 내려 밸브를 파쇄해 가스 분사를 멈추게:
+                          <br>
+                          <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">aperture-override --force --code [우회코드]</code>
+                        </div>
                       </div>
-                      <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
-                        좋았어! 보안 필터 우회는 성공했군. 이제 녀석의 제어 설정을 변조할 차례네.
-                        원격 스트림 화면에서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 4px;">System.cfg</code> 파일을 열어보게!
-                        에러 로그 덤프의 각 모듈 첫 글자를 순서대로 수집한 뒤, 사내 복호화 규칙에 맞추어 변환해서 입력창에 인증 코드로 넣어야 하네.
-                      </div>
+                    ` : ''}
+                  ` : `
+                    <!-- 아내와 딸의 DM 메시지 -->
+                    <div style="background:rgba(244,143,177,0.04); border:1px dashed rgba(244,143,177,0.2); padding:10px; border-radius:6px; color:#ff80ab; font-size:0.75rem; text-align:center;">
+                      🔒 [안내] Emma 계정(외부 사설 단말기)으로부터 온 우회 암호화 메시지 목록입니다.
                     </div>
-                  ` : ''}
 
-                  ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
-                    <!-- Msg 3: Vance emergency intervention -->
-                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #e53935; padding-left: 8px; margin-top: 14px;">
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:bold; color:#ef5350;">⚠️ Supervisor Vance</span>
-                        <span style="font-size:0.65rem; color:#888;">방금 전</span>
+                    <!-- ============================================== -->
+                    <!-- 4 Weeks Ago Block -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 6:30</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          여보 오늘 저녁두 먹고 들어와?
+                        </div>
                       </div>
-                      <div style="background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#ffcdd2; font-size:0.78rem; line-height:1.5;">
-                        AP-09! GLaDIS가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
-                        <br><br>
-                        원격 스트림 화면(GLaDIS Remote Desktop)에 내가 복구 쉘 우회 및 자가 진단 가이드가 담긴 <span style="color:#ffaa00; font-weight:bold;">diagnostics.lnk</span> 파일을 생성해두었으니 더블 클릭해서 내용을 확인하고 지침을 따르게!
-                        지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있으니, Terminal.exe를 열고 우회 코드를 알아내 주입해 차단해주게!
-                        <br><br>
-                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get-key body</code>
-                        <br><br>
-                        코드를 얻으면 즉시 이 명령을 내려 밸브를 파쇄해 가스 분사를 멈추게:
-                        <br>
-                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">aperture-override --force --code [우회코드]</code>
+                      <!-- Father 1 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 6:45</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          응 오늘 장비 점검이 안 끝나서 ㅠ 먼저 먹어!
+                        </div>
+                      </div>
+                      <!-- Emma 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 6:46</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          알써 고생해용 ㅠ
+                        </div>
+                      </div>
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">4주 전 오후 8:15</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠!!
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          나 릴리 ㅋㅋㅋ 엄마 폰 훔쳐왔당
+                        </div>
+                      </div>
+                      <!-- Lily 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          언제왕? 나 안자고 기다리꺼야
+                        </div>
+                      </div>
+                      <!-- Father 2 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 8:30</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          릴리야 ㅋㅋㅋ 엄마 폰 몰래 쓰면 안 돼! 아빠 오늘 늦으니까 일찍 자구 내일 퇴근하면 꼭 놀아주께!!
+                        </div>
+                      </div>
+                      <!-- Lily 4 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">4주 전 오후 8:31</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          웅!! 내일 동물원 가는 고당? 약속!!!
+                        </div>
+                      </div>
+                      <!-- Emma 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 8:35</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          아유 릴리 이 녀석 방금 소파 밑에서 폰 하다가 나한테 들킴 ㅋㅋㅋ 여보 신경 쓰지 말고 일해~ 애들은 내가 재울게!
+                        </div>
+                      </div>
+                      <!-- Father 3 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">4주 전 오후 8:37</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          고마워 여보 금방 갈게 ㅠ!
+                        </div>
                       </div>
                     </div>
-                  ` : ''}
+
+                    <hr style="border:none; border-top:1px solid #2d2d35; margin:15px 0;">
+
+                    <!-- ============================================== -->
+                    <!-- 3 Weeks Ago Block -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">3주 전 오후 3:30</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          여보 연구소 책상에 릴리가 그린 그림 올려놨는데 봤어?
+                        </div>
+                      </div>
+                      <!-- Emma 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          유치원에서 아빠 보고 싶다고 그린 건데 꼭 챙겨와 ㅋㅋㅋ 안 가져오면 서운해할 듯
+                        </div>
+                      </div>
+                      <!-- Father 1 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">3주 전 오후 3:45</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          오 진짜? 아직 확인 못했는데 가자마자 볼게!
+                        </div>
+                      </div>
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">3주 전 오후 4:02</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠!! 내 그림 봤오?
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠를 젤 크게 그렸어!
+                        </div>
+                      </div>
+                      <!-- Lily 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          나랑 클로이랑 엄마랑 아빠랑 다 손잡고 이찌
+                        </div>
+                      </div>
+                      <!-- Lily 4 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          노란색 바나나 테두리 액자 한고야 이뿌지?
+                        </div>
+                      </div>
+                      <!-- Father 2 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">3주 전 오후 4:10</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          릴리 그림 아빠가 방금 봤어! 너무너무 이쁘네 ㅎㅎ 아빠 감동 먹음!
+                        </div>
+                      </div>
+                      <!-- Father 3 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          아빠 퇴근할 때 가방에 소중히 넣어갈게! 고마워 릴리❤️
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr style="border:none; border-top:1px solid #2d2d35; margin:15px 0;">
+
+                    <!-- ============================================== -->
+                    <!-- 2 Weeks Ago Block (Children's Day) -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">2주 전 오전 10:10</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠.. 오늘 어린이날인데 진짜 출근이야? ㅠㅠ
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          나 아빠 많이 보고 시픈데..
+                        </div>
+                      </div>
+                      <!-- Father 1 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">2주 전 오전 10:15</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          아 미안해 릴리야 ㅠㅠ 아빠가 급한 장비 수리가 생겨서 ㅠ 주말엔 아빠가 하루 종일 릴리 하고 싶은 거 다 해줄게! 약속!
+                        </div>
+                      </div>
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">2주 전 오전 10:20</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          여보 바쁜데 릴리가 보채서 미안해 ㅠ 내가 놀이공원 데려가서 아이스크림 사줄 테니까 일 잘 마쳐요!
+                        </div>
+                      </div>
+                      <!-- Lily 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">2주 전 오전 10:22</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠 힘내!! 엄마가 아빠 지금 악당 로봇이랑 싸워서 과학 세상 구하는 중이래 ㅋㅋㅋ
+                        </div>
+                      </div>
+                      <!-- Lily 4 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          멋쟁이 아빠 다치지 말구 화이팅!!
+                        </div>
+                      </div>
+                      <!-- Father 2 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">2주 전 오전 10:30</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          ㅋㅋㅋ 응! 아빠가 악당 얼른 물리치고 갈게! 릴리 고마워 사랑해!
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr style="border:none; border-top:1px solid #2d2d35; margin:15px 0;">
+
+                    <!-- ============================================== -->
+                    <!-- 1 Week Ago Block -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">1주 전 오후 9:15</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          여보 오늘도 밤샘이야?
+                        </div>
+                      </div>
+                      <!-- Emma 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          일교차 심한데 겉옷 챙겨간 거 꼭 입고 해요
+                        </div>
+                      </div>
+                      <!-- Father 1 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">1주 전 오후 9:30</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          응 오늘 밤샘 각이네 ㅠ 미안해 여보.. 밥 든든히 챙겨 먹어!
+                        </div>
+                      </div>
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">1주 전 오후 10:05</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠 나 아빠 겉옷 안고 자고 있어
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠 냄새 나서 조아
+                        </div>
+                      </div>
+                      <!-- Lily 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          집 오면 자고 있어두 침대에 번쩍 안아서 옮겨조야대!!
+                        </div>
+                      </div>
+                      <!-- Father 2 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">1주 전 오후 11:20</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          당근이지! 아빠가 퇴근하면 우리 릴리 꼭 안아줄게 ㅎㅎ 얼른 코 자자 이쁜 딸!
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr style="border:none; border-top:1px solid #2d2d35; margin:15px 0;">
+
+                    <!-- ============================================== -->
+                    <!-- 3 Days Ago Block -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#f48fb1;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#777;">3일 전 오후 7:10</span>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#eee; font-size:0.78rem; align-self:flex-start;">
+                          여보 요새 연구소 분위기가 이상해.. 뉴스에 이상한 기사도 나고 ㅠ 괜찮은 거지?
+                        </div>
+                      </div>
+                      <!-- Father 1 -->
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-size:0.65rem; color:#777;">3일 전 오후 7:30</span>
+                          <span style="font-weight:bold; color:#00bcd4;">나 (AP-09)</span>
+                        </div>
+                        <div style="background:#00bcd4; color:#111; padding:10px 14px; border-radius:12px 0 12px 12px; max-width:80%; font-size:0.78rem; font-weight:500; text-align:left;">
+                          아 괜찮아 여보 걱정 안 해도 돼! 그냥 단순 시스템 점검이야
+                        </div>
+                      </div>
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#888;">3일 전 오후 8:40</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          아빠 나 오늘도 아빠 올 때까지 절대 안 자구 기다릴 거야!
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          엄마한테 걸리기 전에 폰 돌려놓아야대니까 답장 노노!! 알라뷰 아빠!! 뿅뿅
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr style="border:none; border-top:1px solid #2d2d35; margin:15px 0;">
+
+                    <!-- ============================================== -->
+                    <!-- Today Block (CRITICAL NARRATIVE CONNECT) -->
+                    <!-- ============================================== -->
+                    <div style="display:flex; flex-direction:column; gap:8px; border-left: 3px solid #ff80ab; padding-left: 8px;">
+                      <!-- Emma 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff80ab; font-weight:bold;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#ff80ab; font-weight:bold;">오늘 오후 1:15</span>
+                        </div>
+                        <div style="background:rgba(244,143,177,0.08); border:1px solid rgba(244,143,177,0.25); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffe0b2; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          여보... 지금 연구소 서버 전체 오프라인이라는데 뉴스 난리 났어...
+                        </div>
+                      </div>
+                      <!-- Emma 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(244,143,177,0.08); border:1px solid rgba(244,143,177,0.25); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffe0b2; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          전화도 안 되고... 진짜 괜찮은 거야? 너무 걱정돼...
+                        </div>
+                      </div>
+                      <!-- Lily 1 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#ff80ab; font-weight:bold;">오늘 오후 1:17</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.08); border:1px solid rgba(255,64,129,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffd54f; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          아빠.. 오늘도 못 오는 거야? ㅠㅠ 나쁜 인공지능이 아빠 괴롭혀?
+                        </div>
+                      </div>
+                      <!-- Lily 2 -->
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.08); border:1px solid rgba(255,64,129,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffd54f; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          감기 조심하구 밥 꼭 먹어 아빠! 책상 위에 둔 노란 테두리 그림 보면서 우리 생각하고 힘내야 돼
+                        </div>
+                      </div>
+                      <!-- Emma 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff80ab; font-weight:bold;">아내 (Emma)</span>
+                          <span style="font-size:0.65rem; color:#ff80ab; font-weight:bold;">오늘 오후 1:20</span>
+                        </div>
+                        <div style="background:rgba(244,143,177,0.08); border:1px solid rgba(244,143,177,0.25); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffe0b2; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          여보 제발 다치지만 말고 무사히 돌아와... 사랑해...
+                        </div>
+                      </div>
+                      <!-- Lily 3 -->
+                      <div style="display:flex; flex-direction:column; gap:4px; margin-top: 6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span style="font-weight:bold; color:#ff4081;">릴리 (Lily)</span>
+                          <span style="font-size:0.65rem; color:#ff80ab; font-weight:bold;">오늘 오후 1:21</span>
+                        </div>
+                        <div style="background:rgba(255,64,129,0.08); border:1px solid rgba(255,64,129,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:85%; color:#ffd54f; font-size:0.8rem; align-self:flex-start; line-height:1.5;">
+                          아빠 꼭 꼭 무사히 돌아와야 해!!! 약속!!! 사랑해 아빠!!! ♥♥♥
+                        </div>
+                      </div>
+                    </div>
+                  `}
                 </div>
               </div>
               </div>
@@ -733,6 +1183,24 @@ function getLinuxDesktopScreenHTML() {
           <button class="context-menu-item" id="ctxProperties">📄 속성 (Properties)</button>
         </div>
       ` : ''}
+
+      <!-- 4. Family Photo Viewer Window -->
+      ${isLinuxPhotoOpen ? `
+        <div class="window-frame ${isLinuxPhotoFocused ? 'focused' : ''}" id="win-linux-photo" style="left:${linuxPhotoX}px; top:${linuxPhotoY}px; width:${linuxPhotoWidth}px; height:${linuxPhotoHeight}px; display:flex; flex-direction:column;">
+          <div class="window-header">
+            <div class="window-title" style="display:flex; align-items:center; gap:6px;">
+              🖼️ 가족사진.jpg - 이미지 뷰어
+            </div>
+            <div class="window-controls">
+              <button class="window-btn close-linux-photo-btn">×</button>
+            </div>
+          </div>
+          <div class="window-content photo-viewer-app" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px; background:#1e1e1e; overflow:hidden;">
+            <img src="/family.jpg" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:4px; box-shadow:0 4px 12px rgba(0,0,0,0.5);" />
+          </div>
+        </div>
+      ` : ''}
+
 
       <!-- UAC Privilege Overlay Modal -->
       ${isUacDialogOpen ? `
@@ -1724,6 +2192,11 @@ function setupLinuxDesktopListeners() {
     linuxReadmeIcon.addEventListener('dblclick', openLinuxReadme);
   }
 
+  const linuxPhotoIcon = document.getElementById('linuxPhotoIcon');
+  if (linuxPhotoIcon) {
+    linuxPhotoIcon.addEventListener('dblclick', openLinuxPhoto);
+  }
+
   if (linuxDiagnosticsIcon) {
     linuxDiagnosticsIcon.addEventListener('dblclick', openLinuxDiagnostics);
   }
@@ -1901,6 +2374,31 @@ function setupLinuxDesktopListeners() {
     });
   }
 
+  const closePhotoBtn = document.querySelector('.close-linux-photo-btn');
+  if (closePhotoBtn) {
+    closePhotoBtn.addEventListener('click', () => {
+      isLinuxPhotoOpen = false;
+      renderApp();
+    });
+  }
+
+  // Chat tab switching
+  const chatVanceTab = document.getElementById('chatVanceTab');
+  if (chatVanceTab) {
+    chatVanceTab.addEventListener('click', () => {
+      activeChatTab = 'vance';
+      renderApp();
+    });
+  }
+
+  const chatWifeTab = document.getElementById('chatWifeTab');
+  if (chatWifeTab) {
+    chatWifeTab.addEventListener('click', () => {
+      activeChatTab = 'wife';
+      renderApp();
+    });
+  }
+
   const closeCoreLinkBtn = document.querySelector('.close-linux-core-link-btn');
   if (closeCoreLinkBtn) {
     closeCoreLinkBtn.addEventListener('click', () => {
@@ -1939,6 +2437,18 @@ function setupLinuxDesktopListeners() {
       isLinuxCoreLinkFocused = true;
       isLinuxBrowserFocused = false;
       isLinuxReadmeFocused = false;
+      isLinuxPhotoFocused = false;
+      updateLinuxWindowFocusClasses();
+    });
+  }
+
+  const photoFrame = document.getElementById('win-linux-photo');
+  if (photoFrame) {
+    photoFrame.addEventListener('mousedown', () => {
+      isLinuxPhotoFocused = true;
+      isLinuxBrowserFocused = false;
+      isLinuxReadmeFocused = false;
+      isLinuxCoreLinkFocused = false;
       updateLinuxWindowFocusClasses();
     });
   }
@@ -2341,6 +2851,7 @@ function updateLinuxWindowFocusClasses() {
   const browser = document.getElementById('win-linux-browser');
   const readme = document.getElementById('win-linux-readme');
   const coreLink = document.getElementById('win-linux-core-link');
+  const photo = document.getElementById('win-linux-photo');
 
   if (browser) {
     if (isLinuxBrowserFocused) browser.classList.add('focused');
@@ -2355,6 +2866,11 @@ function updateLinuxWindowFocusClasses() {
   if (coreLink) {
     if (isLinuxCoreLinkFocused) coreLink.classList.add('focused');
     else coreLink.classList.remove('focused');
+  }
+
+  if (photo) {
+    if (isLinuxPhotoFocused) photo.classList.add('focused');
+    else photo.classList.remove('focused');
   }
 }
 
@@ -2526,6 +3042,17 @@ function openLinuxReadme() {
   isLinuxReadmeFocused = true;
   isLinuxBrowserFocused = false;
   isLinuxCoreLinkFocused = false;
+  isLinuxPhotoFocused = false;
+  renderApp();
+}
+
+function openLinuxPhoto() {
+  audio.playBeep(920, 0.04);
+  isLinuxPhotoOpen = true;
+  isLinuxPhotoFocused = true;
+  isLinuxBrowserFocused = false;
+  isLinuxReadmeFocused = false;
+  isLinuxCoreLinkFocused = false;
   renderApp();
 }
 
@@ -2685,7 +3212,53 @@ function setupLinuxDragAndDrop() {
       document.addEventListener('mouseup', up);
     });
   }
+
+  const photo = document.getElementById('win-linux-photo');
+  if (photo) {
+    setupWindowResizeObserver(photo, (w, h) => {
+      linuxPhotoWidth = w;
+      linuxPhotoHeight = h;
+    });
+
+    const h = photo.querySelector('.window-header') as HTMLElement;
+    h.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      let active = true;
+      const startX = e.clientX, startY = e.clientY;
+      const initX = photo.offsetLeft, initY = photo.offsetTop;
+
+      isLinuxPhotoFocused = true;
+      isLinuxBrowserFocused = false;
+      isLinuxReadmeFocused = false;
+      isLinuxCoreLinkFocused = false;
+      updateLinuxWindowFocusClasses();
+
+      const move = (ev: MouseEvent) => {
+        if (!active) return;
+        const workspace = document.querySelector('.linux-workspace');
+        const workspaceWidth = workspace ? workspace.clientWidth : window.innerWidth;
+        const workspaceHeight = workspace ? workspace.clientHeight : window.innerHeight;
+
+        let nextX = initX + (ev.clientX - startX);
+        let nextY = initY + (ev.clientY - startY);
+
+        linuxPhotoX = Math.max(0, Math.min(nextX, workspaceWidth - 100));
+        linuxPhotoY = Math.max(0, Math.min(nextY, workspaceHeight - 40));
+
+        photo.style.left = `${linuxPhotoX}px`;
+        photo.style.top = `${linuxPhotoY}px`;
+      };
+      const up = () => {
+        active = false;
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+      };
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+  }
 }
+
 
 // Sub-draggable windows inside Remote Connection Stream Workspace
 function setupRemoteDragAndDrop() {
