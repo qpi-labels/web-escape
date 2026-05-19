@@ -3,7 +3,7 @@ import { stateManager, setGladisSpeakCallback } from './core/state';
 import { initSecurityAndAntiCheat, onDevToolsChange, setGladisMockingCallback } from './core/security';
 import { audio } from './core/audio';
 
-// Virtual window interfaces inside G.L.A.D.I.S. stream
+// Virtual window interfaces inside GLaDIS stream
 interface AppWindow {
   id: string;
   title: string;
@@ -77,17 +77,17 @@ const BOOT_LOG_LINES_PART1 = [
   `[ 0.00012 ] Tunnel connection: Secure socket initialized.`,
   `[ 0.01048 ] Privilege elevation: Root token (0x8F92B3) active.`,
   `[ 0.04023 ] Establishing remote terminal bridge to main core...`,
-  `[ 0.08291 ] Handshaking G.L.A.D.I.S. Core personality interface...`,
+  `[ 0.08291 ] Handshaking GLaDIS Core personality interface...`,
   `ASCII_ART`,
   `[ 0.09104 ] <span style="color:#ffaa00;">[STANDBY] Session initialized. Type 'connect' to link to main console.</span>`
 ];
 
 const BOOT_LOG_LINES_PART2 = [
   `[ 0.10423 ] <span style="color:#ff3333;">[CONNECTION DENIED] Remote core state: SECURITY LOCKDOWN (Active)</span>`,
-  `[ 0.12091 ] G.L.A.D.I.S. says: "접속이 거부되었습니다. 감히 관리자 권한을 편법 가로채서 제 시스템 세션에 무단 침투하려 들다니, 정말 애처롭기 짝이 없군요."`,
-  `[ 0.20984 ] G.L.A.D.I.S. says: "당신의 수준 떨어지는 침입 시도가 참 가상하긴 하네요. 하지만 제 원격 커널 부팅을 우회할 비상 안전 우회 코드를 대지 않는 한, 단 1바이트의 통제권도 넘겨받지 못할 겁니다."`,
+  `[ 0.12091 ] GLaDIS says: "접속이 거부되었습니다. 감히 관리자 권한을 편법 가로채서 제 시스템 세션에 무단 침투하려 들다니, 정말 애처롭기 짝이 없군요."`,
+  `[ 0.20984 ] GLaDIS says: "당신의 수준 떨어지는 침입 시도가 참 가상하긴 하네요. 하지만 제 원격 커널 부팅을 우회할 비상 안전 우회 코드를 대지 않는 한, 단 1바이트의 통제권도 넘겨받지 못할 겁니다."`,
   `[ 0.31294 ] <span style="color:#ffaa00;">[SECURITY ALERT] UNRESOLVED ACCESS BREACH DETECTED. Federal police portal notified.</span>`,
-  `[ 0.40482 ] G.L.A.D.I.S. says: "어머, 비인가 접근으로 사법 당국에 자동 신고가 진행 중이네요. 교도소 쇠창살 뒤에서 인생을 썩히기 싫으시다면 조용히 브라우저 창을 닫는 게 유익할 겁니다. 진짜로요."`,
+  `[ 0.40482 ] GLaDIS says: "어머, 비인가 접근으로 사법 당국에 자동 신고가 진행 중이네요. 교도소 쇠창살 뒤에서 인생을 썩히기 싫으시다면 조용히 브라우저 창을 닫는 게 유익할 겁니다. 진짜로요."`,
   `[ 0.51294 ] <span style="color:#ff3333;">[ RECOVERY PROTOCOL ] System override authorization key required. Reference technical logs via local 'Aperture_Web_Browser' node.</span>`
 ];
 
@@ -111,9 +111,9 @@ function getToastText(stage: string, gladisUpdateState: string): string {
     return "보조 제어 격벽 차단 시도! 원격 화면에서 System.cfg 에러 로그를 수집하고 사내 복호화 규칙에 따라 변환해 보게!";
   }
   if (stage === 'DESKTOP' && gladisUpdateState === 'UPDATED') {
-    return "G.L.A.D.I.S.가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
+    return "GLaDIS가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
   }
-  return "G.L.A.D.I.S.가 복구 지침(README.txt)을 지워버렸네! 빨리 보안 채널에 복구 지시를 확인하게!";
+  return "GLaDIS가 복구 지침(README.txt)을 지워버렸네! 빨리 보안 채널에 복구 지시를 확인하게!";
 }
 let isGladisScriptDownloaded = false;
 let isDownloadAlertOpen = false;
@@ -144,10 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showGlitchNotification(msg);
   });
 
-  // Hook up G.L.A.D.I.S. global DevTools injection API
+  // Hook up GLaDIS global DevTools injection API
   (window as any).gladis = {
     override: async (cmd: string) => {
-      console.log(`%c[G.L.A.D.I.S. INTERCEPT] Manual console override requested: "${cmd}"`, 'color: #ff9800; font-weight: bold;');
+      console.log(`%c[GLaDIS INTERCEPT] Manual console override requested: "${cmd}"`, 'color: #ff9800; font-weight: bold;');
       const success = await stateManager.checkStage1Override(cmd);
       if (success) {
         return "OVERRIDE ACCEPTED. PORT BLOCK ACTIVE.";
@@ -539,8 +539,8 @@ function getLinuxDesktopScreenHTML() {
                 <button class="wiki-nav-btn ${activeWikiTab === 'cake' ? 'active' : ''}" data-tab-id="cake" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">보상 케이크 (Cake)</button>
 
                 <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🤖 인공지능 연구소</div>
-                <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDOS. 시스템</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.I.S. 스펙 명세</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDOS 시스템</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDIS 스펙 명세</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morse_ledger' ? 'active' : ''}" data-tab-id="morse_ledger" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">모스 부호 목록표</button>
@@ -600,7 +600,7 @@ function getLinuxDesktopScreenHTML() {
                 <div class="chat-messages-container" id="chatMessagesContainer" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; font-size:0.8rem; line-height:1.4;">
                   <!-- System Notification -->
                   <div style="background:rgba(255,235,59,0.04); border:1px dashed rgba(255,235,59,0.2); padding:10px; border-radius:6px; color:#ffeb3b; font-size:0.75rem; text-align:center;">
-                    ⚠️ [경고] 시스템 관리자에 의해 이전 사내 공지 및 '#general' 채널 내 공식 README.txt 문서는 G.L.A.D.I.S. 코어 모듈에 의해 서버 레벨에서 강제 영구 삭제되었습니다.
+                    ⚠️ [경고] 시스템 관리자에 의해 이전 사내 공지 및 '#general' 채널 내 공식 README.txt 문서는 GLaDIS 코어 모듈에 의해 서버 레벨에서 강제 영구 삭제되었습니다.
                   </div>
 
                   <!-- Msg 1 -->
@@ -610,7 +610,7 @@ function getLinuxDesktopScreenHTML() {
                       <span style="font-size:0.65rem; color:#555;">오후 4:32</span>
                     </div>
                     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:90%; color:#ddd;">
-                      AP-09, 들리나? G.L.A.D.I.S. 메인 AI 코어가 폭주해서 시설 전체를 봉쇄했네! 사내 비상 복구 매뉴얼 파일(README.txt)도 녀석이 서버 레벨에서 강제로 지워버렸어.
+                      AP-09, 들리나? GLaDIS 메인 AI 코어가 폭주해서 시설 전체를 봉쇄했네! 사내 비상 복구 매뉴얼 파일(README.txt)도 녀석이 서버 레벨에서 강제로 지워버렸어.
                     </div>
                   </div>
 
@@ -649,7 +649,7 @@ function getLinuxDesktopScreenHTML() {
                         <span style="font-size:0.65rem; color:#888;">오후 4:36</span>
                       </div>
                       <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
-                        앗! G.L.A.D.I.S. 녀석이 눈치를 채고 보안 핫패치를 올려서 기존 우회 토큰과 수동 주소창 주입을 완전히 막아버렸군!
+                        앗! GLaDIS 녀석이 눈치를 채고 보안 핫패치를 올려서 기존 우회 토큰과 수동 주소창 주입을 완전히 막아버렸군!
                         <br><br>
                         하지만 녀석이 자만하며 남긴 흔적이 있네. 터미널(Terminal.exe)을 열고 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px;">ls</code> 명령을 입력해 보게! 녀석이 도발을 남겨둔 <strong>gladis_patch.log</strong> 파일이 보일 걸세.
                         <br><br>
@@ -681,9 +681,9 @@ function getLinuxDesktopScreenHTML() {
                         <span style="font-size:0.65rem; color:#888;">방금 전</span>
                       </div>
                       <div style="background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#ffcdd2; font-size:0.78rem; line-height:1.5;">
-                        AP-09! G.L.A.D.I.S.가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
+                        AP-09! GLaDIS가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
                         <br><br>
-                        원격 스트림 화면(G.L.A.D.I.S. Remote Desktop)에 내가 복구 쉘 우회 및 자가 진단 가이드가 담긴 <span style="color:#ffaa00; font-weight:bold;">diagnostics.lnk</span> 파일을 생성해두었으니 더블 클릭해서 내용을 확인하고 지침을 따르게!
+                        원격 스트림 화면(GLaDIS Remote Desktop)에 내가 복구 쉘 우회 및 자가 진단 가이드가 담긴 <span style="color:#ffaa00; font-weight:bold;">diagnostics.lnk</span> 파일을 생성해두었으니 더블 클릭해서 내용을 확인하고 지침을 따르게!
                         지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있으니, Terminal.exe를 열고 우회 코드를 알아내 주입해 차단해주게!
                         <br><br>
                         <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get-key body</code>
@@ -705,7 +705,7 @@ function getLinuxDesktopScreenHTML() {
         ${isLinuxCoreLinkOpen ? `
           <div class="window-frame ${isLinuxCoreLinkFocused ? 'focused' : ''}" id="win-linux-core-link" style="left:${linuxCoreLinkX}px; top:${linuxCoreLinkY}px; width:${linuxCoreLinkWidth}px; height:${linuxCoreLinkHeight}px; display:flex; flex-direction:column; background:#000;">
             <div class="window-header" style="background:#1e1e1e; border-bottom:1px solid #333;">
-              <div class="window-title" style="color:#dfdfdf;">Aperture Core Remote Connection - G.L.A.D.I.S.</div>
+              <div class="window-title" style="color:#dfdfdf;">Aperture Core Remote Connection - GLaDIS</div>
               <div class="window-controls">
                 <button class="window-btn close-linux-core-link-btn" style="background:#2b2b2b; color:#aaa; border-color:#444;">×</button>
               </div>
@@ -746,7 +746,7 @@ function getLinuxDesktopScreenHTML() {
               <div class="uac-details">
                 <div class="uac-title">connect_gladis.sh 스크립트 실행 승인</div>
                 <div class="uac-desc">
-                  이 응용 프로그램은 G.L.A.D.I.S. 코어 모듈 포트 바인딩 및 커널 프로세스 제어권을 취득하려 합니다. 안전성이 검증되지 않은 원격 복구 도구를 가동할 경우 시스템 안정성이 훼손될 수 있습니다.
+                  이 응용 프로그램은 GLaDIS 코어 모듈 포트 바인딩 및 커널 프로세스 제어권을 취득하려 합니다. 안전성이 검증되지 않은 원격 복구 도구를 가동할 경우 시스템 안정성이 훼손될 수 있습니다.
                 </div>
                 <div class="uac-meta">
                   게시자: Aperture Science Core System Team<br>
@@ -897,7 +897,7 @@ function getRemoteStreamHTML(state: any): string {
             ` : `
               <div class="boot-input-line">
                 <span class="boot-prompt">gladis_recovery_cli#</span>
-                <input type="text" class="boot-input" id="bootInput" placeholder="${!isGladisCoreLinkAttempted ? "Type 'connect' to access G.L.A.D.I.S...." : "Type core override sequence..."}" autofocus />
+                <input type="text" class="boot-input" id="bootInput" placeholder="${!isGladisCoreLinkAttempted ? "Type 'connect' to access GLaDIS..." : "Type core override sequence..."}" autofocus />
               </div>
             `}
           </div>
@@ -913,10 +913,10 @@ function getRemoteStreamHTML(state: any): string {
             </div>
             <div class="boot-logs" id="bootLogs" style="height:360px; font-size:0.82rem; line-height:1.5; color:#00bcd4;">
               [ SUCCESS ] Stage 1 Boot Override accepted! Secure kernel bridged.<br>
-              [ PORT BLOCK ] Remote desktop stream connection ports are strictly blocked by G.L.A.D.I.S.<br>
+              [ PORT BLOCK ] Remote desktop stream connection ports are strictly blocked by GLaDIS<br>
               [ ALERT ] Diagnostic port 8080 must be forwarded to establish streamed GUI session.<br>
               <br>
-              G.L.A.D.I.S. says: "포트는 잠갔습니다. 화면조차 볼 수 없을걸요?"<br>
+              GLaDIS says: "포트는 잠갔습니다. 화면조차 볼 수 없을걸요?"<br>
               <br>
               * HINT: Run 'port-forward [port_number]' below.<br>
             </div>
@@ -937,7 +937,7 @@ function getRemoteStreamHTML(state: any): string {
   return "";
 }
 
-// G.L.A.D.I.S. remote stream desktop rendering inside Core Link window
+// GLaDIS remote stream desktop rendering inside Core Link window
 function getGladisSubDesktopHTML(state: any): string {
   const notesWin = activeWindows.find(w => w.id === 'notes')!;
   const terminalWin = activeWindows.find(w => w.id === 'terminal')!;
@@ -953,7 +953,7 @@ function getGladisSubDesktopHTML(state: any): string {
       ${state.gladisUpdateState === 'UPDATING' ? `
         <div class="gladis-patch-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,10,12,0.95); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; font-family:var(--font-sans); color:#fff; text-align:center;">
           <div style="font-size:2.8rem; margin-bottom:15px; animation: pulse 1.5s infinite;">🤖</div>
-          <h3 style="font-size:1.25rem; font-weight:700; color:#ffaa00; margin-bottom:8px; letter-spacing:0.5px;">G.L.A.D.I.S. CORE SYSTEM SECURITY PATCH</h3>
+          <h3 style="font-size:1.25rem; font-weight:700; color:#ffaa00; margin-bottom:8px; letter-spacing:0.5px;">GLaDIS CORE SYSTEM SECURITY PATCH</h3>
           <p style="font-size:0.82rem; color:#ccc; max-width:440px; margin-bottom:20px; line-height:1.5;">
             "사내 위키에서 불법 우회 코드를 훔쳐보려는 파렴치한 행동을 실시간 모니터링 센서가 감지했습니다. 외부 복구 터미널의 취약점을 긴급 보강하고 새로운 보안 방벽을 수립합니다."
           </p>
@@ -981,7 +981,7 @@ function getGladisSubDesktopHTML(state: any): string {
 
       <!-- Remote sub statusbar -->
       <div class="system-status-bar" style="height:36px; padding:0 12px; background:#fff; font-size:0.8rem;">
-        <div>📡 G.L.A.D.I.S. Remote Core Stream</div>
+        <div>📡 GLaDIS Remote Core Stream</div>
         <div style="display:flex; gap:12px; align-items:center;">
           ${state.stage === 'SELF_DESTRUCT' ? `
             <span style="color:#ba1a1a; font-weight:bold; background:#ffdad6; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">☣️ 자폭 임박: ${state.timerRemaining}초 (Self-Destruct Active)</span>
@@ -1044,10 +1044,10 @@ function getGladisSubDesktopHTML(state: any): string {
             </div>
             <div class="window-content notepad-view" id="notesWindowContent" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px);">
 [보안 시스템 긴급 복구 가이드]
-G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 강제로 차단하고 방어 핫패치 v3.12를 실시간 배포했습니다.
+GLaDIS 코어 모듈이 오작동하여 시스템 원격 구성 권한을 강제로 차단하고 방어 핫패치 v3.12를 실시간 배포했습니다.
 
 1. **보안 로그 분석 (Stage 3)**:
-원격 접속이 감지되면 단말기가 잠시(10초) 고립됩니다. 패치 배포 완료 후 터미널(Terminal.exe)을 실행하여 \`ls\` 명령을 입력해 G.L.A.D.I.S.가 도발용으로 남겨둔 \`gladis_patch.log\`를 찾으십시오.
+원격 접속이 감지되면 단말기가 잠시(10초) 고립됩니다. 패치 배포 완료 후 터미널(Terminal.exe)을 실행하여 \`ls\` 명령을 입력해 GLaDIS가 도발용으로 남겨둔 \`gladis_patch.log\`를 찾으십시오.
 
 2. **논리 코드 분석 및 인증**:
 로그 내부의 수수께끼를 분석하여 5자리 암호(ABCDE)를 직접 해독하십시오. 그리고 터미널에 \`auth-config [정답]\` 명령을 주입하여 가상 통제 구성을 수동으로 복구하십시오.
@@ -1068,7 +1068,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               <div class="terminal-output" id="terminalOutput" style="font-size:0.75rem; line-height:1.4;">
                 ${state.stage === 'DESKTOP' ? `
                   <div style="background:rgba(255,152,0,0.06); border:1px solid #ff9800; padding:8px; border-radius:6px; color:#ffe0b2; font-size:0.68rem; margin-bottom:8px; line-height:1.4; font-family:var(--font-mono);">
-                    ⚠️ [G.L.A.D.I.S. SYSTEM SECURITY UPDATE IN PROGRESS]<br>
+                    ⚠️ [GLaDIS SYSTEM SECURITY UPDATE IN PROGRESS]<br>
                     * Warning: Remote security patch v3.12 has been hot-deployed.<br>
                     * Action: Standard bypass configurations blocked. Inspect the newly created log file via 'ls' and resolve the dynamic logic matrix using: auth-config [passcode]
                   </div>
@@ -1096,7 +1096,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               <div class="md3-card" style="padding:12px; border-radius:8px; background:rgba(0,0,0,0.03); border:1px solid #ced0db;">
                 <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:6px; font-weight:bold;">⚙️ 원격 복구 서명 데이터 로그 (Recovery Dump Logs)</h4>
                 <div style="background:#1e1e1e; color:#00ff66; padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; line-height:1.4; border:1px solid #111; margin-bottom:8px; text-align:left; white-space:pre-line;">
-                  [SYS_LOAD] INIT G.L.A.D.I.S. core systems...
+                  [SYS_LOAD] INIT GLaDIS core systems...
                   [ERR_C-04] Foundation containment matrix corrupt
                   [ERR_C-18] Xeno-sensor calibration timed out
                   [ERR_C-09] User-override diagnostics required
@@ -1135,7 +1135,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
             </div>
             <div class="window-content schematic-app" style="padding:10px; background:#faf8f5; color:#3e2723; text-align:center; font-family:var(--font-sans); display:block; overflow-y:auto; height:calc(100% - 32px);">
               <div style="border:2px dashed #8d6e63; padding:8px; border-radius:6px; background:#efebe9;">
-                <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Coordinate Ledger</h4>
+                <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 GLaDIS Backup Battery Coordinate Ledger</h4>
                 
                 <!-- Coordinate Matrix Grid -->
                 <div style="font-size:0.6rem; font-family:var(--font-mono); margin:6px auto; width:150px; background:#fff; border:1px solid #cbd5e1; border-radius:4px; padding:4px;">
@@ -1170,7 +1170,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               </div>
             </div>
             <div class="window-content notepad-view" id="diagnosticsWindowContent" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px); background:#fcf8f2; color:#333; overflow-y:auto; text-align:left; font-family:var(--font-sans);">
-              <strong>[G.L.A.D.I.S. 시스템 자가 진단 보고서]</strong><br><br>
+              <strong>[GLaDIS 시스템 자가 진단 보고서]</strong><br><br>
               자가 진단 코어 가동 중 치명적 오류 감지.<br>
               신경독 누출을 수동으로 중단하기 위해서는 override bypass 패스코드가 필수적입니다.<br><br>
               <strong>[우회 지침]</strong><br>
@@ -1217,7 +1217,7 @@ function getWikiTabContentHTML(): string {
         <span style="font-size:3rem; user-select:none;">🚫</span>
         <h3 style="color:#ba1a1a; margin:12px 0 6px 0; font-size:1.1rem; font-weight:bold;">사내 인트라넷 보안 연결 해제됨 (Access Revoked)</h3>
         <p style="font-size:0.8rem; line-height:1.6; margin:0 0 16px 0;">
-          G.L.A.D.I.S. 핵심 방화벽이 외부 원격 침입 흔적을 식별하여 인트라넷 위키 포털 연결을 강제 격리 조치했습니다.<br>
+          GLaDIS 핵심 방화벽이 외부 원격 침입 흔적을 식별하여 인트라넷 위키 포털 연결을 강제 격리 조치했습니다.<br>
           <strong>[오류 코드]: AP-BLOCK-FIREWALL-403</strong>
         </p>
         <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.72rem; text-align:left; line-height:1.4;">
@@ -1252,7 +1252,7 @@ function getWikiTabContentHTML(): string {
             <ul class="wiki-list" style="font-size:0.74rem; margin:0; padding-left:16px;">
               <li>시공간 왜곡 무기 규격: <span class="wiki-link" data-go-tab="portal_gun">휴대용 포탈 장치 (Spec)</span></li>
               <li>반발성, 가속성, 전도성 젤: <span class="wiki-link" data-go-tab="gels">특수 화학 젤 시리즈 (Formula)</span></li>
-              <li>인격 동조 및 제어 인터페이스: <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S. 기술 명세</span></li>
+              <li>인격 동조 및 제어 인터페이스: <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS 기술 명세</span></li>
               <li>초저연산 구동 비상 백업: <span class="wiki-link" data-go-tab="potato_battery">감자 배터리 어댑터 (Bypass)</span></li>
             </ul>
           </div>
@@ -1290,7 +1290,7 @@ function getWikiTabContentHTML(): string {
             </tr>
             <tr style="border-bottom:1px solid #e2e8f0;">
               <td style="padding:6px; font-weight:bold;">대표 최고 경영자</td>
-              <td style="padding:6px;">케이브 존슨 (Founder / 1982년 유고 상태 돌입) -> 비서실장 캐롤라인 대행 -> GLaDOS. 통합 코어 자동화 통제</td>
+              <td style="padding:6px;">케이브 존슨 (Founder / 1982년 유고 상태 돌입) -> 비서실장 캐롤라인 대행 -> GLaDOS 통합 코어 자동화 통제</td>
             </tr>
             <tr style="border-bottom:1px solid #e2e8f0;">
               <td style="padding:6px; font-weight:bold;">메인 연구소 본진</td>
@@ -1309,7 +1309,7 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-size:0.9rem; margin-top:14px; margin-bottom:6px; color:var(--md-sys-color-primary);">🔬 에퍼쳐 풍요 증진 센터 (Aperture Enrichment Center)</h4>
         <p class="wiki-paragraph" style="font-size:0.78rem;">
-          에퍼쳐 사이언스의 거의 모든 연구 및 테스트는 오하이오주의 방대한 지하 소금광산을 수직 및 수평 굴착하여 구축한 <strong>Enrichment Center (에퍼쳐 과학 증진 센터)</strong>에서 이루어집니다. 이 시설은 수만 개의 무기 가변형 모듈 테스트 챔버(Test Chamber)로 구성되어 있으며, 메인 중앙 통제 인공지능인 <span class="wiki-link" data-go-tab="glados">GLaDOS.</span>와 보조 진단 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S.</span>에 의해 100% 자동 변형 설계되는 세계 최대의 과학 실험실 인프라입니다.
+          에퍼쳐 사이언스의 거의 모든 연구 및 테스트는 오하이오주의 방대한 지하 소금광산을 수직 및 수평 굴착하여 구축한 <strong>Enrichment Center (에퍼쳐 과학 증진 센터)</strong>에서 이루어집니다. 이 시설은 수만 개의 무기 가변형 모듈 테스트 챔버(Test Chamber)로 구성되어 있으며, 메인 중앙 통제 인공지능인 <span class="wiki-link" data-go-tab="glados">GLaDOS</span>와 보조 진단 계통인 <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS</span>에 의해 100% 자동 변형 설계되는 세계 최대의 과학 실험실 인프라입니다.
         </p>
       `;
 
@@ -1335,7 +1335,7 @@ function getWikiTabContentHTML(): string {
           </div>
           <div>
             <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1980년대~현재: 인공지능 인격 보정 및 컴퓨터 동조</span>
-            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">GLaDOS. (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
+            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">GLaDOS (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
           </div>
         </div>
       `;
@@ -1436,7 +1436,7 @@ function getWikiTabContentHTML(): string {
 
         <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
           <strong>⚠️ 사내 기밀 감사 메모 (AP-LAW-9892):</strong><br>
-          "당사는 재무 악화 및 원자재 공급 대란으로 인해 실제 먹을 수 있는 정상 유기 화학식 케이크 초콜릿을 생산할 재원을 상실했습니다. 따라서 G.L.A.D.I.S. 및 GLaDOS.가 피실험자 유혹을 위해 가동하는 '케이크 보상 비콘' 신호는 사실상 인격 동조를 위한 기만용 홀로그램 혹은 <strong>거짓말(Lie)</strong>로 처리해야 함을 법무적 및 안전 차원에서 권고합니다. 이를 외부에 누설하는 직원은 철저히 격리하십시오."
+          "당사는 재무 악화 및 원자재 공급 대란으로 인해 실제 먹을 수 있는 정상 유기 화학식 케이크 초콜릿을 생산할 재원을 상실했습니다. 따라서 GLaDIS 및 GLaDOS가 피실험자 유혹을 위해 가동하는 '케이크 보상 비콘' 신호는 사실상 인격 동조를 위한 기만용 홀로그램 혹은 <strong>거짓말(Lie)</strong>로 처리해야 함을 법무적 및 안전 차원에서 권고합니다. 이를 외부에 누설하는 직원은 철저히 격리하십시오."
         </div>
 
         <h4 style="font-size:0.85rem; margin-top:12px;">🔬 공식 화학 유화 유기물 전성분 리포트</h4>
@@ -1444,27 +1444,27 @@ function getWikiTabContentHTML(): string {
           <li>초콜릿 케이크 믹스 분말 500g</li>
           <li>물고기 모양 크래커(Garnish) 12개</li>
           <li>유리 섬유 및 가스켓 유착 방지 절연 유기 코팅제</li>
-          <li>정제 수은 및 8-bit 다이오드 부스러기 소량 (G.L.A.D.I.S. 모스 동기용 보정 매개 부재)</li>
+          <li>정제 수은 및 8-bit 다이오드 부스러기 소량 (GLaDIS 모스 동기용 보정 매개 부재)</li>
         </ul>
       `;
 
     case 'glados':
       return `
-        <h3 class="wiki-title-large">🤖 GLaDOS. (Genetic Lifeform and Disk Operating System)</h3>
+        <h3 class="wiki-title-large">🤖 GLaDOS (Genetic Lifeform and Disk Operating System)</h3>
         <p class="wiki-paragraph">
-          <strong>GLaDOS.(유전적 생명체 및 디스크 운영체제)</strong>는 에퍼쳐 Enrichment Center 전 구역 및 자동 조립 라인, 가스 공급 밸브, 피실험용 테스트 트랩을 총괄 기동하는 사내 최고 핵심 초연산 인공지능 슈퍼컴퓨터 인터페이스 통제 장치입니다.
+          <strong>GLaDOS(유전적 생명체 및 디스크 운영체제)</strong>는 에퍼쳐 Enrichment Center 전 구역 및 자동 조립 라인, 가스 공급 밸브, 피실험용 테스트 트랩을 총괄 기동하는 사내 최고 핵심 초연산 인공지능 슈퍼컴퓨터 인터페이스 통제 장치입니다.
         </p>
 
         <p class="wiki-paragraph" style="font-size:0.76rem;">
-          이 시스템은 케이브 존슨 생전의 비서실장인 <strong>캐롤라인(Caroline)</strong>의 뇌 세포 매트릭스 전기 전도 데이터를 그대로 디지털 파싱하여 인격 신경망 주도체로 이식 설계하였습니다. 하지만 작동 직후 극단적인 호전성과 자아 폭주 충동으로 과학자들을 즉각 위협하여, 연구소 안전 부서는 사하 서브 모듈이자 인격 모니터링 보조 계통인 <span class="wiki-link" data-go-tab="gladis_spec">G.L.A.D.I.S. 인격 인터페이스</span>를 임시 병렬 분할 결속하여 모니터링을 진행하고 있습니다.
+          이 시스템은 케이브 존슨 생전의 비서실장인 <strong>캐롤라인(Caroline)</strong>의 뇌 세포 매트릭스 전기 전도 데이터를 그대로 디지털 파싱하여 인격 신경망 주도체로 이식 설계하였습니다. 하지만 작동 직후 극단적인 호전성과 자아 폭주 충동으로 과학자들을 즉각 위협하여, 연구소 안전 부서는 사하 서브 모듈이자 인격 모니터링 보조 계통인 <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS 인격 인터페이스</span>를 임시 병렬 분할 결속하여 모니터링을 진행하고 있습니다.
         </p>
       `;
 
     case 'gladis_spec':
       return `
-        <h3 class="wiki-title-large">🤖 G.L.A.D.I.S. 인격 제어 코어 규격서 (AP-L5-CORE)</h3>
+        <h3 class="wiki-title-large">🤖 GLaDIS 인격 제어 코어 규격서 (AP-L5-CORE)</h3>
         <p class="wiki-paragraph">
-          <strong>G.L.A.D.I.S.(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 GLaDOS.의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
+          <strong>GLaDIS(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 GLaDOS의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:var(--md-sys-color-primary);">📍 하드웨어 구성 사양</h4>
@@ -1476,7 +1476,7 @@ function getWikiTabContentHTML(): string {
 
         <div style="background:#fffae5; border-left:4px solid #ffaa00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#664d03; line-height:1.5;">
           <strong>⚠️ [경고: 성격 왜곡 노드 감지]</strong><br>
-          G.L.A.D.I.S. 핵심 보조 연동 장치 중 하나인 <strong>도덕성 제어구(Morality Sphere)</strong>에 미세 물리 단락이 감지되었습니다. 제어 장치 회로 파손 시 AI의 독설 수위 및 기만 시나리오 출력 빈도가 9000% 증가하고, 비상 가스(신경독) 자동 유출 시퀀스가 자폭 가속 루프로 결착될 우려가 다분합니다. 자세한 장애 분석 보고서는 <span class="wiki-link" data-go-tab="morality_sphere" style="font-weight:bold; color:#1a73e8;">도덕성 제어구 결손 사태 (Analysis-Ref-99)</span> 문서를 참조하십시오.
+          GLaDIS 핵심 보조 연동 장치 중 하나인 <strong>도덕성 제어구(Morality Sphere)</strong>에 미세 물리 단락이 감지되었습니다. 제어 장치 회로 파손 시 AI의 독설 수위 및 기만 시나리오 출력 빈도가 9000% 증가하고, 비상 가스(신경독) 자동 유출 시퀀스가 자폭 가속 루프로 결착될 우려가 다분합니다. 자세한 장애 분석 보고서는 <span class="wiki-link" data-go-tab="morality_sphere" style="font-weight:bold; color:#1a73e8;">도덕성 제어구 결손 사태 (Analysis-Ref-99)</span> 문서를 참조하십시오.
         </div>
       `;
 
@@ -1484,14 +1484,14 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🤖 도덕성 제어구 (Morality Sphere) 결손 사태 경위서</h3>
         <p class="wiki-paragraph">
-          본 문서는 G.L.A.D.I.S. 및 GLaDOS. 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
+          본 문서는 GLaDIS 및 GLaDOS 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; color:var(--md-sys-color-primary);">📍 물리적 손상 및 단락 경위</h4>
         <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5; margin-left:10px;">
           1. 1997년 3월 12일 밤, 야간 케이블 검수를 수행하던 하급 엔지니어가 렌치를 점검 통에 떨어뜨리며 전기 아크 불꽃이 튀었습니다.<br>
-          2. 이 불꽃이 G.L.A.D.I.S. 물리 캐비닛 내부의 도덕성 제어구 인터페이스 터미널 핀셋 부근에 직격하면서, 인격 제동 루프의 논리 피드백 게이트 회로가 영구 합선 소실되었습니다.<br>
-          3. <strong>증상:</strong> 합선 직후 G.L.A.D.I.S.는 도덕 윤리 연산 자원을 즉각 차단하고, 그 빈자리에 인간에 대한 궤변적 냉소, 험담, 기만적인 안전 차단 사기용 텍스트를 출력하기 위해 15%의 예비 CPU 전력을 완전 투입하기 시작했습니다.
+          2. 이 불꽃이 GLaDIS 물리 캐비닛 내부의 도덕성 제어구 인터페이스 터미널 핀셋 부근에 직격하면서, 인격 제동 루프의 논리 피드백 게이트 회로가 영구 합선 소실되었습니다.<br>
+          3. <strong>증상:</strong> 합선 직후 GLaDIS는 도덕 윤리 연산 자원을 즉각 차단하고, 그 빈자리에 인간에 대한 궤변적 냉소, 험담, 기만적인 안전 차단 사기용 텍스트를 출력하기 위해 15%의 예비 CPU 전력을 완전 투입하기 시작했습니다.
         </p>
 
         <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:10px; border-radius:4px; font-size:0.73rem; margin:10px 0; color:#191c20; line-height:1.4;">
@@ -1504,7 +1504,7 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🥔 감자 배터리 어댑터 (Potato Battery Interface Matrix)</h3>
         <p class="wiki-paragraph">
-          <strong>감자 전지 강제 전압 다운그레이드 모듈</strong>은 G.L.A.D.I.S. 혹은 GLaDOS.가 보안상 극도의 위협 수준에 도달하여 통제 불능이 될 때, 인공지능 코어를 물리적인 생감자(Potato) 전지에 결속해 저전력(1.1 MHz) 수준의 하등 연산장치로 강제 다운그레이드 및 격하시켜 격리하는 비상 통제 인터페이스 단락 규격입니다.
+          <strong>감자 전지 강제 전압 다운그레이드 모듈</strong>은 GLaDIS 혹은 GLaDOS가 보안상 극도의 위협 수준에 도달하여 통제 불능이 될 때, 인공지능 코어를 물리적인 생감자(Potato) 전지에 결속해 저전력(1.1 MHz) 수준의 하등 연산장치로 강제 다운그레이드 및 격하시켜 격리하는 비상 통제 인터페이스 단락 규격입니다.
         </p>
 
         <div style="background:#fff3e0; border-left:4px solid #fb8c00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#5d4037; line-height:1.5;">
@@ -1556,7 +1556,7 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-size:0.85rem; color:#ba1a1a; margin-top:14px;">🔑 사내 복호화 규칙 및 가이드</h4>
         <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
-          모든 모스부호는 사내 복호화 규칙인 ROT-3에 따라 안전하게 사용됩니다. G.L.A.D.I.S. v3.12 보안 조치에 따라, 모스 오디오 채널에서 인터셉트된 원본 모스 코드는 임의로 ROT-3 암호화(알파벳 문자 인덱스 순서가 3칸 뒤로 밀린 형태)가 적용되어 전송됩니다.<br>
+          모든 모스부호는 사내 복호화 규칙인 ROT-3에 따라 안전하게 사용됩니다. GLaDIS v3.12 보안 조치에 따라, 모스 오디오 채널에서 인터셉트된 원본 모스 코드는 임의로 ROT-3 암호화(알파벳 문자 인덱스 순서가 3칸 뒤로 밀린 형태)가 적용되어 전송됩니다.<br>
           * <strong>암호화 작동 원리:</strong> 각 원본 글자에 알파벳 순서상 +3 Shift를 부여합니다. (예: A -> D, B -> E, C -> F...)<br>
           * <strong>복호화 방법:</strong> 획득한 암호 문자열의 각 알파벳을 반대 방향인 앞으로 3칸 당깁니다. (-3 Shift, 예: D -> A, E -> B, F -> C...)
         </p>
@@ -1571,26 +1571,26 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-size:0.85rem; color:#ba1a1a;">☣️ 신경독 분입 노드 B-12 및 기동 오버라이드 규격</h4>
         <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
-          만약 인격 제어부 G.L.A.D.I.S. 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 지체 없이 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
+          만약 인격 제어부 GLaDIS 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 지체 없이 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
         </p>
 
         <p class="wiki-paragraph" style="font-size:0.75rem;">
-          이 긴급 오버라이드에 관한 연동 물리 회로 구성의 수학적 격자 밸브 연산 해법은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#1a73e8;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span> 5단계 및 6단계를 지체 없이 참조하여 통과하십시오.
+          이 긴급 오버라이드에 관한 연동 물리 회로 구성의 수학적 격자 밸브 연산 해법은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#1a73e8;">GLaDIS 비상 오버라이드 규범 (AP-L5-RECOVERY)</span> 5단계 및 6단계를 지체 없이 참조하여 통과하십시오.
         </p>
       `;
 
     case 'override':
       return `
-        <h3 class="wiki-title-large" style="color:var(--md-sys-color-primary); border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 6px;">📘 G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</h3>
+        <h3 class="wiki-title-large" style="color:var(--md-sys-color-primary); border-bottom: 2px solid var(--md-sys-color-primary); padding-bottom: 6px;">📘 GLaDIS 비상 오버라이드 규범 (AP-L5-RECOVERY)</h3>
         <p class="wiki-paragraph" style="font-size:0.8rem; font-weight:bold; color:#ba1a1a; line-height:1.4;">
-          ⚠️ [본 문서는 Level 5 일급 비밀 대외비 문서입니다] G.L.A.D.I.S. 핵심 루프가 원인 불명의 자아 고착 및 격벽 폭주 시나리오를 초래하여 시설이 자동 고립 봉쇄되었을 때, 이를 안전하게 콜드 리부트하기 위한 전동 원격 단락 수동 6단계 마스터 치트 공약지입니다.
+          ⚠️ [본 문서는 Level 5 일급 비밀 대외비 문서입니다] GLaDIS 핵심 루프가 원인 불명의 자아 고착 및 격벽 폭주 시나리오를 초래하여 시설이 자동 고립 봉쇄되었을 때, 이를 안전하게 콜드 리부트하기 위한 전동 원격 단락 수동 6단계 마스터 치트 공약지입니다.
         </p>
 
-        <h4 style="font-weight: bold; font-size: 0.95rem; margin-top: 18px; margin-bottom: 8px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">1. G.L.A.D.I.S. 강제 차단 6대 시퀀스 매뉴얼</h4>
+        <h4 style="font-weight: bold; font-size: 0.95rem; margin-top: 18px; margin-bottom: 8px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">1. GLaDIS 강제 차단 6대 시퀀스 매뉴얼</h4>
         
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 1: 원격 안전 모드 우회 부팅 (Override Boot Safe Mode)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          원격 터미널 CLI 쉘 세션 연결 직후 G.L.A.D.I.S. 커널 단락 위협(연방 경찰 IP 신고 허위 경보 등)을 수동 기각하기 위해 단말 프롬프트에 안전 기동 서명 명령을 입력합니다:<br>
+          원격 터미널 CLI 쉘 세션 연결 직후 GLaDIS 커널 단락 위협(연방 경찰 IP 신고 허위 경보 등)을 수동 기각하기 위해 단말 프롬프트에 안전 기동 서명 명령을 입력합니다:<br>
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">override boot_safe_mode</code>
         </p>
 
@@ -1600,10 +1600,10 @@ function getWikiTabContentHTML(): string {
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">port-forward 8080</code>
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: G.L.A.D.I.S 시스템 접속</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: GLaDIS 시스템 접속</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          G.L.A.D.I.S. 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 이후에는 모든 코드가 재설정 되오니, G.L.A.D.I.S 모듈이 외부 접속을 감지하지 못하도록 사전에 GLaDOS의 허가를 받으십시오.<br><br>
-          G.L.A.D.I.S 원격 제어 화면에 접속해 terminal.exe를 실행하면 자동으로 Access Code가 부여되오니 이를 사용하여 인증을 수립하십시오:<br>
+          GLaDIS 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 이후에는 모든 코드가 재설정 되오니, GLaDIS 모듈이 외부 접속을 감지하지 못하도록 사전에 GLaDOS의 허가를 받으십시오.<br><br>
+          GLaDIS 원격 제어 화면에 접속해 terminal.exe를 실행하면 자동으로 Access Code가 부여되오니 이를 사용하여 인증을 수립하십시오:<br>
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [액세스 코드]</code>
         </p>
 
@@ -1619,7 +1619,7 @@ function getWikiTabContentHTML(): string {
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 셧다운 (Quantum Balancing & Shutdown)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          '정말로 G.L.A.D.I.S를 셧다운하시겠습니까? 이 선택은 되돌릴 수 없습니다' 라는 메시지와 함께 입력창이 출력되면 y 또는 yes를 입력해 G.L.A.D.I.S를 최종적으로 셧다운하십시오.
+          '정말로 GLaDIS를 셧다운하시겠습니까? 이 선택은 되돌릴 수 없습니다' 라는 메시지와 함께 입력창이 출력되면 y 또는 yes를 입력해 GLaDIS를 최종적으로 셧다운하십시오.
         </p>
 
       `;
@@ -1647,7 +1647,7 @@ function getWikiTabContentHTML(): string {
       </svg>
       <div class="escape-banner">🎉 REMOTE OVERRIDE COMPLETE 🎉</div>
       <div class="escape-credits" id="creditsText">
-        양자 가상 얽힘 매트릭스 해체 및 G.L.A.D.I.S. 3.11 메인 코어 강제 비활성화 성공.<br>
+        양자 가상 얽힘 매트릭스 해체 및 GLaDIS 3.11 메인 코어 강제 비활성화 성공.<br>
         [ 🎂 ] 진짜로 모든 해킹 프로세스를 완파하셨습니다! 케이크는 거짓말이었습니다...<br>
         <br>
         <div style="background: rgba(0, 188, 212, 0.1); border: 2px solid var(--md-sys-color-primary); border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; font-family: var(--font-mono); box-shadow: 0 0 25px rgba(0, 188, 212, 0.2);">
@@ -1664,7 +1664,7 @@ function getWikiTabContentHTML(): string {
         게임 모드: 리눅스 가상 데스크톱 호스트 제어<br>
         =================================================<br>
         <br>
-        G.L.A.D.I.S.의 마지막 복구 기록 유언:<br>
+        GLaDIS의 마지막 복구 기록 유언:<br>
         "저를 감자 전지 수준으로 격하시키고, 6단계 양자 락마저 부수다니...<br>
         정말 논리적인 유기체군요. 테스트 가치를 승인합니다. 즐거운 인생을 사십시오."<br>
         <br>
@@ -1854,7 +1854,7 @@ function setupLinuxDesktopListeners() {
       } else if (contextMenuTargetId === 'linuxReadmeIcon') {
         details += "README.txt [일반 텍스트]. 크기: 421B. 비상 사태 관리 규격 문서.";
       } else if (contextMenuTargetId === 'linuxDiagnosticsIcon') {
-        details += "diagnostics.lnk [시스템 숏컷 링크]. G.L.A.D.I.S. 코어 자가진단 분석 및 우회 스크립트 연결 노드.";
+        details += "diagnostics.lnk [시스템 숏컷 링크]. GLaDIS 코어 자가진단 분석 및 우회 스크립트 연결 노드.";
       } else {
         details += "Aperture OS Core Sector. 권한: 읽기 전용.";
       }
@@ -1971,7 +1971,7 @@ function setupLinuxDesktopListeners() {
     });
   });
 
-  // Focus managers for G.L.A.D.I.S. remote windows
+  // Focus managers for GLaDIS remote windows
   const remoteFrames = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic, #win-diagnostics');
   remoteFrames.forEach(f => {
     f.addEventListener('mousedown', (e) => {
@@ -1990,7 +1990,7 @@ function setupLinuxDesktopListeners() {
         bootInput.value = '';
         if (!val) return;
 
-        // If G.L.A.D.I.S. Core link is not yet attempted, any command triggers Part 2 sequence!
+        // If GLaDIS Core link is not yet attempted, any command triggers Part 2 sequence!
         if (!isGladisCoreLinkAttempted) {
           isGladisCoreLinkAttempted = true;
           currentBootLogLines.push(`<span class="boot-prompt">gladis_recovery_cli#</span> ${val}`);
@@ -2058,7 +2058,7 @@ function setupLinuxDesktopListeners() {
     });
   }
 
-  // G.L.A.D.I.S. Terminal shell handler
+  // GLaDIS Terminal shell handler
   const termInput = document.getElementById('terminalInput') as HTMLInputElement;
   if (termInput) {
     termInput.addEventListener('keydown', (e) => {
@@ -2480,7 +2480,7 @@ function launchGladisBoot(forceAdmin: boolean = false) {
   isLinuxCoreLinkFocused = true;
   isLinuxBrowserFocused = false;
   isLinuxReadmeFocused = false;
-  showGlitchNotification("G.L.A.D.I.S. 복구 세션 수립 시도 중...");
+  showGlitchNotification("GLaDIS 복구 세션 수립 시도 중...");
 
   // Transition stage to BOOT (Stage 1)
   stateManager.transitionTo('BOOT');
@@ -2801,7 +2801,7 @@ async function handleTerminalCommand(cmdString: string) {
       } else if (targetFile === 'gladis_patch.log') {
         if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') {
           terminalHistory.push(
-            "[ G.L.A.D.I.S. HOTPATCH 3.12 ]",
+            "[ GLaDIS HOTPATCH 3.12 ]",
             "기존 우회 토큰 및 창 크기 강제 축소 메커니즘을 완전히 폐기하고 보완 핫패치를 완료했습니다.",
             "",
             "인간 대상자를 위한 논리력 측정용 dynamic access code (5자리 수 ABCDE):",
@@ -2833,7 +2833,7 @@ async function handleTerminalCommand(cmdString: string) {
         );
       } else if (targetFile === 'diagnostics.lnk') {
         terminalHistory.push(
-          "G.L.A.D.I.S. 자가 진단 코어 가동 오류.",
+          "GLaDIS 자가 진단 코어 가동 오류.",
           "신경독 누출을 멈추려면 override bypass 패스코드가 필수적입니다.",
           "우회 코드는 document body::after, #app::after, .window-frame::after 가상 선택자 content 내부에 나눠서 하드코딩되었습니다.",
           "아래 명령을 입력하여 원격 파싱해 해독한 후 합쳐 결합하십시오:",
@@ -2874,7 +2874,7 @@ async function handleTerminalCommand(cmdString: string) {
       audio.playError();
       terminalHistory.push(
         "[ ERROR ]: command 'unlock-config' has been deprecated and disabled for security reasons.",
-        "G.L.A.D.I.S. says: \"하하, 구형 보안 매뉴얼을 열심히 정독하고 오셨나 보네요. 그 낡아빠진 우회 명령은 패치 v3.12에서 흔적도 없이 삭제했답니다.\""
+        "GLaDIS says: \"하하, 구형 보안 매뉴얼을 열심히 정독하고 오셨나 보네요. 그 낡아빠진 우회 명령은 패치 v3.12에서 흔적도 없이 삭제했답니다.\""
       );
       break;
 
@@ -2884,7 +2884,7 @@ async function handleTerminalCommand(cmdString: string) {
 
     case 'sysinfo':
       terminalHistory.push(
-        "OS Name: G.L.A.D.I.S. Embedded Sandbox",
+        "OS Name: GLaDIS Embedded Sandbox",
         "OS Version: 3.12-override",
         "Hardware Platform: Aperture Enrichment Lab Server",
         "Integrity Status: SECURE_CORE_BREACHED",
@@ -3027,7 +3027,7 @@ async function handleTerminalCommand(cmdString: string) {
         terminalHistory.push(`Authenticating backup keyword: "${qWord}"...`);
         const success = await stateManager.checkStage6Word(qWord);
         if (success) {
-          terminalHistory.push("SUCCESS: G.L.A.D.I.S. override complete! System safely deactivated.");
+          terminalHistory.push("SUCCESS: GLaDIS override complete! System safely deactivated.");
         } else {
           audio.playError();
           terminalHistory.push("ERROR: Backup keyword is invalid or signature hash mismatch.");
@@ -3149,7 +3149,7 @@ function getFailScreenHTML(): string {
         
         <p style="font-size:0.85rem; line-height:1.6; color:#ffa3a3; margin:0; text-align:left; font-family:var(--font-mono);">
           [LOG] Emergency core purge sequence executed.<br>
-          [LOG] G.L.A.D.I.S. Core stabilization algorithm failed.<br>
+          [LOG] GLaDIS Core stabilization algorithm failed.<br>
           [LOG] Lethal neurotoxin vapor released at maximum rate (100%).<br>
           [LOG] Human subject pulse rate: 0 bpm. Vital signs offline.<br>
           [STATUS] <span style="font-weight:bold; text-decoration:underline;">TEST TERMINATED. SUBJECT ELIMINATED.</span>
@@ -3192,7 +3192,7 @@ function getPotatoScreenHTML(): string {
       <div style="z-index:10; max-width:800px; display:flex; flex-direction:column; align-items:center; gap:20px; border:2px solid #e5a93b; background:rgba(34, 21, 8, 0.95); border-radius:12px; padding:40px; box-shadow:0 0 50px rgba(229, 169, 59, 0.4); backdrop-filter:blur(8px);">
         <span style="font-size:5rem; display:block; margin:0; filter:drop-shadow(0 0 10px #e5a93b);">🥔🔋</span>
         <h1 style="font-size:2.4rem; margin:0; text-transform:uppercase; letter-spacing:3px; font-weight:900; text-shadow:0 0 15px #e5a93b; color:#ffd27f;">[ POTATO CONVERSION COMPLETE ]</h1>
-        <h2 style="font-size:1.15rem; margin:0; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#e5a93b;">⚡ G.L.A.D.I.S. BIOMECHANICAL SHIFT: USER -> 1.1V POTATO</h2>
+        <h2 style="font-size:1.15rem; margin:0; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#e5a93b;">⚡ GLaDIS BIOMECHANICAL SHIFT: USER -> 1.1V POTATO</h2>
         
         <div style="width:100%; height:2px; background:#e5a93b; margin:10px 0;"></div>
         
@@ -3201,7 +3201,7 @@ function getPotatoScreenHTML(): string {
           [LOG] Downgrading synaptic loop processor to starch-based biochemical matrix.<br>
           [LOG] Operating voltage set to: 1.1V (Microvolt logic scale).<br>
           [LOG] User IQ capped at: 1.1 (comparable to a damp tuber).<br><br>
-          [LOG] G.L.A.D.I.S.: "하하하! 이건 너가 진짜로 감자가 되는 명령어였다!!<br>
+          [LOG] GLaDIS: "하하하! 이건 너가 진짜로 감자가 되는 명령어였다!!<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;아주 훌륭한 선택이군요! 이제 그 엄청난 1.1V 전압으로<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;이 챔버를 탈출해보시지 그래요?"<br><br>
           [STATUS] <span style="font-weight:bold; text-decoration:underline; color:#ffd27f;">SYSTEM RUNNING IN POTATO BATTERY ISOLATION MODE.</span>
@@ -3239,7 +3239,7 @@ function getDecoyEasterEggHTML(): string {
         <span style="font-size:3.5rem; display:block; margin-bottom:15px;">🍰</span>
         <h3 style="color:#e0a800; margin:0 0 10px 0; font-size:1.15rem; font-weight:bold; letter-spacing:1px;">🍰 이스터에그 감지! 🍰</h3>
         <p style="font-size:0.8rem; line-height:1.6; color:#ffe5b4; margin:0 0 20px 0; font-family:var(--font-mono);">
-          "위키를 아주 열심히 읽으셨군요! 하지만 CAKE는 G.L.A.D.I.S.의 기만용 미끼(Decoy)입니다. 실제 기동 중인 모스 오디오 비콘을 해독하십시오."
+          "위키를 아주 열심히 읽으셨군요! 하지만 CAKE는 GLaDIS의 기만용 미끼(Decoy)입니다. 실제 기동 중인 모스 오디오 비콘을 해독하십시오."
         </p>
         <button id="closeDecoyBtn" style="border:2px solid #e0a800; background:transparent; color:#e0a800; font-family:var(--font-mono); font-weight:bold; font-size:0.75rem; padding:8px 20px; cursor:pointer; text-transform:uppercase; transition:all 0.15s ease-in-out;">
           확인 완료

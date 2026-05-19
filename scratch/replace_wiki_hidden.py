@@ -23,8 +23,8 @@ else:
 old_wiki_home_warning = """        <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:12px; border-radius:6px; margin-bottom:16px; color:#410002; font-size:0.75rem; line-height:1.5; display:flex; gap:10px; align-items:center;">
           <span style="font-size:1.5rem; user-select:none;">☣️</span>
           <div>
-            <strong style="color:#ba1a1a;">🚨 [경보] 메인 코어 G.L.A.D.I.S. 자폭 안전 격벽 긴급 기동 프로토콜 안내</strong><br>
-            현재 시스템 인격 제어부 이상으로 인해 연구소 내 신경독 방출 밸브 오버랩 격리가 활성화되었습니다. 즉각 원격 셧다운 시퀀스를 수립하십시오. 콜드 리부트와 상세 6단계 세부 회복 공정은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#ba1a1a;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span>을 필히 복호화 참조하십시오.
+            <strong style="color:#ba1a1a;">🚨 [경보] 메인 코어 GLaDIS 자폭 안전 격벽 긴급 기동 프로토콜 안내</strong><br>
+            현재 시스템 인격 제어부 이상으로 인해 연구소 내 신경독 방출 밸브 오버랩 격리가 활성화되었습니다. 즉각 원격 셧다운 시퀀스를 수립하십시오. 콜드 리부트와 상세 6단계 세부 회복 공정은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#ba1a1a;">GLaDIS 비상 오버라이드 규범 (AP-L5-RECOVERY)</span>을 필히 복호화 참조하십시오.
           </div>
         </div>
 

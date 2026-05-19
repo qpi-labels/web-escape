@@ -1,8 +1,8 @@
 import { sha256, STAGE_HASHES } from './security';
 import { audio } from './audio';
 
-export type GameStage = 
-  | 'LINUX_DESKTOP' 
+export type GameStage =
+  | 'LINUX_DESKTOP'
   | 'BOOT'          // Stage 1: Safe Mode Boot Bypass
   | 'PORT_BRIDGE'   // Stage 2: Diagnostic Port Forwarding
   | 'DESKTOP'       // Stage 3: Desktop unlocked (Crushing Geometry puzzle)
@@ -32,7 +32,7 @@ export function setGladisSpeakCallback(cb: (msg: string) => void) {
 
 function gladisSpeak(msg: string) {
   if (gladisSpeakCallback) {
-    gladisSpeakCallback("G.L.A.D.I.S.: " + msg);
+    gladisSpeakCallback("GLaDIS: " + msg);
   }
 }
 
@@ -55,7 +55,7 @@ class StateManager {
   private timerInterval: any = null;
   private lockoutInterval: any = null;
 
-  constructor() {}
+  constructor() { }
 
   getState(): GameState {
     return { ...this.state };
@@ -93,7 +93,7 @@ class StateManager {
   // Trigger state transition
   async transitionTo(newStage: GameStage) {
     this.state.stage = newStage;
-    
+
     if (newStage === 'BOOT') {
       audio.playBeep(650, 0.2);
       gladisSpeak("외부 단말기 접속 감지. 즉시 불법 침입을 중단하고 연결을 끊으시죠.");
@@ -135,7 +135,7 @@ class StateManager {
     const updateInterval = setInterval(() => {
       this.state.gladisUpdateProgress += 10;
       audio.playBeep(1200 + this.state.gladisUpdateProgress * 5, 0.05, 'sine');
-      
+
       if (this.state.gladisUpdateProgress >= 100) {
         clearInterval(updateInterval);
         this.state.gladisUpdateProgress = 100;
@@ -153,7 +153,7 @@ class StateManager {
     const normalized = cmd.trim().toUpperCase();
     const hash1 = await sha256(normalized);
     const hash2 = await sha256("OVERRIDE " + normalized);
-    
+
     if (hash1 === STAGE_HASHES.STAGE1_CMD || hash2 === STAGE_HASHES.STAGE1_CMD) {
       await this.transitionTo('PORT_BRIDGE');
       return true;
@@ -300,7 +300,7 @@ class StateManager {
   triggerDevToolsAlert() {
     this.state.devToolsWarningsCount++;
     audio.playError();
-    
+
     if (this.state.stage === 'SELF_DESTRUCT') {
       this.state.timerRemaining = Math.max(5, this.state.timerRemaining - 15);
       gladisSpeak("개발자 도구 치트 행위 감지. 자폭 카운트다운 15초 단축 페널티를 부여합니다. 정말 어리석습니다, 테스트 대상자님.");
@@ -320,7 +320,7 @@ class StateManager {
       if (this.state.stage === 'SELF_DESTRUCT') {
         if (this.state.timerRemaining > 0) {
           this.state.timerRemaining--;
-          
+
           // Play sweep alarm sound every 15 seconds, and every second in the last 10 seconds
           if (this.state.timerRemaining % 15 === 0 || this.state.timerRemaining <= 10) {
             audio.playSelfDestructAlarm();

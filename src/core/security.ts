@@ -1,5 +1,5 @@
 /**
- * G.L.A.D.I.S. Core Security & Anti-Cheat Module
+ * GLaDIS Core Security & Anti-Cheat Module
  * Handles DevTools detection, input blocking, and cryptographic hash verification.
  */
 
@@ -55,7 +55,7 @@ export function initSecurityAndAntiCheat() {
 
   // Block F12, Ctrl+Shift+I/C/J, Cmd+Opt+I/C/J/U, Cmd+U
   document.addEventListener('keydown', (e) => {
-    const isDevToolsKey = 
+    const isDevToolsKey =
       e.key === 'F12' ||
       // Windows/Linux: Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
       (e.ctrlKey && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) ||
@@ -68,7 +68,7 @@ export function initSecurityAndAntiCheat() {
 
     if (isDevToolsKey) {
       e.preventDefault();
-      triggerGladisMocking("G.L.A.D.I.S System Core : 현 시간부로 임직원의 모든 외부 인터페이스 접근이 차단됩니다.");
+      triggerGladisMocking("GLaDIS System Core : 현 시간부로 임직원의 모든 외부 인터페이스 접근이 차단됩니다.");
       notifyDevToolsChange(true);
     }
   });
@@ -104,7 +104,7 @@ export function initSecurityAndAntiCheat() {
   checkGeometry();
 }
 
-// Global listener hook for G.L.A.D.I.S. messages
+// Global listener hook for GLaDIS messages
 let gladisMockingCallback: ((msg: string) => void) | null = null;
 export function setGladisMockingCallback(cb: (msg: string) => void) {
   gladisMockingCallback = cb;

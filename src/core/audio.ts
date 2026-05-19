@@ -1,5 +1,5 @@
 /**
- * G.L.A.D.I.S. Synthesized Audio Engine (Web Audio API)
+ * GLaDIS Synthesized Audio Engine (Web Audio API)
  * Generates immersive ambient drones, terminal click sounds, alarms, Morse beacons, and TTS intercom static.
  */
 
@@ -9,7 +9,7 @@ class AudioEngine {
   private ambientGain: GainNode | null = null;
   private lfoNode: OscillatorNode | null = null;
 
-  constructor() {}
+  constructor() { }
 
   private init() {
     if (this.ctx) return;
@@ -29,7 +29,7 @@ class AudioEngine {
 
     osc.type = type;
     osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-    
+
     gain.gain.setValueAtTime(volume, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
 
@@ -79,7 +79,7 @@ class AudioEngine {
     this.lfoNode = this.ctx.createOscillator();
     this.lfoNode.type = 'sine';
     this.lfoNode.frequency.setValueAtTime(0.2, this.ctx.currentTime); // 5-second cycle
-    
+
     const lfoGain = this.ctx.createGain();
     lfoGain.gain.setValueAtTime(0.015, this.ctx.currentTime);
 
@@ -101,7 +101,7 @@ class AudioEngine {
       try {
         this.ambientNode.stop();
         this.lfoNode?.stop();
-      } catch (e) {}
+      } catch (e) { }
       this.ambientNode = null;
       this.lfoNode = null;
     }

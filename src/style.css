@@ -1,5 +1,5 @@
 /**
- * G.L.A.D.I.S. Core Override - Aperture Science Minimalist Theme
+ * GLaDIS Core Override - Aperture Science Minimalist Theme
  * Implements a clean, high-contrast, light-grey and charcoal scientific design.
  */
 
@@ -7,26 +7,30 @@
 
 :root {
   /* Aperture Science Light Minimalist Palette Tokens */
-  --md-sys-color-primary: #ff9800; /* Aperture Orange */
+  --md-sys-color-primary: #ff9800;
+  /* Aperture Orange */
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #ffe0b2;
   --md-sys-color-on-primary-container: #5d2b00;
-  
-  --md-sys-color-secondary: #00bcd4; /* Scientific Cyan */
+
+  --md-sys-color-secondary: #00bcd4;
+  /* Scientific Cyan */
   --md-sys-color-on-secondary: #ffffff;
-  
+
   --md-sys-color-error: #ba1a1a;
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffdad6;
-  
-  --md-sys-color-background: #f3f3f5; /* Clean light gray */
-  --md-sys-color-on-background: #191c20; /* Dark charcoal */
-  
+
+  --md-sys-color-background: #f3f3f5;
+  /* Clean light gray */
+  --md-sys-color-on-background: #191c20;
+  /* Dark charcoal */
+
   --md-sys-color-surface: #ffffff;
   --md-sys-color-on-surface: #191c20;
   --md-sys-color-surface-variant: #e1e2ec;
   --md-sys-color-on-surface-variant: #44474f;
-  
+
   --md-sys-color-outline: #ced0db;
   --md-sys-color-surface-container: #f8f9fc;
   --md-sys-color-surface-container-high: #ffffff;
@@ -50,7 +54,8 @@
   user-select: none;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   background-color: var(--md-sys-color-background);
@@ -73,7 +78,10 @@ html, body {
   content: " ";
   display: block;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
   z-index: 9999;
   background-size: 100% 4px, 6px 100%;
@@ -86,8 +94,15 @@ html, body {
 }
 
 @keyframes strobe {
-  0% { box-shadow: inset 0 0 20px rgba(186, 26, 26, 0.08); background-color: rgba(186, 26, 26, 0.02); }
-  100% { box-shadow: inset 0 0 80px rgba(186, 26, 26, 0.25); background-color: rgba(186, 26, 26, 0.06); }
+  0% {
+    box-shadow: inset 0 0 20px rgba(186, 26, 26, 0.08);
+    background-color: rgba(186, 26, 26, 0.02);
+  }
+
+  100% {
+    box-shadow: inset 0 0 80px rgba(186, 26, 26, 0.25);
+    background-color: rgba(186, 26, 26, 0.06);
+  }
 }
 
 /* Scrollbars */
@@ -95,13 +110,16 @@ html, body {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: var(--md-shape-corner-full);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--md-sys-color-primary);
 }
@@ -124,10 +142,10 @@ html, body {
   width: 100%;
   max-width: 750px;
   background: #000;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--md-shape-corner-medium);
   padding: 24px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
   position: relative;
 }
 
@@ -135,7 +153,7 @@ html, body {
   color: #ff3333;
   font-size: 1.2rem;
   margin-bottom: 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 8px;
   display: flex;
   align-items: center;
@@ -145,7 +163,8 @@ html, body {
 .boot-logs {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #39ff14; /* Retro Green */
+  color: #39ff14;
+  /* Retro Green */
   max-height: 280px;
   overflow-y: auto;
   margin-bottom: 16px;
@@ -191,7 +210,7 @@ html, body {
   position: relative;
   /* Clean technical grid background for Aperture lab feel */
   background-color: #ededf1;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
@@ -208,7 +227,7 @@ html, body {
   padding: 0 24px;
   font-size: 0.88rem;
   font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .status-left {
@@ -278,7 +297,8 @@ html, body {
 .desktop-icon svg {
   width: 44px;
   height: 44px;
-  fill: #3c4043; /* Technical slate gray */
+  fill: #3c4043;
+  /* Technical slate gray */
   margin-bottom: 8px;
   transition: fill 0.2s;
 }
@@ -313,7 +333,7 @@ html, body {
   backdrop-filter: blur(10px);
   border: 1px solid var(--md-sys-color-outline);
   border-radius: var(--md-shape-corner-large);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -323,7 +343,7 @@ html, body {
 
 .window-frame.focused {
   border: 1px solid #000000;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   z-index: 20;
 }
 
@@ -640,6 +660,7 @@ html, body {
   cursor: pointer;
   font-weight: bold;
 }
+
 .wiki-link:hover {
   color: #1557b0;
 }
@@ -648,9 +669,17 @@ html, body {
    STAGE 2 RESIZE PUZZLE
    ========================================================== */
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.75; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* ==========================================================
@@ -658,7 +687,10 @@ html, body {
    ========================================================== */
 .emergency-overlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: transparent;
   z-index: 10;
   display: flex;
@@ -672,7 +704,7 @@ html, body {
   max-width: 480px;
   text-align: center;
   border: 3px solid var(--md-sys-color-error);
-  box-shadow: 0 20px 50px rgba(186,26,26,0.15);
+  box-shadow: 0 20px 50px rgba(186, 26, 26, 0.15);
   pointer-events: auto;
 }
 
@@ -725,10 +757,12 @@ body::after {
   content: "PART_A: TkVVUk9UT1hJTg==";
   display: none;
 }
+
 #app::after {
   content: "PART_B: X0JZUEFTU185OQ==";
   display: none;
 }
+
 .window-frame::after {
   content: "PART_C: X1NFQ1VSRQ==";
   display: none;
@@ -803,7 +837,7 @@ body::after {
   border-radius: 6px;
   transition: background 0.15s;
   color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .linux-icon:hover {
@@ -815,7 +849,7 @@ body::after {
   height: 48px;
   fill: #ffffff;
   margin-bottom: 6px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .linux-icon span {
@@ -883,8 +917,15 @@ body::after {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .context-menu-item {
@@ -925,7 +966,10 @@ body::after {
 /* UAC Privilege Dialog Overlay */
 .uac-overlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(3px);
   display: flex;
@@ -1033,12 +1077,23 @@ body::after {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Allow text selection for copy-paste in critical puzzle elements */
-.terminal-output, .terminal-output *, code, pre, .notepad-view, .chat-messages-container, .chat-messages-container * {
+.terminal-output,
+.terminal-output *,
+code,
+pre,
+.notepad-view,
+.chat-messages-container,
+.chat-messages-container * {
   user-select: text !important;
   -webkit-user-select: text !important;
   -moz-user-select: text !important;
@@ -1046,11 +1101,15 @@ body::after {
 }
 
 /* Block text selection for non-puzzle elements to keep drag/drop clean */
-.window-header, .linux-workspace, .workspace, .desktop-container, .app-grid, .app-icon, .system-status-bar {
+.window-header,
+.linux-workspace,
+.workspace,
+.desktop-container,
+.app-grid,
+.app-icon,
+.system-status-bar {
   user-select: none !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
 }
-
-
