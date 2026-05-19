@@ -183,6 +183,9 @@ class AudioEngine {
 
   // Emergency Siren Synth for Stage 4 Self Destruct
   playSelfDestructAlarm() {
+    if ((window as any).showStage5EmergencyOverlay === false) {
+      return;
+    }
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === 'suspended') this.ctx.resume();

@@ -102,7 +102,7 @@ let shownVanceStage5Toast = false;
 
 function getToastText(stage: string, gladisUpdateState: string): string {
   if (stage === 'SELF_DESTRUCT') {
-    return "자폭 타이머가 작동했네! [CLAIM CAKE]는 기만 단추니 절대 속지 말게! 빨리 터미널로 우회코드를 파싱하게!";
+    return "자폭 타이머 작동! [CLAIM CAKE]는 기만 단추니 절대 무시하게! 바탕화면에 생성된 'diagnostics.lnk' 파일을 cat 명령어로 읽고 우회법을 확인하게!";
   }
   if (stage === 'DESKTOP' && gladisUpdateState === 'UPDATED') {
     return "G.L.A.D.I.S.가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
@@ -117,6 +117,7 @@ let downloadTimerId: any = null;
 let isWindowsErrorDialogOpen = false;
 let showDecoyEasterEgg = false;
 let showStage5EmergencyOverlay = true;
+(window as any).showStage5EmergencyOverlay = true;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderApp();
@@ -192,6 +193,7 @@ function renderApp() {
     shownVanceStage5Toast = true;
     showMessengerToast = true;
     audio.playBeep(880, 0.08);
+    showGlitchNotification("☣️ [경고] 가스 실시간 유출! 바탕화면에 'diagnostics.lnk' 파일이 수신되었습니다.");
   }
   if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' && !shownVanceStage3Toast) {
     shownVanceStage3Toast = true;
@@ -896,7 +898,7 @@ function getGladisSubDesktopHTML(state: any): string {
       </div>
 
       <!-- Remote workspace area -->
-      <div class="workspace" id="remoteWorkspace" style="padding:16px; background:#ededf1; position:relative; overflow:hidden; flex:1; display:flex;">
+      <div class="workspace" id="remoteWorkspace" style="padding:16px; background:#ededf1; position:relative; overflow:hidden; flex:1; display:block;">
         <div class="app-grid" style="grid-template-columns: repeat(auto-fill, minmax(80px, 80px)); grid-auto-rows: 80px; gap:12px;">
           <!-- Notes icon -->
           <button class="desktop-icon" data-remote-win-id="notes" style="padding:4px; font-size:0.75rem;">
@@ -991,15 +993,15 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:6px; font-weight:bold;">⚙️ 원격 복구 서명 데이터 로그 (Recovery Dump Logs)</h4>
                 <div style="background:#1e1e1e; color:#00ff66; padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; line-height:1.4; border:1px solid #111; margin-bottom:8px; text-align:left; white-space:pre-line;">
                   [SYS_LOAD] INIT G.L.A.D.I.S. core systems...
-                  [ERR_C-04] <span style="font-weight:bold; color:#ff3b30;">F</span>oundation containment matrix corrupt
-                  [ERR_C-18] <span style="font-weight:bold; color:#ff3b30;">X</span>eno-sensor calibration timed out
-                  [ERR_C-09] <span style="font-weight:bold; color:#ff3b30;">U</span>ser-override diagnostics required
-                  [ERR_C-22] <span style="font-weight:bold; color:#ff3b30;">H</span>azardous neurotoxin gas vents ARMED
+                  [ERR_C-04] Foundation containment matrix corrupt
+                  [ERR_C-18] Xeno-sensor calibration timed out
+                  [ERR_C-09] User-override diagnostics required
+                  [ERR_C-22] Hazardous neurotoxin gas vents ARMED
                 </div>
                 <span style="font-size:0.65rem; color:#555; line-height:1.4; display:block;">
-                  * 에러 코드 라인의 메시지 첫 글자(Red Color)를 차례대로 나열하십시오.
+                  * 안내: 위 원격 에러 덤프 로그의 각 에러 모듈(ERR_C-*)별 키워드 첫 글자를 순서대로 수집하십시오.
                   <br>
-                  * 나열한 4글자에 사내 <strong>Caesar ROT-3 복호화 규칙</strong>을 적용하십시오.
+                  * 수집한 4글자에 사내 <strong>Caesar ROT-3 복호화 규칙</strong>을 적용하여 최종 승인 키를 복구하십시오.
                 </span>
               </div>
               <div class="input-group" style="margin-bottom: 8px; margin-top: 10px;">
@@ -1994,6 +1996,7 @@ function setupLinuxDesktopListeners() {
   if (closeEmergencyOverlayBtn) {
     closeEmergencyOverlayBtn.addEventListener('click', () => {
       showStage5EmergencyOverlay = false;
+      (window as any).showStage5EmergencyOverlay = false;
       renderApp();
     });
   }
