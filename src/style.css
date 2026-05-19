@@ -1045,4 +1045,12 @@ body::after {
   -ms-user-select: text !important;
 }
 
+/* Block text selection for non-puzzle elements to keep drag/drop clean */
+.window-header, .linux-workspace, .workspace, .desktop-container, .app-grid, .app-icon, .system-status-bar {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
 

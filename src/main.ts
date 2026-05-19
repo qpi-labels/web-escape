@@ -187,6 +187,21 @@ function renderApp() {
   const chatScrollTop = oldChatContainer ? oldChatContainer.scrollTop : null;
   const chatWasAtBottom = oldChatContainer ? (oldChatContainer.scrollHeight - oldChatContainer.clientHeight - oldChatContainer.scrollTop < 15) : true;
 
+  const oldNotesContent = document.getElementById('notesWindowContent');
+  const notesScrollTop = oldNotesContent ? oldNotesContent.scrollTop : null;
+
+  const oldDiagnosticsContent = document.getElementById('diagnosticsWindowContent');
+  const diagnosticsScrollTop = oldDiagnosticsContent ? oldDiagnosticsContent.scrollTop : null;
+
+  const oldConfigContent = document.getElementById('configWindowContent');
+  const configScrollTop = oldConfigContent ? oldConfigContent.scrollTop : null;
+
+  const oldWikiArticle = document.getElementById('wikiArticleView');
+  const wikiArticleScrollTop = oldWikiArticle ? oldWikiArticle.scrollTop : null;
+
+  const oldWikiSidebar = document.getElementById('wikiSidebar');
+  const wikiSidebarScrollTop = oldWikiSidebar ? oldWikiSidebar.scrollTop : null;
+
   // 1. Save input state to prevent loss of focus & text during full DOM redraws
   const activeElement = document.activeElement as HTMLElement | null;
   const activeId = activeElement ? activeElement.id : null;
@@ -287,6 +302,26 @@ function renderApp() {
     } else if (chatScrollTop !== null) {
       newChatContainer.scrollTop = chatScrollTop;
     }
+  }
+  const newNotesContent = document.getElementById('notesWindowContent');
+  if (newNotesContent && notesScrollTop !== null) {
+    newNotesContent.scrollTop = notesScrollTop;
+  }
+  const newDiagnosticsContent = document.getElementById('diagnosticsWindowContent');
+  if (newDiagnosticsContent && diagnosticsScrollTop !== null) {
+    newDiagnosticsContent.scrollTop = diagnosticsScrollTop;
+  }
+  const newConfigContent = document.getElementById('configWindowContent');
+  if (newConfigContent && configScrollTop !== null) {
+    newConfigContent.scrollTop = configScrollTop;
+  }
+  const newWikiArticle = document.getElementById('wikiArticleView');
+  if (newWikiArticle && wikiArticleScrollTop !== null) {
+    newWikiArticle.scrollTop = wikiArticleScrollTop;
+  }
+  const newWikiSidebar = document.getElementById('wikiSidebar');
+  if (newWikiSidebar && wikiSidebarScrollTop !== null) {
+    newWikiSidebar.scrollTop = wikiSidebarScrollTop;
   }
 
   // 2. Restore active element value, selection and focus
@@ -472,7 +507,7 @@ function getLinuxDesktopScreenHTML() {
             <!-- Wiki Embed Area -->
             <div class="window-content wiki-app" style="padding:0; flex: 1; min-height: 0;">
               <!-- Sidebar -->
-              <div class="wiki-sidebar" style="width:220px; background:#f1f5f9; border-right:1px solid #cbd5e1; display:flex; flex-direction:column; padding:12px 0; overflow-y:auto;">
+              <div class="wiki-sidebar" id="wikiSidebar" style="width:220px; background:#f1f5f9; border-right:1px solid #cbd5e1; display:flex; flex-direction:column; padding:12px 0; overflow-y:auto;">
                 <div class="wiki-logo-area" style="padding:0 12px 12px 12px; border-bottom:1px solid #cbd5e1; margin-bottom:8px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:#0f172a; display:flex; align-items:center; gap:6px;">
                   <svg style="width:16px;height:16px;color:#0f172a;" viewBox="0 0 100 100" fill="currentColor">
                     <path d="M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z M50,92C26.8,92,8,73.2,8,50S26.8,8,50,8s42,18.8,42,42S73.2,92,50,92z"/>
@@ -504,7 +539,7 @@ function getLinuxDesktopScreenHTML() {
 
               </div>
               <!-- Article View -->
-              <div class="wiki-article-view">
+              <div class="wiki-article-view" id="wikiArticleView">
                 ${getWikiTabContentHTML()}
               </div>
             </div>
@@ -998,7 +1033,7 @@ function getGladisSubDesktopHTML(state: any): string {
                 <button class="window-btn close-remote-win-btn" data-win-id="notes" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px);">
+            <div class="window-content notepad-view" id="notesWindowContent" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px);">
 [보안 시스템 긴급 복구 가이드]
 G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 강제로 차단하고 방어 핫패치 v3.12를 실시간 배포했습니다.
 
@@ -1048,7 +1083,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <button class="window-btn close-remote-win-btn" data-win-id="config" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content config-app" style="padding:10px; font-size:0.8rem; gap:10px; width:100%; height:calc(100% - 32px); overflow-y:auto;">
+            <div class="window-content config-app" id="configWindowContent" style="padding:10px; font-size:0.8rem; gap:10px; width:100%; height:calc(100% - 32px); overflow-y:auto;">
               <div class="md3-card" style="padding:12px; border-radius:8px; background:rgba(0,0,0,0.03); border:1px solid #ced0db;">
                 <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:6px; font-weight:bold;">⚙️ 원격 복구 서명 데이터 로그 (Recovery Dump Logs)</h4>
                 <div style="background:#1e1e1e; color:#00ff66; padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; line-height:1.4; border:1px solid #111; margin-bottom:8px; text-align:left; white-space:pre-line;">
@@ -1125,7 +1160,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <button class="window-btn close-remote-win-btn" data-win-id="diagnostics" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px); background:#fcf8f2; color:#333; overflow-y:auto; text-align:left; font-family:var(--font-sans);">
+            <div class="window-content notepad-view" id="diagnosticsWindowContent" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px); background:#fcf8f2; color:#333; overflow-y:auto; text-align:left; font-family:var(--font-sans);">
               <strong>[G.L.A.D.I.S. 시스템 자가 진단 보고서]</strong><br><br>
               자가 진단 코어 가동 중 치명적 오류 감지.<br>
               신경독 누출을 수동으로 중단하기 위해서는 override bypass 패스코드가 필수적입니다.<br><br>
@@ -1142,8 +1177,8 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
 
         <!-- STAGE 5 EMERGENCY TIMER CARD OVERLAP -->
         ${state.stage === 'SELF_DESTRUCT' && showStage5EmergencyOverlay ? `
-          <div class="emergency-overlay" style="position:absolute; z-index:50;">
-            <div class="md3-card emergency-card" style="padding:16px; max-width:340px; border-width:2px; position:relative;">
+          <div class="emergency-overlay" style="position:absolute; top:0; left:0; right:0; bottom:0; z-index:50; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+            <div class="md3-card emergency-card" style="padding:16px; max-width:340px; border-width:2px; position:relative; pointer-events:auto;">
               <button style="position:absolute; top:10px; right:10px; border:none; background:none; color:#ba1a1a; font-size:1.1rem; cursor:pointer; font-weight:bold; line-height:1;" id="closeEmergencyOverlayBtn">×</button>
               <h3 style="color:#ba1a1a; font-size:1.1rem; margin-bottom:6px;">☣️ CORE SELF DESTRUCT ☣️</h3>
               <p style="font-size:0.75rem; line-height:1.4; margin-bottom:10px;">
@@ -2510,6 +2545,7 @@ function setupLinuxDragAndDrop() {
 
     const h = browser.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
+      e.preventDefault();
       let active = true;
       const startX = e.clientX, startY = e.clientY;
       const initX = browser.offsetLeft, initY = browser.offsetTop;
@@ -2554,6 +2590,7 @@ function setupLinuxDragAndDrop() {
 
     const h = readme.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
+      e.preventDefault();
       let active = true;
       const startX = e.clientX, startY = e.clientY;
       const initX = readme.offsetLeft, initY = readme.offsetTop;
@@ -2597,6 +2634,7 @@ function setupLinuxDragAndDrop() {
 
     const h = coreLink.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
+      e.preventDefault();
       let active = true;
       const startX = e.clientX, startY = e.clientY;
       const initX = coreLink.offsetLeft, initY = coreLink.offsetTop;
@@ -2656,6 +2694,7 @@ function setupRemoteDragAndDrop() {
     let iX = 0, iY = 0;
 
     header.addEventListener('mousedown', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       isDrag = true;
       sX = e.clientX;
@@ -2922,7 +2961,19 @@ async function handleTerminalCommand(cmdString: string) {
           terminalHistory.push(
             "AUTHORIZATION APPROVED. Core self-destruct mechanism stopped.",
             "WARNING: Stage 6 Quantum Lattice Alignment Protocol engaged!",
-            "Solve the Magic Square matrix wave to release final neural hold."
+            "===========================================================",
+            " [ Quantum Lattice Balance Magic Square Matrix ]",
+            " +----+----+----+",
+            " | 32 |  X | 36 |",
+            " +----+----+----+",
+            " |  Y | 33 |  Z |",
+            " +----+----+----+",
+            " | 30 | 35 | 34 |",
+            " +----+----+----+",
+            " Wave balance condition: Sum of all rows, cols, diagonals must match the master quantum constant sum (99).",
+            " Solve for variables X, Y, Z and calculate Resonance Key = (X * Y) - (Z * 2).",
+            " Inject key using command: quantum-solve [key]",
+            "==========================================================="
           );
         } else {
           audio.playError();
