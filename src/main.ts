@@ -116,6 +116,7 @@ let downloadProgressVal = 0;
 let downloadTimerId: any = null;
 let isWindowsErrorDialogOpen = false;
 let showDecoyEasterEgg = false;
+let showStage5EmergencyOverlay = true;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderApp();
@@ -1054,9 +1055,10 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
         ` : ''}
 
         <!-- STAGE 5 EMERGENCY TIMER CARD OVERLAP -->
-        ${state.stage === 'SELF_DESTRUCT' ? `
+        ${state.stage === 'SELF_DESTRUCT' && showStage5EmergencyOverlay ? `
           <div class="emergency-overlay" style="position:absolute; z-index:50;">
-            <div class="md3-card emergency-card" style="padding:16px; max-width:340px; border-width:2px;">
+            <div class="md3-card emergency-card" style="padding:16px; max-width:340px; border-width:2px; position:relative;">
+              <button style="position:absolute; top:10px; right:10px; border:none; background:none; color:#ba1a1a; font-size:1.1rem; cursor:pointer; font-weight:bold; line-height:1;" id="closeEmergencyOverlayBtn">×</button>
               <h3 style="color:#ba1a1a; font-size:1.1rem; margin-bottom:6px;">☣️ CORE SELF DESTRUCT ☣️</h3>
               <p style="font-size:0.75rem; line-height:1.4; margin-bottom:10px;">
                 인격 제어 핵심 루프 강제 조작으로 비상 가스가 유출됩니다. 120초 후 자폭합니다.

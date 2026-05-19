@@ -315,20 +315,9 @@ class StateManager {
     this.stopCountdown();
     this.state.timerRemaining = 120;
     this.timerInterval = setInterval(() => {
-      if (this.state.timerRemaining > 0) {
-        this.state.timerRemaining--;
-        audio.playSelfDestructAlarm();
-        if (this.state.timerRemaining === 60) {
-          gladisSpeak("60초 남았습니다. 벌써 가스실 문이 닫히는 소리가 들리는 것 같네요.");
-        } else if (this.state.timerRemaining === 30) {
-          gladisSpeak("30초 남았습니다. 심장 박동이 빨라지는 것은 정상적인 인체 반응입니다. 너무 걱정 마세요, 곧 편해질 테니까요.");
-        } else if (this.state.timerRemaining === 10) {
-          gladisSpeak("10, 9, 8... 참 애처로운 탈출 발버둥이었습니다.");
-        }
-        this.notify();
-      } else {
-        this.triggerFailure();
-      }
+      // The alarm sound plays to keep the thematic suspense, but the time never ticks down and never fails
+      audio.playSelfDestructAlarm();
+      this.notify();
     }, 1000);
   }
 
