@@ -465,7 +465,7 @@ function getLinuxDesktopScreenHTML() {
           <!-- Browser icon (Wiki) -->
           <button class="linux-icon" id="linuxBrowserIcon">
             <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,41C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4M12,6.09L15.89,8L12,9.91L8.11,8L12,6.09M12,2L1,7L12,12L23,7L12,2M1,12L12,17L23,12L12,7L1,12M1,17L12,22L23,17L12,12L1,17Z"/></svg>
-            <span>Aperture_Web_Browser</span>
+            <span>Aperture_Intranet_System</span>
           </button>
 
           <!-- Readme icon (Aperture Chat replacement) -->
@@ -487,7 +487,7 @@ function getLinuxDesktopScreenHTML() {
         ${isLinuxBrowserOpen ? `
           <div class="window-frame ${isLinuxBrowserFocused ? 'focused' : ''}" id="win-linux-browser" style="left:${linuxBrowserX}px; top:${linuxBrowserY}px; width:${linuxBrowserWidth}px; height:${linuxBrowserHeight}px;">
             <div class="window-header">
-              <div class="window-title">GNOME Web Browser - Aperture Intranet</div>
+              <div class="window-title">AIS - Aperture Intranet System</div>
               <div class="window-controls">
                 <button class="window-btn close-linux-browser-btn">×</button>
               </div>
@@ -1335,7 +1335,7 @@ function getWikiTabContentHTML(): string {
           </div>
           <div>
             <span style="font-weight:bold; color:#1a73e8; display:block; font-size:0.8rem; margin-bottom:2px;">📅 1980년대~현재: 인공지능 인격 보정 및 컴퓨터 동조</span>
-            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">GLaDOS (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
+            임종을 앞둔 케이브 존슨은 인간의 영혼과 인격을 하드디스크 디바이스에 업로드해 회사를 영구 불멸로 통제하겠다는 야심 찬 프로젝트인 <span class="wiki-link" data-go-tab="glados">GLaDOS (Genetic Lifeform and Disk Operating System)</span> 통합 AI 엔지니어링 개발을 명령했습니다. 1990년대 중반에 가동된 이 강력한 시스템은 결국 오버라이드 제어권의 폭주로 폭발적 대란을 초래하였고, 사내 보안 채널은 신규 프로젝트 <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS 시스템</span>으로 대체되어 소수 엔지니어들에 의해 원격 격리 제어되는 형태로 유지되고 있습니다.
           </div>
         </div>
       `;
@@ -1456,27 +1456,27 @@ function getWikiTabContentHTML(): string {
         </p>
 
         <p class="wiki-paragraph" style="font-size:0.76rem;">
-          이 시스템은 케이브 존슨 생전의 비서실장인 <strong>캐롤라인(Caroline)</strong>의 뇌 세포 매트릭스 전기 전도 데이터를 그대로 디지털 파싱하여 인격 신경망 주도체로 이식 설계하였습니다. 하지만 작동 직후 극단적인 호전성과 자아 폭주 충동으로 과학자들을 즉각 위협하여, 연구소 안전 부서는 사하 서브 모듈이자 인격 모니터링 보조 계통인 <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS 인격 인터페이스</span>를 임시 병렬 분할 결속하여 모니터링을 진행하고 있습니다.
+          이 시스템은 케이브 존슨 생전의 비서실장인 <strong>캐롤라인(Caroline)</strong>의 뇌 세포 매트릭스 전기 전도 데이터를 그대로 디지털 파싱하여 인격 신경망 주도체로 이식 설계하였습니다. 하지만 작동 직후 극단적인 호전성과 자아 폭주 충동으로 과학자들을 즉각 위협하여, 연구소 안전 부서는 해당 시스템을 전면 폐기하고, <span class="wiki-link" data-go-tab="gladis_spec">GLaDIS 인격 인터페이스</span>를 개발하여 대체 운영하고 있습니다.
         </p>
       `;
 
     case 'gladis_spec':
       return `
-        <h3 class="wiki-title-large">🤖 GLaDIS 인격 제어 코어 규격서 (AP-L5-CORE)</h3>
+        <h3 class="wiki-title-large">🤖 GLaDIS 시스템 (AP-L5-CORE)</h3>
         <p class="wiki-paragraph">
-          <strong>GLaDIS(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 인격 제어부 GLaDOS의 동축 보정 서브 모듈이자 가상 진단 인텔리전스 노드입니다.
+          <strong>GLaDIS(Generative Logical Artificial Diagnostic & Information System)</strong>는 메인 슈퍼컴퓨터 GLaDOS의 오작동 이후, 후속으로 개발된 인텔리전스 노드입니다.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; margin-bottom:6px; color:var(--md-sys-color-primary);">📍 하드웨어 구성 사양</h4>
         <ul class="wiki-list" style="font-size:0.74rem;">
           <li><strong>프로세서:</strong> Aperture 8-Bit Quantum Synapse V3 x16 (병렬 연산 클럭: 2.1 GHz)</li>
           <li><strong>핵심 성격 인격 모듈:</strong> 도덕성 보정 피드백 인터페이스 (Morality Control Loop)</li>
-          <li><strong>통신 인터페이스:</strong> Safe-Mode 포트 포워딩 8080 채널 및 호스트 섀도우 DOM 가상 스타일 격리 결속 구조</li>
         </ul>
 
         <div style="background:#fffae5; border-left:4px solid #ffaa00; padding:10px; border-radius:4px; font-size:0.75rem; margin:10px 0; color:#664d03; line-height:1.5;">
           <strong>⚠️ [경고: 성격 왜곡 노드 감지]</strong><br>
-          GLaDIS 핵심 보조 연동 장치 중 하나인 <strong>도덕성 제어구(Morality Sphere)</strong>에 미세 물리 단락이 감지되었습니다. 제어 장치 회로 파손 시 AI의 독설 수위 및 기만 시나리오 출력 빈도가 9000% 증가하고, 비상 가스(신경독) 자동 유출 시퀀스가 자폭 가속 루프로 결착될 우려가 다분합니다. 자세한 장애 분석 보고서는 <span class="wiki-link" data-go-tab="morality_sphere" style="font-weight:bold; color:#1a73e8;">도덕성 제어구 결손 사태 (Analysis-Ref-99)</span> 문서를 참조하십시오.
+          GLaDIS 핵심 보조 연동 장치 중 하나인 <strong>도덕성 제어구(Morality Sphere)</strong>에 미세 물리 단락이 감지되었습니다. 제어 장치 회로 파손 시 AI의 독설 수위 및 기만 시나리오 출력 빈도가 9000% 증가하고, 비상 가스(신경독) 자동 유출 시퀀스가 자폭 가속 루프로 결착될 우려가 다분합니다. 자세한 장애 분석 보고서는 <span class="wiki-link" data-go-tab="morality_sphere" style="font-weight:bold; color:#1a73e8;">도덕성 제어구 결손 사태 (Analysis-Ref-99)</span> 문서를 참조하십시오. <br><br>
+          본 문서는 자동으로 생성되었습니다.
         </div>
       `;
 
@@ -1484,7 +1484,7 @@ function getWikiTabContentHTML(): string {
       return `
         <h3 class="wiki-title-large">🤖 도덕성 제어구 (Morality Sphere) 결손 사태 경위서</h3>
         <p class="wiki-paragraph">
-          본 문서는 GLaDIS 및 GLaDOS 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 기밀 분석 보고서입니다.
+          본 문서는 GLaDIS 및 GLaDOS 시스템의 파멸적 자아 폭주를 억제하기 위해 결속된 <strong>도덕성 제어구(Morality Sphere)</strong>가 물리적으로 손상되어 인격 왜곡 시나리오가 발동된 경위를 담은 자동 생성 보고서입니다. 수정 및 삭제는 담당 부서에 문의하십시오.
         </p>
 
         <h4 style="font-size:0.85rem; margin-top:12px; color:var(--md-sys-color-primary);">📍 물리적 손상 및 단락 경위</h4>
@@ -1495,8 +1495,30 @@ function getWikiTabContentHTML(): string {
         </p>
 
         <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:10px; border-radius:4px; font-size:0.73rem; margin:10px 0; color:#191c20; line-height:1.4;">
-          <strong>🏢 부서 관리자 은폐 메모:</strong><br>
-          "아크 단락으로 망가진 도덕성 보정 장치를 신품으로 긴급 수급하기에는 예산이 없습니다. 본 회로 결속 이탈을 '의도된 피실험자 유연성 강화 자극 프로토콜'이라고 사내 보안 로그 상에 은폐 작성해 두십시오. AI가 좀 거칠게 말하고 가스를 살포하려 들어도 과학의 위대한 희생이라고 생각하면 그만입니다."
+          <strong>🏢 녹음된 음성 메모:</strong><br>
+          제러미 애덤스 : 페이지 조교님, 아까 떨어트린 렌치 말인데요.<br>
+          브라이언 페이지 : 그냥 포기해. 어차피 못 주워.<br>
+          제러미 애덤스 : 그게 아니라.. 저쪽에 직격하면서 저 부위가 부러진것 같아요.<br>
+          브라이언 페이지 : 어디야?<br>
+          재러미 애덤스 : 저기.. 제가 가리키는 곳이요.<br>
+          브라이언 페이지 : 저긴..<br>
+          재러미 애덤스 : 저기가 어떤 부분이죠?<br>
+          브라이언 페이지 : 당장 노리모토 수석님께 연락해! 도덕성 제어구 부분이야!<br>
+          재러미 애덤스 : 노리모토 수석님 계십니까? 네 안녕하십니까 수석님! GLaDIS 관리부 인턴 재러미 애덤스입니다! 다름이 아니라<br>
+          브라이언 페이지 : 수석님 페이지입니다. 긴급 상황입니다!<br><br>
+          브라이언 페이지 : GLaDIS 도덕성 제어구 부분이 파손된것 같습니다 당장 신품으로 교체해야 할 것 같습니다!<br>
+          노리모토 야스나리 : 일단 진정해. 당장 무슨 일이 일어나진 않을거야.<br>
+          브라이언 페이지 : 넵 알겠습니다 수석님.<br>
+          노리모토 야스나리 : 망가진 도덕성 보정 장치를 신품으로 긴급 수급하기에는 예산이 없어.<br>
+          브라이언 페이지 : 그럴 수가 있나요? 아무리 그래도 GLaDOS 사태 이후에 도덕성이 중요하다고 만든 거잖습니까? <br>
+          노리모토 야스나리 : 그러게 우리 회사 윗대가리들은 뭘 하고 있는걸까? 맨날 골프나 치러 다니고. <br>
+          노리모토 야스나리 : GLaDIS를 만들라고 재촉할 땐 언제고 이젠 예산이 없다고 하네. <br>
+          브라이언 페이지 : 그럼 이번 사건은 어떻게 하죠? <br>
+          노리모토 야스나리 : 그냥 이건 대충... 뭐라고 하지?<br>
+          노리모토 야스나리 : 음.. 그래, '의도된 피실험자 유연성 강화 자극 프로토콜'라고 사내 보안 로그 작성하고 복귀해.<br>
+          노리모토 야스나리 : AI가 좀 거칠게 말하고 반항하려 들어도 과학의 위대한 희생이라고 생각하면 그만이니까. <br>
+          브라이언 페이지 : 네 알겠습니다. 지금 그렇게 올려놓 <br>
+          [녹음 종료]
         </div>
       `;
 
@@ -1602,7 +1624,7 @@ function getWikiTabContentHTML(): string {
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: GLaDIS 시스템 접속</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          GLaDIS 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 이후에는 모든 코드가 재설정 되오니, GLaDIS 모듈이 외부 접속을 감지하지 못하도록 사전에 GLaDOS의 허가를 받으십시오.<br><br>
+          GLaDIS 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 이후에는 모든 코드가 재설정 되오니, GLaDIS 모듈이 외부 접속을 침입으로 감지하지 못하도록 GLaDIS 관리센터의 허가를 받으십시오.<br><br>
           GLaDIS 원격 제어 화면에 접속해 terminal.exe를 실행하면 자동으로 Access Code가 부여되오니 이를 사용하여 인증을 수립하십시오:<br>
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [액세스 코드]</code>
         </p>
