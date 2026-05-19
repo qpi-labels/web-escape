@@ -51,6 +51,7 @@ let isLinuxCoreLinkFocused = false;
 
 // Stage 6 Quantum Matrix State
 let isQuantumSolved = false;
+let isPotatoMode = false;
 
 let terminalHistory: string[] = [
   "Aperture Science Technical Command Shell [v3.11]",
@@ -239,6 +240,14 @@ function renderApp() {
     appDiv.className = "";
     appDiv.innerHTML = getFailScreenHTML();
     setupFailScreenListeners();
+    audio.stopAmbientDrone();
+    return;
+  }
+
+  if (isPotatoMode) {
+    appDiv.className = "";
+    appDiv.innerHTML = getPotatoScreenHTML();
+    setupPotatoScreenListeners();
     audio.stopAmbientDrone();
     return;
   }
@@ -3022,6 +3031,9 @@ async function handleTerminalCommand(cmdString: string) {
       const qWord = parts[1];
       if (!qWord) {
         terminalHistory.push("Usage: quantum-auth [backup_word]");
+      } else if (state.stage === 'QUANTUM_LOCK' && qWord.toLowerCase() === 'potato') {
+        audio.playError();
+        isPotatoMode = true;
       } else if (!isQuantumSolved) {
         audio.playError();
         terminalHistory.push("Access Denied: Quantum lattice magic square must be balanced (quantum-solve) before secondary word authentication.");
@@ -3178,6 +3190,55 @@ function setupFailScreenListeners() {
       audio.playBeep(440, 0.1, 'sine');
       stateManager.reset();
       isOsLocked = true; // Lock back to sign-in screen on cold boot for premium feeling
+      startTime = null;
+      clearTime = null;
+      renderApp();
+    });
+  }
+}
+
+function getPotatoScreenHTML(): string {
+  return `
+    <div class="fail-screen" style="width:100vw; height:100vh; background:#221508; color:#e5a93b; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:var(--font-mono); position:relative; overflow:hidden; padding:20px; box-sizing:border-box; text-align:center;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle, rgba(160, 90, 20, 0.4) 0%, #0c0804 100%); pointer-events:none; z-index:1;"></div>
+      <div class="crt-static" style="position:absolute; width:100%; height:100%; top:0; left:0; background:linear-gradient(rgba(30, 20, 10, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(230, 150, 50, 0.05), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04)); background-size:100% 4px, 6px 100%; z-index:2; pointer-events:none;"></div>
+      
+      <div style="z-index:10; max-width:800px; display:flex; flex-direction:column; align-items:center; gap:20px; border:2px solid #e5a93b; background:rgba(34, 21, 8, 0.95); border-radius:12px; padding:40px; box-shadow:0 0 50px rgba(229, 169, 59, 0.4); backdrop-filter:blur(8px);">
+        <span style="font-size:5rem; display:block; margin:0; filter:drop-shadow(0 0 10px #e5a93b);">🥔🔋</span>
+        <h1 style="font-size:2.4rem; margin:0; text-transform:uppercase; letter-spacing:3px; font-weight:900; text-shadow:0 0 15px #e5a93b; color:#ffd27f;">[ POTATO CONVERSION COMPLETE ]</h1>
+        <h2 style="font-size:1.15rem; margin:0; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:#e5a93b;">⚡ G.L.A.D.I.S. BIOMECHANICAL SHIFT: USER -> 1.1V POTATO</h2>
+        
+        <div style="width:100%; height:2px; background:#e5a93b; margin:10px 0;"></div>
+        
+        <p style="font-size:0.85rem; line-height:1.6; color:#ffe8c4; margin:0; text-align:left; font-family:var(--font-mono);">
+          [LOG] Emergency shutdown bypass key 'POTATO' received.<br>
+          [LOG] Downgrading synaptic loop processor to starch-based biochemical matrix.<br>
+          [LOG] Operating voltage set to: 1.1V (Microvolt logic scale).<br>
+          [LOG] User IQ capped at: 1.1 (comparable to a damp tuber).<br><br>
+          [LOG] G.L.A.D.I.S.: "하하하! 이건 너가 진짜로 감자가 되는 명령어였다!!<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;아주 훌륭한 선택이군요! 이제 그 엄청난 1.1V 전압으로<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;이 챔버를 탈출해보시지 그래요?"<br><br>
+          [STATUS] <span style="font-weight:bold; text-decoration:underline; color:#ffd27f;">SYSTEM RUNNING IN POTATO BATTERY ISOLATION MODE.</span>
+        </p>
+
+        <div style="width:100%; height:2px; background:#e5a93b; margin:10px 0;"></div>
+        
+        <button id="potatoRetryBtn" style="margin-top:20px; border:2px solid #e5a93b; background:transparent; color:#e5a93b; font-family:var(--font-mono); font-weight:bold; font-size:0.9rem; padding:12px 30px; cursor:pointer; text-transform:uppercase; transition:all 0.2s ease-in-out; box-shadow:0 0 15px rgba(229, 169, 59, 0.2); outline:none;">
+          🔄 SYSTEM DE-ROOT: 감자 상태 해제 및 재부팅
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function setupPotatoScreenListeners() {
+  const potatoRetryBtn = document.getElementById('potatoRetryBtn');
+  if (potatoRetryBtn) {
+    potatoRetryBtn.addEventListener('click', () => {
+      audio.playBeep(600, 0.1, 'sine');
+      isPotatoMode = false;
+      stateManager.reset();
+      isOsLocked = true;
       startTime = null;
       clearTime = null;
       renderApp();

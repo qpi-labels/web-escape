@@ -330,7 +330,6 @@ class StateManager {
             this.triggerFailure();
           }
         }
-        this.notify();
       } else {
         this.stopCountdown();
       }
