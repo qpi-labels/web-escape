@@ -20,6 +20,7 @@ let activeWindows: AppWindow[] = [
   { id: 'terminal', title: 'Terminal.exe', isOpen: false, x: 90, y: 90, width: 520, height: 380, focused: false },
   { id: 'config', title: 'System.cfg', isOpen: false, x: 160, y: 40, width: 440, height: 350, focused: false },
   { id: 'schematic', title: 'battery_schematic.jpg', isOpen: false, x: 50, y: 80, width: 360, height: 320, focused: false },
+  { id: 'diagnostics', title: 'diagnostics.lnk', isOpen: false, x: 120, y: 120, width: 460, height: 320, focused: false },
 ];
 
 let activeWikiTab: string = 'home';
@@ -98,11 +99,15 @@ let startTime: number | null = null;
 let clearTime: number | null = null;
 let showMessengerToast = false;
 let shownVanceStage3Toast = false;
+let shownVanceStage4Toast = false;
 let shownVanceStage5Toast = false;
 
 function getToastText(stage: string, gladisUpdateState: string): string {
   if (stage === 'SELF_DESTRUCT') {
     return "자폭 타이머 작동! [CLAIM CAKE]는 기만 단추니 절대 무시하게! 바탕화면에 생성된 'diagnostics.lnk' 파일을 읽고 우회법을 확인하게!";
+  }
+  if (stage === 'CONFIG') {
+    return "보조 제어 격벽 차단 시도! 원격 화면에서 System.cfg 에러 로그를 수집하고 사내 복호화 규칙에 따라 변환해 보게!";
   }
   if (stage === 'DESKTOP' && gladisUpdateState === 'UPDATED') {
     return "G.L.A.D.I.S.가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
@@ -173,6 +178,15 @@ function renderApp() {
   const appDiv = document.getElementById('app');
   if (!appDiv) return;
 
+  // Save scroll positions and bottom-docked status
+  const oldTermOutput = document.getElementById('terminalOutput');
+  const termScrollTop = oldTermOutput ? oldTermOutput.scrollTop : null;
+  const termWasAtBottom = oldTermOutput ? (oldTermOutput.scrollHeight - oldTermOutput.clientHeight - oldTermOutput.scrollTop < 15) : true;
+
+  const oldChatContainer = document.getElementById('chatMessagesContainer');
+  const chatScrollTop = oldChatContainer ? oldChatContainer.scrollTop : null;
+  const chatWasAtBottom = oldChatContainer ? (oldChatContainer.scrollHeight - oldChatContainer.clientHeight - oldChatContainer.scrollTop < 15) : true;
+
   // 1. Save input state to prevent loss of focus & text during full DOM redraws
   const activeElement = document.activeElement as HTMLElement | null;
   const activeId = activeElement ? activeElement.id : null;
@@ -194,6 +208,11 @@ function renderApp() {
     showMessengerToast = true;
     audio.playBeep(880, 0.08);
     showGlitchNotification("☣️ [경고] 가스 실시간 유출!");
+  }
+  if (state.stage === 'CONFIG' && !shownVanceStage4Toast) {
+    shownVanceStage4Toast = true;
+    showMessengerToast = true;
+    audio.playBeep(880, 0.08);
   }
   if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' && !shownVanceStage3Toast) {
     shownVanceStage3Toast = true;
@@ -252,14 +271,22 @@ function renderApp() {
       break;
   }
 
-  // Auto-scroll chat & terminal to their bottom positions to avoid scroll resets on speedrun timer redraws
-  const termOutput = document.getElementById('terminalOutput');
-  if (termOutput) {
-    termOutput.scrollTop = termOutput.scrollHeight;
+  // Restore scroll positions or auto-scroll to bottom
+  const newTermOutput = document.getElementById('terminalOutput');
+  if (newTermOutput) {
+    if (termWasAtBottom) {
+      newTermOutput.scrollTop = newTermOutput.scrollHeight;
+    } else if (termScrollTop !== null) {
+      newTermOutput.scrollTop = termScrollTop;
+    }
   }
-  const chatContainer = document.getElementById('chatMessagesContainer');
-  if (chatContainer) {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  const newChatContainer = document.getElementById('chatMessagesContainer');
+  if (newChatContainer) {
+    if (chatWasAtBottom) {
+      newChatContainer.scrollTop = newChatContainer.scrollHeight;
+    } else if (chatScrollTop !== null) {
+      newChatContainer.scrollTop = chatScrollTop;
+    }
   }
 
   // 2. Restore active element value, selection and focus
@@ -402,6 +429,14 @@ function getLinuxDesktopScreenHTML() {
             <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12C2,14.73 3.08,17.2 4.88,19L3.5,22L6.87,20.85C8.39,21.57 10.15,22 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20C10.53,20 9.17,19.66 7.96,19.05L7.61,18.88L5.27,19.68L6.2,17.65L6.03,17.28C5.37,15.84 5,14 5,12A8,8 0 0,1 12,4Z"/></svg>
             <span>Aperture_Chat</span>
           </button>
+
+          <!-- Diagnostics icon (visible if in unlockedApps) -->
+          ${state.unlockedApps.includes('diagnostics.lnk') ? `
+            <button class="linux-icon" id="linuxDiagnosticsIcon">
+              <svg viewBox="0 0 24 24"><path fill="#3b82f6" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              <span>diagnostics.lnk</span>
+            </button>
+          ` : ''}
         </div>
 
         <!-- 1. GNOME Web Browser (Wiki) Window -->
@@ -563,7 +598,7 @@ function getLinuxDesktopScreenHTML() {
                   </div>
 
                   <!-- Msg 2.5: Vance Stage 3 intervention (Riddle Hint) -->
-                  ${state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' ? `
+                  ${(state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') || state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
                     <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
                       <div style="display:flex; align-items:center; gap:8px;">
                         <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
@@ -579,7 +614,22 @@ function getLinuxDesktopScreenHTML() {
                     </div>
                   ` : ''}
 
-                  ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' ? `
+                  <!-- Msg 2.7: Vance Stage 4 intervention (Config Decryption) -->
+                  ${state.stage === 'CONFIG' || state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
+                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #00bcd4; padding-left: 8px; margin-top: 10px;">
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:bold; color:#00bcd4;">Supervisor Vance</span>
+                        <span style="font-size:0.65rem; color:#888;">오후 4:38</span>
+                      </div>
+                      <div style="background:rgba(0,188,212,0.06); border:1px solid rgba(0,188,212,0.15); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#e0f7fa; font-size:0.78rem; line-height:1.5;">
+                        좋았어! 보안 필터 우회는 성공했군. 이제 녀석의 제어 설정을 변조할 차례네.
+                        원격 스트림 화면에서 <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 4px;">System.cfg</code> 파일을 열어보게!
+                        에러 로그 덤프의 각 모듈 첫 글자를 순서대로 수집한 뒤, 사내 복호화 규칙에 맞추어 변환해서 입력창에 인증 코드로 넣어야 하네.
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' || state.stage === 'ESCAPED' ? `
                     <!-- Msg 3: Vance emergency intervention -->
                     <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #e53935; padding-left: 8px; margin-top: 14px;">
                       <div style="display:flex; align-items:center; gap:8px;">
@@ -589,9 +639,10 @@ function getLinuxDesktopScreenHTML() {
                       <div style="background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#ffcdd2; font-size:0.78rem; line-height:1.5;">
                         AP-09! G.L.A.D.I.S.가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
                         <br><br>
-                        지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있군! 어서 Terminal.exe를 열고 다음 명령을 입력해 우회 코드를 알아내 주입해 차단하게!
+                        원격 스트림 화면(G.L.A.D.I.S. Remote Desktop)에 내가 복구 쉘 우회 및 자가 진단 가이드가 담긴 <span style="color:#ffaa00; font-weight:bold;">diagnostics.lnk</span> 파일을 생성해두었으니 더블 클릭해서 내용을 확인하고 지침을 따르게!
+                        지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있으니, Terminal.exe를 열고 우회 코드를 알아내 주입해 차단해주게!
                         <br><br>
-                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get --css body::after</code>
+                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get-key body</code>
                         <br><br>
                         코드를 얻으면 즉시 이 명령을 내려 밸브를 파쇄해 가스 분사를 멈추게:
                         <br>
@@ -848,6 +899,7 @@ function getGladisSubDesktopHTML(state: any): string {
   const terminalWin = activeWindows.find(w => w.id === 'terminal')!;
   const configWin = activeWindows.find(w => w.id === 'config')!;
   const schematicWin = activeWindows.find(w => w.id === 'schematic')!;
+  const diagnosticsWin = activeWindows.find(w => w.id === 'diagnostics')!;
 
   const isConfigUnlocked = state.stage !== 'DESKTOP';
 
@@ -888,7 +940,7 @@ function getGladisSubDesktopHTML(state: any): string {
         <div>📡 G.L.A.D.I.S. Remote Core Stream</div>
         <div style="display:flex; gap:12px; align-items:center;">
           ${state.stage === 'SELF_DESTRUCT' ? `
-            <span style="color:#ba1a1a; font-weight:bold; background:#ffdad6; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">자폭 카운트: ${state.timerRemaining}s</span>
+            <span style="color:#ba1a1a; font-weight:bold; background:#ffdad6; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">☣️ 자폭 시퀀스 가동됨 (Self-Destruct Active)</span>
           ` : ''}
           ${state.stage === 'QUANTUM_LOCK' ? `
             <span style="color:#e65100; font-weight:bold; background:#fff3e0; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">양자 얽힘 잠금 활성</span>
@@ -917,6 +969,14 @@ function getGladisSubDesktopHTML(state: any): string {
             <svg style="width:32px; height:32px;" viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.47,2.42C14.43,2.18 14.22,2 14,2H10C9.78,2 9.57,2.18 9.53,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.53,21.58C9.57,21.82 9.78,22 10,22H14C14.22,22 14.43,21.82 14.47,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/></svg>
             <span>System.cfg</span>
           </button>
+
+          <!-- Diagnostics icon (visible if in unlockedApps) -->
+          ${state.unlockedApps.includes('diagnostics.lnk') ? `
+            <button class="desktop-icon" data-remote-win-id="diagnostics" style="padding:4px; font-size:0.75rem;">
+              <svg style="width:32px; height:32px;" viewBox="0 0 24 24"><path fill="#3b82f6" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              <span>diagnostics.lnk</span>
+            </button>
+          ` : ''}
 
           <!-- Battery Schematic icon (ONLY visible in Stage 6 / QUANTUM_LOCK) -->
           ${state.stage === 'QUANTUM_LOCK' ? `
@@ -1001,7 +1061,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <span style="font-size:0.65rem; color:#555; line-height:1.4; display:block;">
                   * 안내: 위 원격 에러 덤프 로그의 각 에러 모듈(ERR_C-*)별 키워드 첫 글자를 순서대로 수집하십시오.
                   <br>
-                  * 수집한 4글자에 사내 <strong>Caesar ROT-3 복호화 규칙</strong>을 적용하여 최종 승인 키를 복구하십시오.
+                  * 수집한 4글자에 사내 <strong>복호화 규칙</strong>을 적용하여 최종 승인 키를 복구하십시오.
                 </span>
               </div>
               <div class="input-group" style="margin-bottom: 8px; margin-top: 10px;">
@@ -1014,7 +1074,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               
               <!-- Built-in Morse Reference Ledger -->
               <div style="margin-top:10px; border-top:1px solid #cbd5e1; padding-top:8px; text-align:left;">
-                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block; line-height:1.3;">* 안내: Caesar ROT-3 복호화 가이드는 브라우저의 '모스 부호 목록표' 하단에 상세 설명되어 있으니 복구가 필요할 시 참고하십시오.</span>
+                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block; line-height:1.3;">* 안내: 사내 복호화 규칙 및 가이드는 브라우저의 '모스 부호 목록표'에 설명되어 있으니 복구가 필요할 시 참고하십시오.</span>
               </div>
             </div>
           </div>
@@ -1056,6 +1116,30 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
           </div>
         ` : ''}
 
+        <!-- E. diagnostics.lnk remote Window -->
+        ${diagnosticsWin && diagnosticsWin.isOpen ? `
+          <div class="window-frame ${diagnosticsWin.focused ? 'focused' : ''}" id="win-diagnostics" style="left:${diagnosticsWin.x}px; top:${diagnosticsWin.y}px; width:${diagnosticsWin.width}px; height:${diagnosticsWin.height}px; position:absolute; z-index:15; display:flex; flex-direction:column;">
+            <div class="window-header" style="height:32px;">
+              <div class="window-title" style="font-size:0.75rem;">diagnostics.lnk</div>
+              <div class="window-controls">
+                <button class="window-btn close-remote-win-btn" data-win-id="diagnostics" style="width:16px;height:16px;font-size:0.65rem;">×</button>
+              </div>
+            </div>
+            <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px); background:#fcf8f2; color:#333; overflow-y:auto; text-align:left; font-family:var(--font-sans);">
+              <strong>[G.L.A.D.I.S. 시스템 자가 진단 보고서]</strong><br><br>
+              자가 진단 코어 가동 중 치명적 오류 감지.<br>
+              신경독 누출을 수동으로 중단하기 위해서는 override bypass 패스코드가 필수적입니다.<br><br>
+              <strong>[우회 지침]</strong><br>
+              우회 코드는 DOM body::after, #app::after, .window-frame::after 가상 선택자 content 내부에 나눠서 숨겨져 있습니다.<br><br>
+              Terminal.exe를 열고 아래 명령을 입력하여 가상 요소에 숨겨진 키 조각을 원격 추출해 해독한 후 합쳐 결합하십시오:<br>
+              - <code style="font-family:var(--font-mono); background:#eee; padding:1px 3px;">get-key body</code> (body::after 키 조각 추출)<br>
+              - <code style="font-family:var(--font-mono); background:#eee; padding:1px 3px;">get-key app</code> (#app::after 키 조각 추출)<br>
+              - <code style="font-family:var(--font-mono); background:#eee; padding:1px 3px;">get-key window</code> (.window-frame::after 키 조각 추출)<br>
+              - <code style="font-family:var(--font-mono); background:#eee; padding:1px 3px;">base64-decode [디코딩할문자열]</code>
+            </div>
+          </div>
+        ` : ''}
+
         <!-- STAGE 5 EMERGENCY TIMER CARD OVERLAP -->
         ${state.stage === 'SELF_DESTRUCT' && showStage5EmergencyOverlay ? `
           <div class="emergency-overlay" style="position:absolute; z-index:50;">
@@ -1063,13 +1147,13 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               <button style="position:absolute; top:10px; right:10px; border:none; background:none; color:#ba1a1a; font-size:1.1rem; cursor:pointer; font-weight:bold; line-height:1;" id="closeEmergencyOverlayBtn">×</button>
               <h3 style="color:#ba1a1a; font-size:1.1rem; margin-bottom:6px;">☣️ CORE SELF DESTRUCT ☣️</h3>
               <p style="font-size:0.75rem; line-height:1.4; margin-bottom:10px;">
-                인격 제어 핵심 루프 강제 조작으로 비상 가스가 유출됩니다. 120초 후 자폭합니다.
+                인격 제어 핵심 루프 강제 조작으로 비상 가스가 유출됩니다. 자폭 시퀀스가 활성화되었습니다.
               </p>
               <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px; border:1px solid #ced0db; font-size:0.7rem; margin-bottom:10px; text-align:left;">
                 <strong>OVERRIDE PROTOCOL:</strong><br>
                 <code style="font-family:var(--font-mono); font-size:0.78rem; color:#ba1a1a;">aperture-override --force --code [STAGE5_BYPASS]</code>
                 <p style="font-size:0.65rem; color:#555; margin-top:2px;">
-                  우회 코드는 DOM body::after, #app::after, .window-frame::after에 파편화되어 숨겨져 있습니다. <code style="font-family:var(--font-mono);">get --css [선택자]</code> 명령으로 훔친 뒤 디코딩하여 차례로 결합하십시오!
+                  우회 코드는 DOM body::after, #app::after, .window-frame::after에 파편화되어 숨겨져 있습니다. <code style="font-family:var(--font-mono);">get-key [body/app/window]</code> 명령으로 추출한 뒤 디코딩하여 차례로 결합하십시오!
                 </p>
               </div>
               <button class="md3-button emergency-btn-claim" id="claimCakeBtn" style="padding:6px; font-size:0.8rem; margin-top:0;">🎂 [CLAIM CAKE] 공짜 케이크 혜택 승인</button>
@@ -1426,9 +1510,9 @@ function getWikiTabContentHTML(): string {
           <div><strong>Z:</strong> <code>--..</code></div>
         </div>
 
-        <h4 style="font-size:0.85rem; color:#ba1a1a; margin-top:14px;">🔑 Caesar ROT-3 Shift 복호화 복구 가이드</h4>
+        <h4 style="font-size:0.85rem; color:#ba1a1a; margin-top:14px;">🔑 사내 복호화 규칙 및 가이드</h4>
         <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
-          G.L.A.D.I.S. v3.12 보안 조치에 따라, 모스 오디오 채널에서 인터셉트된 원본 모스 코드는 임의로 Caesar ROT-3 암호화(알파벳 문자 인덱스 순서가 3칸 뒤로 밀린 형태)가 적용되어 전송됩니다.<br>
+          모든 모스부호는 사내 복호화 규칙인 ROT-3에 따라 안전하게 사용됩니다. G.L.A.D.I.S. v3.12 보안 조치에 따라, 모스 오디오 채널에서 인터셉트된 원본 모스 코드는 임의로 ROT-3 암호화(알파벳 문자 인덱스 순서가 3칸 뒤로 밀린 형태)가 적용되어 전송됩니다.<br>
           * <strong>암호화 작동 원리:</strong> 각 원본 글자에 알파벳 순서상 +3 Shift를 부여합니다. (예: A -> D, B -> E, C -> F...)<br>
           * <strong>복호화 방법:</strong> 획득한 암호 문자열의 각 알파벳을 반대 방향인 앞으로 3칸 당깁니다. (-3 Shift, 예: D -> A, E -> B, F -> C...)
         </p>
@@ -1443,7 +1527,7 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-size:0.85rem; color:#ba1a1a;">☣️ 신경독 분입 노드 B-12 및 기동 오버라이드 규격</h4>
         <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
-          만약 인격 제어부 G.L.A.D.I.S. 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 120초 이내에 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
+          만약 인격 제어부 G.L.A.D.I.S. 내부의 자폭 시퀀스가 활성화되는 와중에 비인가 CLAIM CAKE 버튼을 더블 클릭하는 등의 기만 작동이 가동될 경우, 비상 안전 가스 역류 차단막이 소실되어 지체 없이 중앙 챔버 전 구역에 신경독 가스가 완전히 공급 방출 완료됩니다.
         </p>
 
         <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:10px; border-radius:4px; font-size:0.74rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
@@ -1487,12 +1571,12 @@ function getWikiTabContentHTML(): string {
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 수집하십시오. 획득한 모스 시퀀스를 사내 '모스 부호 목록표'를 참조하여 번역하고, system.cfg에 명시된 Caesar ROT-3 shift 해독법에 맞춰 복호화한 4자 동기 보정 어휘 키워드(Passcode)를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
+          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 수집하십시오. 획득한 모스 시퀀스를 사내 '모스 부호 목록표'를 참조하여 번역하고, 사내 복호화 규칙에 맞춰 복호화한 4자 동기 보정 어휘 키워드(Passcode)를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css #app::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css .window-frame::after</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 혹은 시간 초과 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
+          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css #app::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css .window-frame::after</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
@@ -1573,6 +1657,7 @@ function setupLinuxDesktopListeners() {
   const connectGladisIcon = document.getElementById('connectGladisIcon');
   const linuxBrowserIcon = document.getElementById('linuxBrowserIcon');
   const linuxReadmeIcon = document.getElementById('linuxReadmeIcon');
+  const linuxDiagnosticsIcon = document.getElementById('linuxDiagnosticsIcon');
 
   // Helper double click bindings
   if (connectGladisIcon) {
@@ -1585,6 +1670,10 @@ function setupLinuxDesktopListeners() {
 
   if (linuxReadmeIcon) {
     linuxReadmeIcon.addEventListener('dblclick', openLinuxReadme);
+  }
+
+  if (linuxDiagnosticsIcon) {
+    linuxDiagnosticsIcon.addEventListener('dblclick', openLinuxDiagnostics);
   }
 
   // Windows Error Dialog Close listeners
@@ -1698,6 +1787,8 @@ function setupLinuxDesktopListeners() {
         openLinuxBrowser();
       } else if (contextMenuTargetId === 'linuxReadmeIcon') {
         openLinuxReadme();
+      } else if (contextMenuTargetId === 'linuxDiagnosticsIcon') {
+        openLinuxDiagnostics();
       }
     });
   }
@@ -1732,6 +1823,8 @@ function setupLinuxDesktopListeners() {
         details += "Aperture_Web_Browser [시스템 애플리케이션]. 크기: 45MB. 애퍼처 인트라넷 전용 웹 브라우저.";
       } else if (contextMenuTargetId === 'linuxReadmeIcon') {
         details += "README.txt [일반 텍스트]. 크기: 421B. 비상 사태 관리 규격 문서.";
+      } else if (contextMenuTargetId === 'linuxDiagnosticsIcon') {
+        details += "diagnostics.lnk [시스템 숏컷 링크]. G.L.A.D.I.S. 코어 자가진단 분석 및 우회 스크립트 연결 노드.";
       } else {
         details += "Aperture OS Core Sector. 권한: 읽기 전용.";
       }
@@ -1803,6 +1896,7 @@ function setupLinuxDesktopListeners() {
   const remoteTerminalIcon = document.querySelector('[data-remote-win-id="terminal"]');
   const remoteConfigIcon = document.querySelector('[data-remote-win-id="config"]');
   const remoteSchematicIcon = document.querySelector('[data-remote-win-id="schematic"]');
+  const remoteDiagnosticsIcon = document.querySelector('[data-remote-win-id="diagnostics"]');
 
   if (remoteNotesIcon) {
     remoteNotesIcon.addEventListener('click', () => {
@@ -1828,6 +1922,12 @@ function setupLinuxDesktopListeners() {
       openRemoteWindow('schematic');
     });
   }
+  if (remoteDiagnosticsIcon) {
+    remoteDiagnosticsIcon.addEventListener('click', () => {
+      audio.playBeep(900, 0.04);
+      openRemoteWindow('diagnostics');
+    });
+  }
 
   // Close sub-window buttons inside remote space
   const closeRemoteBtns = document.querySelectorAll('.close-remote-win-btn');
@@ -1842,7 +1942,7 @@ function setupLinuxDesktopListeners() {
   });
 
   // Focus managers for G.L.A.D.I.S. remote windows
-  const remoteFrames = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic');
+  const remoteFrames = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic, #win-diagnostics');
   remoteFrames.forEach(f => {
     f.addEventListener('mousedown', (e) => {
       e.stopPropagation();
@@ -2226,7 +2326,7 @@ function focusRemoteWindow(winId: string) {
   activeWindows = activeWindows.map(w => {
     return { ...w, focused: w.id === winId };
   });
-  const subframes = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic');
+  const subframes = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic, #win-diagnostics');
   subframes.forEach(f => {
     if (f.id === `win-${winId}`) f.classList.add('focused');
     else f.classList.remove('focused');
@@ -2374,6 +2474,16 @@ function openLinuxReadme() {
   isLinuxReadmeFocused = true;
   isLinuxBrowserFocused = false;
   isLinuxCoreLinkFocused = false;
+  renderApp();
+}
+
+function openLinuxDiagnostics() {
+  audio.playBeep(900, 0.04);
+  isLinuxCoreLinkOpen = true;
+  isLinuxCoreLinkFocused = true;
+  isLinuxBrowserFocused = false;
+  isLinuxReadmeFocused = false;
+  openRemoteWindow('diagnostics');
   renderApp();
 }
 
@@ -2605,21 +2715,31 @@ async function handleTerminalCommand(cmdString: string) {
 
   switch (mainCmd) {
     case 'help':
-      terminalHistory.push(
+      const helpLines = [
         "Available commands:",
         "  help                    - Display available command list.",
         "  ls                      - List contents of current sector.",
         "  cat [file]              - Print file content.",
         "  clear                   - Clear screen buffer.",
-        "  sysinfo                 - Print system configuration.",
-        "  auth-config [code]      - Authorize dynamic access code (Stage 3 logic riddle).",
-        "  morse-decode            - Captured raw Morse beacon listener tool (Stage 4).",
-        "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 body::after / #app::after / .window-frame::after).",
-        "  base64-decode [string]  - Base64 string decoding tool (Stage 5).",
-        "  aperture-override --force --code [code] - Emergency core bypass (Stage 5).",
-        "  quantum-solve [val]     - Solve the Magic Square center wave parameter (Stage 6).",
-        "  quantum-auth [word]     - Authenticate backup secondary keyword (Stage 6)."
-      );
+        "  sysinfo                 - Print system configuration."
+      ];
+      if (state.stage === 'DESKTOP') {
+        helpLines.push("  auth-config [code]      - Authorize dynamic access code.");
+      }
+      if (state.stage === 'SELF_DESTRUCT') {
+        helpLines.push(
+          "  get-key [body|app|window] - Extract CSS style key piece.",
+          "  base64-decode [string]    - Base64 string decoding tool.",
+          "  aperture-override --force --code [code] - Emergency core bypass."
+        );
+      }
+      if (state.stage === 'QUANTUM_LOCK') {
+        helpLines.push(
+          "  quantum-solve [val]     - Solve the Magic Square center wave parameter.",
+          "  quantum-auth [word]     - Authenticate backup secondary keyword."
+        );
+      }
+      terminalHistory.push(...helpLines);
       break;
 
     case 'ls':
@@ -2669,9 +2789,13 @@ async function handleTerminalCommand(cmdString: string) {
         }
       } else if (targetFile === 'system.cfg') {
         terminalHistory.push(
-          "[AUDIO DIAGNOSTICS MODULE CONFIG]",
-          "주파수 재생(Play Signal) 시 나오는 소리 신호는 오리지널 8-bit 모스 부호입니다.",
-          " v3.12 핫패치 조치 사항: 자동 디코더 'morse-decode'가 강제로 무력화되었습니다."
+          "[SYSTEM RECOVERY DUMP LOG CONFIG]",
+          "ERR_C-04: Foundation containment matrix corrupt",
+          "ERR_C-18: Xeno-sensor calibration timed out",
+          "ERR_C-09: User-override diagnostics required",
+          "ERR_C-22: Hazardous neurotoxin gas vents ARMED",
+          "",
+          "* 안내: 각 에러 모듈(ERR_C-*)별 키워드 첫 글자를 순서대로 수집한 뒤 사내 복호화 규칙을 적용하십시오."
         );
       } else if (targetFile === 'diagnostics.lnk') {
         terminalHistory.push(
@@ -2679,9 +2803,9 @@ async function handleTerminalCommand(cmdString: string) {
           "신경독 누출을 멈추려면 override bypass 패스코드가 필수적입니다.",
           "우회 코드는 document body::after, #app::after, .window-frame::after 가상 선택자 content 내부에 나눠서 하드코딩되었습니다.",
           "아래 명령을 입력하여 원격 파싱해 해독한 후 합쳐 결합하십시오:",
-          "  get --css body::after",
-          "  get --css #app::after",
-          "  get --css .window-frame::after",
+          "  get-key body",
+          "  get-key app",
+          "  get-key window",
           "  base64-decode [디코딩할문자열]"
         );
       } else {
@@ -2724,22 +2848,6 @@ async function handleTerminalCommand(cmdString: string) {
       terminalHistory = [];
       break;
 
-    case 'morse-decode':
-      if (state.stage === 'CONFIG') {
-        terminalHistory.push(
-          "[📡 LISTENING TO ACTIVE INTRA-SYSTEM AUDIO BEACON...]",
-          "Analyzing frequency audio tone duration intervals...",
-          "  Raw Morse Sequence captured:",
-          "  ..-.   -..-   ..-   ....",
-          "",
-          "[ALERT] Automated character decoder offline due to v3.12 hotpatch.",
-          "Please refer to the Aperture Morse Ledger in the Wiki and system.cfg Caesar shifting rules."
-        );
-      } else {
-        terminalHistory.push("[ERROR] Decoder offline. No active Morse audio beacon detected on current frequency.");
-      }
-      break;
-
     case 'sysinfo':
       terminalHistory.push(
         "OS Name: G.L.A.D.I.S. Embedded Sandbox",
@@ -2750,28 +2858,29 @@ async function handleTerminalCommand(cmdString: string) {
       );
       break;
 
-    case 'get':
-      if (parts[1] === '--css') {
-        if (parts[2] === 'body::after') {
+    case 'get-key':
+      if (state.stage !== 'SELF_DESTRUCT' && state.stage !== 'QUANTUM_LOCK' && state.stage !== 'ESCAPED') {
+        terminalHistory.push("[ ERROR ] Command 'get-key' is only available during emergency self-destruct bypass protocol.");
+      } else {
+        const target = parts[1]?.toLowerCase();
+        if (target === 'body') {
           terminalHistory.push(
-            "Querying DOM stylesheet rule: body::after { ... }",
+            "Extracting key piece from CSS style of body::after element...",
             "Result: content = \"PART_A: TkVVUk9UT1hJTg==\""
           );
-        } else if (parts[2] === '#app::after') {
+        } else if (target === 'app') {
           terminalHistory.push(
-            "Querying DOM stylesheet rule: #app::after { ... }",
+            "Extracting key piece from CSS style of #app::after element...",
             "Result: content = \"PART_B: X0JZUEFTU185OQ==\""
           );
-        } else if (parts[2] === '.window-frame::after') {
+        } else if (target === 'window') {
           terminalHistory.push(
-            "Querying DOM stylesheet rule: .window-frame::after { ... }",
+            "Extracting key piece from CSS style of .window-frame::after element...",
             "Result: content = \"PART_C: X1NFQ1VSRQ==\""
           );
         } else {
-          terminalHistory.push("Usage: get --css [body::after | #app::after | .window-frame::after]");
+          terminalHistory.push("Usage: get-key [body | app | window]");
         }
-      } else {
-        terminalHistory.push("Usage: get --css [selector]");
       }
       break;
 

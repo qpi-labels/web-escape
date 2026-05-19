@@ -53,13 +53,20 @@ export function initSecurityAndAntiCheat() {
     triggerGladisMocking("우클릭 감지됨: 비인가 외부 탐색이 감지되었습니다. 정말 애처롭군요.");
   });
 
-  // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+  // Block F12, Ctrl+Shift+I/C/J, Cmd+Opt+I/C/J/U, Cmd+U
   document.addEventListener('keydown', (e) => {
-    if (
+    const isDevToolsKey = 
       e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
-      (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
-    ) {
+      // Windows/Linux: Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+      (e.ctrlKey && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) ||
+      // macOS: Cmd+Opt+I, Cmd+Opt+J, Cmd+Opt+C
+      (e.metaKey && e.altKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) ||
+      // View Source: Ctrl+U, Cmd+Option+U, Cmd+U
+      (e.ctrlKey && ['U', 'u'].includes(e.key)) ||
+      (e.metaKey && e.altKey && ['U', 'u'].includes(e.key)) ||
+      (e.metaKey && ['U', 'u'].includes(e.key));
+
+    if (isDevToolsKey) {
       e.preventDefault();
       triggerGladisMocking("G.L.A.D.I.S System Core : 현 시간부로 임직원의 모든 외부 인터페이스 접근이 차단됩니다.");
       notifyDevToolsChange(true);

@@ -7,7 +7,7 @@ export type GameStage =
   | 'PORT_BRIDGE'   // Stage 2: Diagnostic Port Forwarding
   | 'DESKTOP'       // Stage 3: Desktop unlocked (Crushing Geometry puzzle)
   | 'CONFIG'        // Stage 4: System Config Morse Decryption
-  | 'SELF_DESTRUCT' // Stage 5: DOM Element Bypass (120s timer)
+  | 'SELF_DESTRUCT' // Stage 5: DOM Element Bypass
   | 'QUANTUM_LOCK'  // Stage 6: Magic Square & Potato Auth
   | 'ESCAPED';
 
@@ -206,7 +206,7 @@ class StateManager {
     if (this.state.stage4Attempts >= 3) {
       this.state.stage4Attempts = 0;
       this.state.stage4LockoutTimer = 15;
-      gladisSpeak("[SYSTEM OVERHEAT] 잘못된 검증 키가 연속 3회 유입되었습니다. 안전을 위해 오디오 데이터 채널을 15초간 격리 차단합니다.");
+      gladisSpeak("[SYSTEM OVERHEAT] 잘못된 검증 키가 연속 3회 유입되었습니다. 안전을 위해 원격 보안 채널을 15초간 격리 차단합니다.");
       this.startStage4LockoutCountdown();
       this.notify();
       return { success: false, lockout: true };
@@ -225,7 +225,7 @@ class StateManager {
         if (this.state.stage4LockoutTimer === 0) {
           clearInterval(this.lockoutInterval);
           this.lockoutInterval = null;
-          gladisSpeak("오디오 모듈이 충분히 냉각되었습니다. 모스 비콘 청취 채널이 재활성화되었습니다.");
+          gladisSpeak("오디오 모듈이 충분히 냉각되었습니다. 원격 보안 채널이 재활성화되었습니다.");
         }
         this.notify();
       } else {
@@ -302,8 +302,7 @@ class StateManager {
     audio.playError();
     
     if (this.state.stage === 'SELF_DESTRUCT') {
-      this.state.timerRemaining = Math.max(5, this.state.timerRemaining - 15);
-      gladisSpeak("개발자 도구 치트 행위 감지. 패널티로 자폭 타이머를 15초 단축합니다. 꼼수를 부리려다 목숨을 단축시키는군요, 테스트 대상자님.");
+      gladisSpeak("개발자 도구 치트 행위 감지. 시스템 우회 장치를 무력화하려 시도하는군요. 정말 어리석습니다, 테스트 대상자님.");
     } else {
       gladisSpeak("비인간적 행위 감지. 개발자 도구를 여셨군요. 시스템 코드를 훔쳐보려는 어리석은 노력이 정말 눈물겹습니다. 하지만 핵심 데이터는 모두 안전하게 해싱되어 있답니다.");
     }
@@ -313,12 +312,7 @@ class StateManager {
   // Start self destruct timer
   private startCountdown() {
     this.stopCountdown();
-    this.state.timerRemaining = 120;
-    this.timerInterval = setInterval(() => {
-      // The alarm sound plays to keep the thematic suspense, but the time never ticks down and never fails
-      audio.playSelfDestructAlarm();
-      this.notify();
-    }, 1000);
+    audio.playSelfDestructAlarm();
   }
 
   private stopCountdown() {
