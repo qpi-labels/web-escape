@@ -307,7 +307,8 @@ html, body {
    ========================================================== */
 .window-frame {
   position: absolute;
-  min-width: 320px;
+  min-width: 250px;
+  min-height: 120px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid var(--md-sys-color-outline);
@@ -317,6 +318,7 @@ html, body {
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
+  resize: both;
 }
 
 .window-frame.focused {

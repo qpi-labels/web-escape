@@ -10,14 +10,16 @@ interface AppWindow {
   isOpen: boolean;
   x: number;
   y: number;
+  width: number;
+  height: number;
   focused: boolean;
 }
 
 let activeWindows: AppWindow[] = [
-  { id: 'notes', title: 'Notes.txt', isOpen: false, x: 30, y: 50, focused: false },
-  { id: 'terminal', title: 'Terminal.exe', isOpen: false, x: 90, y: 90, focused: false },
-  { id: 'config', title: 'System.cfg', isOpen: false, x: 160, y: 40, focused: false },
-  { id: 'schematic', title: 'battery_schematic.jpg', isOpen: false, x: 50, y: 80, focused: false },
+  { id: 'notes', title: 'Notes.txt', isOpen: false, x: 30, y: 50, width: 400, height: 300, focused: false },
+  { id: 'terminal', title: 'Terminal.exe', isOpen: false, x: 90, y: 90, width: 520, height: 380, focused: false },
+  { id: 'config', title: 'System.cfg', isOpen: false, x: 160, y: 40, width: 440, height: 350, focused: false },
+  { id: 'schematic', title: 'battery_schematic.jpg', isOpen: false, x: 50, y: 80, width: 360, height: 320, focused: false },
 ];
 
 let activeWikiTab: string = 'home';
@@ -29,10 +31,18 @@ let isLinuxCoreLinkOpen = false;
 
 let linuxBrowserX = 220;
 let linuxBrowserY = 50;
+let linuxBrowserWidth = 700;
+let linuxBrowserHeight = 530;
+
 let linuxReadmeX = 100;
 let linuxReadmeY = 160;
+let linuxReadmeWidth = 680;
+let linuxReadmeHeight = 500;
+
 let linuxCoreLinkX = 60;
 let linuxCoreLinkY = 30;
+let linuxCoreLinkWidth = 740;
+let linuxCoreLinkHeight = 570;
 
 let isLinuxBrowserFocused = false;
 let isLinuxReadmeFocused = false;
@@ -84,6 +94,8 @@ let bootLogTimerIds: any[] = [];
 let isGladisCoreLinkAttempted = false;
 let isSequentialPrintingActive = false;
 let isOsLocked = true;
+let startTime: number | null = null;
+let clearTime: number | null = null;
 let showMessengerToast = false;
 let isGladisScriptDownloaded = false;
 let isDownloadAlertOpen = false;
@@ -165,6 +177,9 @@ function renderApp() {
 
   switch (state.stage) {
     case 'ESCAPED':
+      if (startTime && !clearTime) {
+        clearTime = Date.now();
+      }
       appDiv.innerHTML = getEscapeScreenHTML();
       audio.stopAmbientDrone();
       break;
@@ -226,6 +241,8 @@ function setupLockScreenListeners() {
 
   const performUnlock = () => {
     isOsLocked = false;
+    startTime = Date.now();
+    clearTime = null;
     audio.playSuccess();
     audio.startAmbientDrone();
     renderApp();
@@ -304,7 +321,7 @@ function getLinuxDesktopScreenHTML() {
 
         <!-- 1. GNOME Web Browser (Wiki) Window -->
         ${isLinuxBrowserOpen ? `
-          <div class="window-frame ${isLinuxBrowserFocused ? 'focused' : ''}" id="win-linux-browser" style="left:${linuxBrowserX}px; top:${linuxBrowserY}px; width:700px; height:530px;">
+          <div class="window-frame ${isLinuxBrowserFocused ? 'focused' : ''}" id="win-linux-browser" style="left:${linuxBrowserX}px; top:${linuxBrowserY}px; width:${linuxBrowserWidth}px; height:${linuxBrowserHeight}px;">
             <div class="window-header">
               <div class="window-title">GNOME Web Browser - Aperture Intranet</div>
               <div class="window-controls">
@@ -333,7 +350,7 @@ function getLinuxDesktopScreenHTML() {
               </div>
             </div>
             <!-- Wiki Embed Area -->
-            <div class="window-content wiki-app" style="padding:0; height:402px;">
+            <div class="window-content wiki-app" style="padding:0; flex: 1; min-height: 0;">
               <!-- Sidebar -->
               <div class="wiki-sidebar" style="width:220px; background:#f1f5f9; border-right:1px solid #cbd5e1; display:flex; flex-direction:column; padding:12px 0; overflow-y:auto;">
                 <div class="wiki-logo-area" style="padding:0 12px 12px 12px; border-bottom:1px solid #cbd5e1; margin-bottom:8px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:#0f172a; display:flex; align-items:center; gap:6px;">
@@ -376,7 +393,7 @@ function getLinuxDesktopScreenHTML() {
 
         <!-- 2. Aperture Chat (README.txt replacement) Window -->
         ${isLinuxReadmeOpen ? `
-          <div class="window-frame ${isLinuxReadmeFocused ? 'focused' : ''}" id="win-linux-readme" style="left:${linuxReadmeX}px; top:${linuxReadmeY}px; width:680px; height:500px; display:flex; flex-direction:column;">
+          <div class="window-frame ${isLinuxReadmeFocused ? 'focused' : ''}" id="win-linux-readme" style="left:${linuxReadmeX}px; top:${linuxReadmeY}px; width:${linuxReadmeWidth}px; height:${linuxReadmeHeight}px; display:flex; flex-direction:column;">
             <div class="window-header">
               <div class="window-title" style="display:flex; align-items:center; gap:6px;">
                 <span style="color:#00bcd4;">●</span> Aperture Chat v2.1 (AP-09 Terminal)
@@ -385,7 +402,7 @@ function getLinuxDesktopScreenHTML() {
                 <button class="window-btn close-linux-readme-btn">×</button>
               </div>
             </div>
-            <div class="window-content chat-app" style="flex:1; display:flex; padding:0; background:#1e1e24; color:#fff; font-family:var(--font-sans); height:460px; overflow:hidden;">
+            <div class="window-content chat-app" style="flex:1; display:flex; padding:0; background:#1e1e24; color:#fff; font-family:var(--font-sans); min-height:0; overflow:hidden;">
               <!-- Sidebar -->
               <div class="chat-sidebar" style="width:180px; background:#121214; border-right:1px solid #2d2d35; display:flex; flex-direction:column; padding:15px 10px; font-size:0.8rem; user-select:none;">
                 <div class="chat-sidebar-header" style="font-weight:bold; color:#00bcd4; margin-bottom:20px; font-size:0.85rem; letter-spacing:0.5px;">APERTURE INTRANET</div>
@@ -506,7 +523,7 @@ function getLinuxDesktopScreenHTML() {
 
         <!-- 3. Aperture Core Remote Connection Session Window (Closable & Draggable) -->
         ${isLinuxCoreLinkOpen ? `
-          <div class="window-frame ${isLinuxCoreLinkFocused ? 'focused' : ''}" id="win-linux-core-link" style="left:${linuxCoreLinkX}px; top:${linuxCoreLinkY}px; width:740px; height:570px; display:flex; flex-direction:column; background:#000;">
+          <div class="window-frame ${isLinuxCoreLinkFocused ? 'focused' : ''}" id="win-linux-core-link" style="left:${linuxCoreLinkX}px; top:${linuxCoreLinkY}px; width:${linuxCoreLinkWidth}px; height:${linuxCoreLinkHeight}px; display:flex; flex-direction:column; background:#000;">
             <div class="window-header" style="background:#1e1e1e; border-bottom:1px solid #333;">
               <div class="window-title" style="color:#dfdfdf;">Aperture Core Remote Connection - G.L.A.D.I.S.</div>
               <div class="window-controls">
@@ -829,14 +846,14 @@ function getGladisSubDesktopHTML(state: any): string {
 
         <!-- A. Notes.txt remote Window -->
         ${notesWin.isOpen ? `
-          <div class="window-frame ${notesWin.focused ? 'focused' : ''}" id="win-notes" style="left:${notesWin.x}px; top:${notesWin.y}px; width:340px; position:absolute; z-index:15;">
+          <div class="window-frame ${notesWin.focused ? 'focused' : ''}" id="win-notes" style="left:${notesWin.x}px; top:${notesWin.y}px; width:${notesWin.width}px; height:${notesWin.height}px; position:absolute; z-index:15;">
             <div class="window-header" style="height:32px;">
               <div class="window-title" style="font-size:0.75rem;">Notes.txt</div>
               <div class="window-controls">
                 <button class="window-btn close-remote-win-btn" data-win-id="notes" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:180px;">
+            <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:calc(100% - 32px);">
 [보안 시스템 긴급 복구 가이드]
 G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 강제로 차단하고 방어 핫패치 v3.12를 실시간 배포했습니다.
 
@@ -851,14 +868,14 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
 
         <!-- B. Terminal.exe remote Window -->
         ${terminalWin.isOpen ? `
-          <div class="window-frame ${terminalWin.focused ? 'focused' : ''}" id="win-terminal" style="left:${terminalWin.x}px; top:${terminalWin.y}px; width:380px; position:absolute; z-index:15;">
+          <div class="window-frame ${terminalWin.focused ? 'focused' : ''}" id="win-terminal" style="left:${terminalWin.x}px; top:${terminalWin.y}px; width:${terminalWin.width}px; height:${terminalWin.height}px; position:absolute; z-index:15;">
             <div class="window-header" style="height:32px;">
               <div class="window-title" style="font-size:0.75rem;">Terminal.exe</div>
               <div class="window-controls">
                 <button class="window-btn close-remote-win-btn" data-win-id="terminal" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content terminal-app" id="terminalAppContainer" style="height:250px; width:100%; border-radius:0;">
+            <div class="window-content terminal-app" id="terminalAppContainer" style="height:calc(100% - 32px); width:100%; border-radius:0;">
               <div class="terminal-output" id="terminalOutput" style="font-size:0.75rem; line-height:1.4;">
                 ${state.stage === 'DESKTOP' ? `
                   <div style="background:rgba(255,152,0,0.06); border:1px solid #ff9800; padding:8px; border-radius:6px; color:#ffe0b2; font-size:0.68rem; margin-bottom:8px; line-height:1.4; font-family:var(--font-mono);">
@@ -879,14 +896,14 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
 
         <!-- C. System.cfg remote Window -->
         ${configWin.isOpen ? `
-          <div class="window-frame ${configWin.focused ? 'focused' : ''}" id="win-config" style="left:${configWin.x}px; top:${configWin.y}px; width:360px; position:absolute; z-index:15;">
+          <div class="window-frame ${configWin.focused ? 'focused' : ''}" id="win-config" style="left:${configWin.x}px; top:${configWin.y}px; width:${configWin.width}px; height:${configWin.height}px; position:absolute; z-index:15;">
             <div class="window-header" style="height:32px;">
               <div class="window-title" style="font-size:0.75rem;">System.cfg</div>
               <div class="window-controls">
                 <button class="window-btn close-remote-win-btn" data-win-id="config" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content config-app" style="padding:10px; font-size:0.8rem; gap:10px; width:100%;">
+            <div class="window-content config-app" style="padding:10px; font-size:0.8rem; gap:10px; width:100%; height:calc(100% - 32px); overflow-y:auto;">
               <div class="md3-card" style="padding:10px; border-radius:8px;">
                 <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:4px;">주파수 비콘 (Audio Beacon Decoder)</h4>
                 <canvas class="waveform-canvas" id="waveCanvas" style="height:60px; margin-bottom:8px;"></canvas>
@@ -920,14 +937,14 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
 
         <!-- D. battery_schematic.jpg remote Window -->
         ${schematicWin && schematicWin.isOpen ? `
-          <div class="window-frame ${schematicWin.focused ? 'focused' : ''}" id="win-schematic" style="left:${schematicWin.x}px; top:${schematicWin.y}px; width:340px; position:absolute; z-index:15; display:flex; flex-direction:column;">
+          <div class="window-frame ${schematicWin.focused ? 'focused' : ''}" id="win-schematic" style="left:${schematicWin.x}px; top:${schematicWin.y}px; width:${schematicWin.width}px; height:${schematicWin.height}px; position:absolute; z-index:15; display:flex; flex-direction:column;">
             <div class="window-header" style="height:32px;">
               <div class="window-title" style="font-size:0.75rem;">battery_schematic.jpg</div>
               <div class="window-controls">
                 <button class="window-btn close-remote-win-btn" data-win-id="schematic" style="width:16px;height:16px;font-size:0.65rem;">×</button>
               </div>
             </div>
-            <div class="window-content schematic-app" style="padding:10px; background:#faf8f5; color:#3e2723; text-align:center; font-family:var(--font-sans); display:block; overflow:hidden;">
+            <div class="window-content schematic-app" style="padding:10px; background:#faf8f5; color:#3e2723; text-align:center; font-family:var(--font-sans); display:block; overflow-y:auto; height:calc(100% - 32px);">
               <div style="border:2px dashed #8d6e63; padding:8px; border-radius:6px; background:#efebe9;">
                 <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Coordinate Ledger</h4>
                 
@@ -1409,6 +1426,18 @@ function getWikiTabContentHTML(): string {
   }
   return "";
 } function getEscapeScreenHTML() {
+  const elapsed = (startTime && clearTime) ? (clearTime - startTime) : 0;
+  const minutes = Math.floor(elapsed / 60000);
+  const seconds = Math.floor((elapsed % 60000) / 1000);
+  const milliseconds = elapsed % 1000;
+  
+  const minStr = String(minutes).padStart(2, '0');
+  const secStr = String(seconds).padStart(2, '0');
+  const msStr = String(milliseconds).padStart(3, '0');
+  
+  const formattedTime = `${minStr}분 ${secStr}초 ${msStr}`;
+  const rawFormattedTime = `${minStr}:${secStr}.${msStr}`;
+
   return `
     <div class="escape-screen">
       <!-- Minimalist shutter logo at credits -->
@@ -1420,6 +1449,13 @@ function getWikiTabContentHTML(): string {
       <div class="escape-credits" id="creditsText">
         양자 가상 얽힘 매트릭스 해체 및 G.L.A.D.I.S. 3.11 메인 코어 강제 비활성화 성공.<br>
         [ 🎂 ] 진짜로 모든 해킹 프로세스를 완파하셨습니다! 케이크는 거짓말이었습니다...<br>
+        <br>
+        <div style="background: rgba(0, 188, 212, 0.1); border: 2px solid var(--md-sys-color-primary); border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; font-family: var(--font-mono); box-shadow: 0 0 25px rgba(0, 188, 212, 0.2);">
+          <span style="font-size: 1.5rem; font-weight: bold; color: var(--md-sys-color-primary); display: block; margin-bottom: 8px; text-shadow: 0 0 10px rgba(0, 188, 212, 0.5);">⏱️ SPEEDRUN TIME ATTACK ⏱️</span>
+          <span style="font-size: 1.1rem; font-weight: bold; color: #fff; display: block; margin-bottom: 4px;">총 탈출 소요 시간</span>
+          <span style="font-size: 2rem; font-weight: 900; color: #39ff14; font-family: var(--font-mono); text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);">${formattedTime}</span>
+          <span style="font-size: 0.9rem; color: #888; display: block; margin-top: 4px;">(${rawFormattedTime})</span>
+        </div>
         <br>
         =================================================<br>
         Aperture Science Enrichment Center - ESCAPED<br>
@@ -2245,10 +2281,27 @@ function openLinuxReadme() {
   renderApp();
 }
 
+// Helper to track window resizing dynamically
+function setupWindowResizeObserver(element: HTMLElement, onResize: (w: number, h: number) => void) {
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver((entries) => {
+      if (entries.length > 0 && element.offsetWidth > 0 && element.offsetHeight > 0) {
+        onResize(element.offsetWidth, element.offsetHeight);
+      }
+    });
+    observer.observe(element);
+  }
+}
+
 // Parent GNOME Linux Window Drags
 function setupLinuxDragAndDrop() {
   const browser = document.getElementById('win-linux-browser');
   if (browser) {
+    setupWindowResizeObserver(browser, (w, h) => {
+      linuxBrowserWidth = w;
+      linuxBrowserHeight = h;
+    });
+
     const h = browser.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
       let active = true;
@@ -2262,8 +2315,17 @@ function setupLinuxDragAndDrop() {
 
       const move = (ev: MouseEvent) => {
         if (!active) return;
-        linuxBrowserX = initX + (ev.clientX - startX);
-        linuxBrowserY = initY + (ev.clientY - startY);
+        const workspace = document.querySelector('.linux-workspace');
+        const workspaceWidth = workspace ? workspace.clientWidth : window.innerWidth;
+        const workspaceHeight = workspace ? workspace.clientHeight : window.innerHeight;
+
+        let nextX = initX + (ev.clientX - startX);
+        let nextY = initY + (ev.clientY - startY);
+
+        // Enforce boundary clips so window headers are always visible and accessible
+        linuxBrowserX = Math.max(0, Math.min(nextX, workspaceWidth - 100));
+        linuxBrowserY = Math.max(0, Math.min(nextY, workspaceHeight - 40));
+
         browser.style.left = `${linuxBrowserX}px`;
         browser.style.top = `${linuxBrowserY}px`;
       };
@@ -2279,6 +2341,11 @@ function setupLinuxDragAndDrop() {
 
   const readme = document.getElementById('win-linux-readme');
   if (readme) {
+    setupWindowResizeObserver(readme, (w, h) => {
+      linuxReadmeWidth = w;
+      linuxReadmeHeight = h;
+    });
+
     const h = readme.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
       let active = true;
@@ -2292,8 +2359,16 @@ function setupLinuxDragAndDrop() {
 
       const move = (ev: MouseEvent) => {
         if (!active) return;
-        linuxReadmeX = initX + (ev.clientX - startX);
-        linuxReadmeY = initY + (ev.clientY - startY);
+        const workspace = document.querySelector('.linux-workspace');
+        const workspaceWidth = workspace ? workspace.clientWidth : window.innerWidth;
+        const workspaceHeight = workspace ? workspace.clientHeight : window.innerHeight;
+
+        let nextX = initX + (ev.clientX - startX);
+        let nextY = initY + (ev.clientY - startY);
+
+        linuxReadmeX = Math.max(0, Math.min(nextX, workspaceWidth - 100));
+        linuxReadmeY = Math.max(0, Math.min(nextY, workspaceHeight - 40));
+
         readme.style.left = `${linuxReadmeX}px`;
         readme.style.top = `${linuxReadmeY}px`;
       };
@@ -2309,6 +2384,11 @@ function setupLinuxDragAndDrop() {
 
   const coreLink = document.getElementById('win-linux-core-link');
   if (coreLink) {
+    setupWindowResizeObserver(coreLink, (w, h) => {
+      linuxCoreLinkWidth = w;
+      linuxCoreLinkHeight = h;
+    });
+
     const h = coreLink.querySelector('.window-header') as HTMLElement;
     h.addEventListener('mousedown', (e) => {
       let active = true;
@@ -2322,8 +2402,16 @@ function setupLinuxDragAndDrop() {
 
       const move = (ev: MouseEvent) => {
         if (!active) return;
-        linuxCoreLinkX = initX + (ev.clientX - startX);
-        linuxCoreLinkY = initY + (ev.clientY - startY);
+        const workspace = document.querySelector('.linux-workspace');
+        const workspaceWidth = workspace ? workspace.clientWidth : window.innerWidth;
+        const workspaceHeight = workspace ? workspace.clientHeight : window.innerHeight;
+
+        let nextX = initX + (ev.clientX - startX);
+        let nextY = initY + (ev.clientY - startY);
+
+        linuxCoreLinkX = Math.max(0, Math.min(nextX, workspaceWidth - 100));
+        linuxCoreLinkY = Math.max(0, Math.min(nextY, workspaceHeight - 40));
+
         coreLink.style.left = `${linuxCoreLinkX}px`;
         coreLink.style.top = `${linuxCoreLinkY}px`;
       };
@@ -2345,6 +2433,15 @@ function setupRemoteDragAndDrop() {
 
   const subframes = remoteWorkspace.querySelectorAll('.window-frame') as NodeListOf<HTMLElement>;
   subframes.forEach(frame => {
+    const winId = frame.id.replace('win-', '');
+    setupWindowResizeObserver(frame, (w, h) => {
+      const winObj = activeWindows.find(w => w.id === winId);
+      if (winObj) {
+        winObj.width = w;
+        winObj.height = h;
+      }
+    });
+
     const header = frame.querySelector('.window-header') as HTMLElement;
     if (!header) return;
 
@@ -2360,15 +2457,21 @@ function setupRemoteDragAndDrop() {
       iX = frame.offsetLeft;
       iY = frame.offsetTop;
 
-      const winId = frame.id.replace('win-', '');
       focusRemoteWindow(winId);
 
       const onMouseMove = (ev: MouseEvent) => {
         if (!isDrag) return;
         const dx = ev.clientX - sX;
         const dy = ev.clientY - sY;
-        const nextX = iX + dx;
-        const nextY = iY + dy;
+        let nextX = iX + dx;
+        let nextY = iY + dy;
+
+        // Enforce dynamic boundary clipping strictly inside the remote connection stream container
+        const workspaceWidth = remoteWorkspace.clientWidth;
+        const workspaceHeight = remoteWorkspace.clientHeight;
+
+        nextX = Math.max(0, Math.min(nextX, workspaceWidth - 100));
+        nextY = Math.max(0, Math.min(nextY, workspaceHeight - 40));
 
         frame.style.left = `${nextX}px`;
         frame.style.top = `${nextY}px`;
@@ -2816,6 +2919,8 @@ function setupFailScreenListeners() {
       audio.playBeep(440, 0.1, 'sine');
       stateManager.reset();
       isOsLocked = true; // Lock back to sign-in screen on cold boot for premium feeling
+      startTime = null;
+      clearTime = null;
       renderApp();
     });
   }
