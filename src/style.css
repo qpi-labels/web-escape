@@ -725,6 +725,10 @@ body::after {
   content: "PART_B: X0JZUEFTU185OQ==";
   display: none;
 }
+.window-frame::after {
+  content: "PART_C: X1NFQ1VSRQ==";
+  display: none;
+}
 
 /* ==========================================================
    LINUX GNOME/UBUNTU PC DESKTOP STYLING

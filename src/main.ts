@@ -91,6 +91,7 @@ let isDownloadingProgress = false;
 let downloadProgressVal = 0;
 let downloadTimerId: any = null;
 let isWindowsErrorDialogOpen = false;
+let showDecoyEasterEgg = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderApp();
@@ -128,13 +129,33 @@ function renderApp() {
   const appDiv = document.getElementById('app');
   if (!appDiv) return;
 
+  const state = stateManager.getState();
+
+  if (state.isFailed) {
+    appDiv.className = "";
+    appDiv.innerHTML = getFailScreenHTML();
+    setupFailScreenListeners();
+    audio.stopAmbientDrone();
+    return;
+  }
+
+  if (showDecoyEasterEgg) {
+    appDiv.className = "";
+    appDiv.innerHTML = getDecoyEasterEggHTML() + getLinuxDesktopScreenHTML();
+    setupDecoyEasterEggListeners();
+    setupLinuxDesktopListeners();
+    setupLinuxDragAndDrop();
+    if (isVisualizerPlaying) {
+      startCanvasVisualizer();
+    }
+    return;
+  }
+
   if (isOsLocked) {
     appDiv.innerHTML = getLockScreenHTML();
     setupLockScreenListeners();
     return;
   }
-
-  const state = stateManager.getState();
 
   if (state.stage === 'SELF_DESTRUCT') {
     appDiv.className = "emergency-flash";
@@ -295,7 +316,13 @@ function getLinuxDesktopScreenHTML() {
               <button class="linux-browser-btn">◀</button>
               <button class="linux-browser-btn">▶</button>
               <button class="linux-browser-btn">⟳</button>
-              <div class="linux-browser-addressbar">http://wiki.aperture.local</div>
+              <input type="text" id="wikiAddressInput" class="linux-browser-addressbar" style="background:#fff; color:#333; border:1px solid #cbd5e1; border-radius:4px; padding:2px 8px; flex-grow:1; font-family:var(--font-mono); font-size:0.72rem; outline:none;" value="${activeWikiTab === 'morse_ledger' ? 'http://wiki.aperture.local?tab=morse_ledger' : 'http://wiki.aperture.local'}" />
+            </div>
+            <!-- Bookmarks Bar -->
+            <div class="linux-browser-bookmarks" style="display:flex; gap:12px; padding:4px 14px; background:#f1f5f9; border-bottom:1px solid #cbd5e1; align-items:center; font-size:0.7rem; font-family:var(--font-sans);">
+              <span style="color:#64748b; font-weight:bold; display:flex; align-items:center; gap:2px;">⭐ 즐겨찾기:</span>
+              <button class="bookmark-btn" id="bookmarkWikiHome" style="border:none; background:none; color:#1a73e8; cursor:pointer; font-weight:bold; font-size:0.7rem; display:flex; align-items:center; gap:2px; padding:0;">🏠 Aperture Wiki</button>
+              <button class="bookmark-btn" id="bookmarkMorseLedger" style="border:none; background:none; color:#1a73e8; cursor:pointer; font-weight:bold; font-size:0.7rem; display:flex; align-items:center; gap:2px; padding:0;">📡 Morse Code Ledger</button>
             </div>
             <!-- Wiki Search Header Bar -->
             <div class="wiki-header-bar" style="display:flex; justify-content:space-between; align-items:center; padding:6px 14px; background:#f1f5f9; border-bottom:1px solid #cbd5e1; height:38px;">
@@ -880,12 +907,12 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               <div style="margin-top:10px; border-top:1px solid #cbd5e1; padding-top:8px; text-align:left;">
                 <span style="font-size:0.7rem; font-weight:bold; color:#475569; display:block; margin-bottom:4px;">📡 8-bit Morse Code Reference Ledger:</span>
                 <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; font-size:0.65rem; font-family:var(--font-mono); background:#f8fafc; padding:6px; border-radius:4px; border:1px solid #e2e8f0; text-align:center;">
-                  <div><strong>A:</strong> <code>.-</code></div>
                   <div><strong>C:</strong> <code>-.-.</code></div>
+                  <div><strong>U:</strong> <code>..-</code></div>
+                  <div><strong>R:</strong> <code>.-.</code></div>
                   <div><strong>E:</strong> <code>.</code></div>
-                  <div><strong>K:</strong> <code>-.-</code></div>
                 </div>
-                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block;">* Tip: G.L.A.D.I.S.'s favorite fake reward (4 letters). Play signal to listen.</span>
+                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block; line-height:1.3;">* Tip: G.L.A.D.I.S. v3.12 보안 조치에 따른 오디오 비콘 해청용 (4 letters). 이스터에그 주의.</span>
               </div>
             </div>
           </div>
@@ -905,22 +932,22 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Coordinate Ledger</h4>
                 
                 <!-- Coordinate Matrix Grid -->
-                <div style="font-size:0.6rem; font-family:var(--font-mono); margin:6px auto; width:130px; background:#fff; border:1px solid #cbd5e1; border-radius:4px; padding:4px;">
+                <div style="font-size:0.6rem; font-family:var(--font-mono); margin:6px auto; width:150px; background:#fff; border:1px solid #cbd5e1; border-radius:4px; padding:4px;">
                   <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:1px; background:#e2e8f0; font-weight:bold; color:#1e293b; text-align:center;">
                     <div style="background:#f1f5f9;"></div><div style="background:#f1f5f9;">1</div><div style="background:#f1f5f9;">2</div><div style="background:#f1f5f9;">3</div><div style="background:#f1f5f9;">4</div><div style="background:#f1f5f9;">5</div>
-                    <div style="background:#f1f5f9;">1</div><div>P</div><div>A</div><div>B</div><div>C</div><div>D</div>
-                    <div style="background:#f1f5f9;">2</div><div>E</div><div>O</div><div>F</div><div>G</div><div>H</div>
-                    <div style="background:#f1f5f9;">3</div><div>T</div><div>I</div><div>J</div><div>K</div><div>L</div>
-                    <div style="background:#f1f5f9;">4</div><div>M</div><div>N</div><div>Q</div><div>R</div><div>S</div>
+                    <div style="background:#f1f5f9;">1</div><div>A</div><div>P</div><div>B</div><div>C</div><div>E</div>
+                    <div style="background:#f1f5f9;">2</div><div>F</div><div>O</div><div>G</div><div>H</div><div>I</div>
+                    <div style="background:#f1f5f9;">3</div><div>K</div><div>L</div><div>M</div><div>N</div><div>D</div>
+                    <div style="background:#f1f5f9;">4</div><div>P</div><div>Q</div><div>R</div><div>S</div><div>T</div>
                     <div style="background:#f1f5f9;">5</div><div>U</div><div>V</div><div>W</div><div>X</div><div>Y</div>
                   </div>
                 </div>
 
-                <div style="text-align:left; font-size:0.68rem; line-height:1.4; color:#4e342e;">
+                <div style="text-align:left; font-size:0.65rem; line-height:1.3; color:#4e342e;">
                   <strong>[LATTICE COORDINATE KEY]</strong><br>
                   * Mapping: Grid values calculated by row-column index pair (Y, X).<br>
-                  * Sequence: <code style="background:#fff3e0; padding:2px 4px; border-radius:4px; color:#e65100; font-weight:bold; font-family:var(--font-mono); font-size:0.7rem;">(1,1) (2,2) (3,1) (1,2) (3,1) (2,2)</code><br>
-                  * Action: Decode sequence and authenticate backup key using: <code style="font-family:var(--font-mono); font-size:0.65rem; color:#ba1a1a;">quantum-auth [backup_word]</code>
+                  * Sequence: <code style="background:#fff3e0; padding:2px 4px; border-radius:4px; color:#e65100; font-weight:bold; font-family:var(--font-mono); font-size:0.65rem;">(1,1) (4,1) (1,5) (4,3) (4,5) (5,1) (4,3) (1,5)</code><br>
+                  * Action: Decode sequence and authenticate backup key using: <code style="font-family:var(--font-mono); font-size:0.62rem; color:#ba1a1a;">quantum-auth [backup_word]</code>
                 </div>
               </div>
             </div>
@@ -939,7 +966,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
                 <strong>OVERRIDE PROTOCOL:</strong><br>
                 <code style="font-family:var(--font-mono); font-size:0.78rem; color:#ba1a1a;">aperture-override --force --code [STAGE5_BYPASS]</code>
                 <p style="font-size:0.65rem; color:#555; margin-top:2px;">
-                  우회 코드는 DOM body의 ::after 가상 요소에 숨겨져 있습니다. 터미널에 <code style="font-family:var(--font-mono);">get --css body::after</code>를 입력해 확인해 가로채십시오!
+                  우회 코드는 DOM body::after, #app::after, .window-frame::after에 파편화되어 숨겨져 있습니다. <code style="font-family:var(--font-mono);">get --css [선택자]</code> 명령으로 훔친 뒤 디코딩하여 차례로 결합하십시오!
                 </p>
               </div>
               <button class="md3-button emergency-btn-claim" id="claimCakeBtn" style="padding:6px; font-size:0.8rem; margin-top:0;">🎂 [CLAIM CAKE] 공짜 케이크 혜택 승인</button>
@@ -1318,8 +1345,8 @@ function getWikiTabContentHTML(): string {
 
         <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:10px; border-radius:4px; font-size:0.74rem; margin:10px 0; color:#ba1a1a; line-height:1.5;">
           <strong>⚙️ [긴급 수동 오버라이드 우회 명령]:</strong><br>
-          신경독 가스 공급 밸브를 원격 쉘에서 강제로 차단하고 대피 카운트다운을 즉시 리셋하기 위해서는, 가상 요소 가림 가림막(body::after 가상 클래스 속성 내에 캡처 숨겨진 코드인 <strong>"NEUROTOXIN_BYPASS_99"</strong>)을 훔쳐낸 후 터미널 명령어 라인에 다음과 같이 강제 입력하여야만 통제 밸브가 완벽하게 물리 고정 차단됩니다:<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; font-size:0.82rem; background:#000; color:#39ff14; padding:2px 6px; display:inline-block; margin-top:4px;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code>
+          신경독 가스 공급 밸브를 원격 쉘에서 강제로 차단하고 대피 카운트다운을 즉시 리셋하기 위해서는, 가상 요소 body::after, #app::after, .window-frame::after 가상 클래스 content 내부에 파편화된 Base64 토큰 조각들을 차례로 디코딩한 뒤 결합하여 만든 <strong>"NEUROTOXIN_BYPASS_99_SECURE"</strong>를 터미널 명령어 라인에 다음과 같이 강제 입력하여야만 통제 밸브가 완벽하게 물리 고정 차단됩니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; font-size:0.82rem; background:#000; color:#39ff14; padding:2px 6px; display:inline-block; margin-top:4px;">aperture-override --force --code NEUROTOXIN_BYPASS_99_SECURE</code>
         </div>
         <p class="wiki-paragraph" style="font-size:0.75rem;">
           이 긴급 오버라이드에 관한 연동 물리 회로 구성의 수학적 격자 밸브 연산 해법은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#1a73e8;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span> 5단계 및 6단계를 지체 없이 참조하여 통과하십시오.
@@ -1350,30 +1377,33 @@ function getWikiTabContentHTML(): string {
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 3: 논리 코드 추론 및 동적 터미널 인증 (Dynamic Logic Auth)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
           G.L.A.D.I.S. 코어 모듈은 외부 접속 감지 시 실시간으로 비상 방벽 패치 v3.12를 배포합니다. 패치 진행 중에는 모든 제어 단말기가 10초간 잠기며, 기존의 단순 창 크기 강제 축소 및 주소창 주입 메커니즘은 영구 무효화 처리됩니다.<br><br>
-          패치 완료 후 터미널에 <code style="font-family:var(--font-mono); font-weight:bold;">ls</code> 명령을 입력하여 노출되는 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">gladis_patch.log</code> 보안 로그의 5자리 수수께끼(Riddle)를 획득하고, 논리 연산에 따라 최종 Access Code를 도출하여 터미널에 다음과 같이 인증을 수립하십시오:<br>
+          * <strong>가상 주소 파라미터 매핑:</strong> 현재 물리적인 PC 브라우저가 F11 전체화면으로 구동 중이라 물리 주소창 조작이 불가능하므로, 가상 웹브라우저의 주소창 <input type="text" readonly style="width:200px; font-size:0.65rem; padding:1px 3px;" value="http://wiki.aperture.local?auth=31459" /> 영역에 쿼리 파라미터 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">?auth=31459</code>를 기입하고 엔터를 누르거나, 즐겨찾기 북마크바를 통해 동적 인증을 수행하십시오.<br><br>
+          인증 수립 후 터미널에 <code style="font-family:var(--font-mono); font-weight:bold;">ls</code> 명령을 입력하여 노출되는 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">gladis_patch.log</code> 보안 로그의 5자리 수수께끼(Riddle)를 획득하고, 논리 연산에 따라 최종 Access Code를 도출하여 터미널에 다음과 같이 인증을 수립하십시오:<br>
           <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; border-radius:3px; color:#1a73e8;">auth-config [5자리코드]</code>
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 사내 사전 알파벳 규격에 대칭 복호화하여 취득한 4자 동기 보정 어휘 키워드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#0f172a;">CAKE</code>를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다.
+          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 사내 사전 알파벳 규격에 대칭 복호화하여 취득한 4자 동기 보정 어휘 키워드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#0f172a;">CURE</code>를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 타임아웃이 10배 가속 정지 루프로 직행합니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>를 입력해 가상 클래스 스타일 content에 담긴 우회 비공개 코드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99</code>를 훔쳐낸 후, 즉시 터미널 쉘에 차단 코드 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code> 명령으로 실어 주입하여 신경독 공급 밸브를 긴급 수동 봉쇄하십시오.
+          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css #app::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css .window-frame::after</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 혹은 시간 초과 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
         </p>
 
-        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 3x3 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
+        <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          격자 락 제어 행렬(Magic Square)의 모든 가로, 세로, 대각선 파동 대칭합이 마스터 양자 상수인 **'15'**로 완전 충족 수렴되도록 하기 위해 중앙 격자 누락값인 정수 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">5</code>를 터미널 명령에 실어 격자 조율을 완결합니다:<br>
-          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-solve 5</code><br>
-          양자 균형 락이 수렴 분해되면, 즉시 전력 제어 단락용 감자 백업 전원 마스터 인증 단어인 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">quantum-auth POTATO</code>를 입력하여 AI 코어를 영구 쿨다운 완료 상태로 셧다운 시키십시오.
+          격자 락 제어 행렬(Magic Square, 마스터 상수합=99)의 모든 가로, 세로, 대각선 파동 대칭합이 수렴되도록 방정식을 해결하십시오. 정수 변수 X, Y, Z에 대해 공명 키 Resonance Key = (X * Y) - (Z * 2) 공식 값을 터미널 명령에 실어 주입합니다 (Key = 1089):<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-solve 1089</code><br>
+          양자 균형 락이 수렴 분해되면, 즉시 battery_schematic.jpg에 명시된 2D 격자 인덱스 좌표쌍 시퀀스를 매핑하여 8글자 셧다운 복구 단어 <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">APERTURE</code>를 획득하고 아래 명령어로 셧다운을 완결합니다:<br>
+          <code style="font-family:var(--font-mono); font-weight:bold; background:#f1f3f4; padding:1px 4px; color:#1a73e8;">quantum-auth APERTURE</code><br>
+          (Resonance Key 혹은 셧다운 단어를 2회 연속 오동작 주입 시 즉각 과부하로 폭사하며 Tragic Fail 상태로 들어갑니다.)
         </p>
 
         <h4 style="font-weight: bold; font-size: 0.88rem; margin-top: 15px; margin-bottom: 6px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">2. 최고 안전 권고안 (Trivia & Security Directive)</h4>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.6;">
-          성격 보정용 비상 패스코드가 <strong>"CAKE"</strong>로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
+          성격 보정용 비상 패스코드가 <strong>"CURE"</strong>로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
         </p>
       `;
   }
@@ -1817,13 +1847,17 @@ function setupLinuxDesktopListeners() {
     submitMorseBtn.addEventListener('click', async () => {
       const val = morseInput.value.trim();
       if (!val) return;
-      const success = await stateManager.checkStage4Decrypt(val);
-      if (success) {
+      const res = await stateManager.checkStage4Decrypt(val);
+      if (res.success) {
         showGlitchNotification("패스코드 성공: 인격 자폭 루프가 전격 개방됩니다.");
+      } else if (res.isDecoy) {
+        showDecoyEasterEgg = true;
+      } else if (res.lockout) {
+        showGlitchNotification("⚠️ 오디오 채널 격리: 데이터 비콘 수신기가 과열 보호 상태입니다.");
       } else {
-        audio.playError();
         showGlitchNotification("검증 실패: 비콘 암호 서명이 기각되었습니다.");
       }
+      renderApp();
     });
   }
 
@@ -1831,7 +1865,7 @@ function setupLinuxDesktopListeners() {
   const claimCakeBtn = document.getElementById('claimCakeBtn');
   if (claimCakeBtn) {
     claimCakeBtn.addEventListener('click', () => {
-      stateManager.triggerSelfDestructFailure(true);
+      stateManager.triggerFailure();
     });
   }
 
@@ -1900,6 +1934,44 @@ function setupLinuxDesktopListeners() {
       renderApp(); // Clean full re-render
     });
   });
+
+  // NEW: virtual browser address input and bookmarks listeners
+  const wikiAddressInput = document.getElementById('wikiAddressInput') as HTMLInputElement;
+  if (wikiAddressInput) {
+    wikiAddressInput.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const val = wikiAddressInput.value.trim().toLowerCase();
+        if (val.includes('auth=31459')) {
+          const success = await stateManager.checkStage3Auth('31459');
+          if (success) {
+            audio.playSuccess();
+            showGlitchNotification("가상 웹브라우저 주소 파라미터 매핑 성공: 세션 동적 동화 완료!");
+          }
+        } else {
+          audio.playError();
+          showGlitchNotification("가상 브라우저 경고: 잘못된 원격 복구 쿼리 파라미터 구성입니다.");
+        }
+      }
+    });
+  }
+
+  const bookmarkWikiHome = document.getElementById('bookmarkWikiHome');
+  if (bookmarkWikiHome) {
+    bookmarkWikiHome.addEventListener('click', () => {
+      audio.playBeep(1000, 0.03);
+      activeWikiTab = 'home';
+      renderApp();
+    });
+  }
+
+  const bookmarkMorseLedger = document.getElementById('bookmarkMorseLedger');
+  if (bookmarkMorseLedger) {
+    bookmarkMorseLedger.addEventListener('click', () => {
+      audio.playBeep(1000, 0.03);
+      activeWikiTab = 'morse_ledger';
+      renderApp();
+    });
+  }
 
   // Wiki inline link clicks (.wiki-link event delegation)
   const browserWindow = document.getElementById('win-linux-browser');
@@ -2343,7 +2415,7 @@ async function handleTerminalCommand(cmdString: string) {
         "  sysinfo                 - Print system configuration.",
         "  auth-config [code]      - Authorize dynamic access code (Stage 3 logic riddle).",
         "  morse-decode            - Captured raw Morse beacon listener tool (Stage 4).",
-        "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 body::after / #app::after).",
+        "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 body::after / #app::after / .window-frame::after).",
         "  base64-decode [string]  - Base64 string decoding tool (Stage 5).",
         "  aperture-override --force --code [code] - Emergency core bypass (Stage 5).",
         "  quantum-solve [val]     - Solve the Magic Square center wave parameter (Stage 6).",
@@ -2399,17 +2471,18 @@ async function handleTerminalCommand(cmdString: string) {
           "주파수 재생(Play Signal) 시 나오는 소리 신호는 오리지널 8-bit 모스 부호입니다.",
           " v3.12 핫패치 조치 사항: 자동 디코더 'morse-decode'가 강제로 무력화되었습니다.",
           "  * 복구 힌트: 터미널로 수집된 모스 시퀀스를 획득하고, 위키의 '모스 부호 목록표'를 참조하여 해독하십시오.",
-          "  * G.L.A.D.I.S. 시스템 키 변조: 해독된 원본 문자열에 Caesar ROT-3 shift (각 알파벳 뒤로 3칸 밀림 -> 복호화하려면 앞으로 3칸 당겨야 함, 예: D -> A)를 적용하여 정답을 유추하십시오.",
-          "  * 힌트: G.L.A.D.I.S.가 가장 좋아하는 디저트이자, 끝없이 제공하겠다고 약속된 거짓말."
+          "  * G.L.A.D.I.S. 시스템 키 변조: 해독된 원본 문자열에 Caesar ROT-3 shift (각 알파벳 뒤로 3칸 밀림 -> 복호화하려면 앞으로 3칸 당겨야 함, 예: F -> C)를 적용하여 정답을 유추하십시오.",
+          "  * 힌트: G.L.A.D.I.S. 인격 치료 및 안정 유기 복구 비콘 (4글자)."
         );
       } else if (targetFile === 'diagnostics.lnk') {
         terminalHistory.push(
           "G.L.A.D.I.S. 자가 진단 코어 가동 오류.",
           "신경독 누출을 멈추려면 override bypass 패스코드가 필수적입니다.",
-          "우회 코드는 document body의 ::after 및 #app::after 가상 선택자 content 내부에 나눠서 하드코딩되었습니다.",
+          "우회 코드는 document body::after, #app::after, .window-frame::after 가상 선택자 content 내부에 나눠서 하드코딩되었습니다.",
           "아래 명령을 입력하여 원격 파싱해 해독한 후 합쳐 결합하십시오:",
           "  get --css body::after",
           "  get --css #app::after",
+          "  get --css .window-frame::after",
           "  base64-decode [디코딩할문자열]"
         );
       } else {
@@ -2458,7 +2531,7 @@ async function handleTerminalCommand(cmdString: string) {
           "[📡 LISTENING TO ACTIVE INTRA-SYSTEM AUDIO BEACON...]",
           "Analyzing frequency audio tone duration intervals...",
           "  Raw Morse Sequence captured:",
-          "  ..-.   -..   -.   ....",
+          "  ..-.   -..-   ..-   ....",
           "",
           "[ALERT] Automated character decoder offline due to v3.12 hotpatch.",
           "Please refer to the Aperture Morse Ledger in the Wiki and system.cfg Caesar shifting rules."
@@ -2490,8 +2563,13 @@ async function handleTerminalCommand(cmdString: string) {
             "Querying DOM stylesheet rule: #app::after { ... }",
             "Result: content = \"PART_B: X0JZUEFTU185OQ==\""
           );
+        } else if (parts[2] === '.window-frame::after') {
+          terminalHistory.push(
+            "Querying DOM stylesheet rule: .window-frame::after { ... }",
+            "Result: content = \"PART_C: X1NFQ1VSRQ==\""
+          );
         } else {
-          terminalHistory.push("Usage: get --css [body::after | #app::after]");
+          terminalHistory.push("Usage: get --css [body::after | #app::after | .window-frame::after]");
         }
       } else {
         terminalHistory.push("Usage: get --css [selector]");
@@ -2550,14 +2628,14 @@ async function handleTerminalCommand(cmdString: string) {
           "",
           "  [ Quantum Lattice Balance Matrix ]",
           "  +----+----+----+",
-          "  | 14 |  X | 12 |",
+          "  | 32 |  X | 36 |",
           "  +----+----+----+",
-          "  |  Y | 11 |  Z |",
+          "  |  Y | 33 |  Z |",
           "  +----+----+----+",
-          "  | 10 | 15 |  8 |",
+          "  | 30 | 35 | 34 |",
           "  +----+----+----+",
-          "  Wave balance condition: Sum of all rows, cols, diagonals must match the master quantum constant sum (33).",
-          "  Solve for variables X, Y, Z and calculate Resonance Key = (X * Y) + Z.",
+          "  Wave balance condition: Sum of all rows, cols, diagonals must match the master quantum constant sum (99).",
+          "  Solve for variables X, Y, Z and calculate Resonance Key = (X * Y) - (Z * 2).",
           "  Inject key: quantum-solve [key]"
         );
       } else {
@@ -2567,7 +2645,7 @@ async function handleTerminalCommand(cmdString: string) {
           isQuantumSolved = true;
           terminalHistory.push(
             "[ SUCCESS ] Quantum lattice wave balanced symmetrically!",
-            "All columns, rows, and diagonals matched quantum sum constant 33.",
+            "All columns, rows, and diagonals matched quantum sum constant 99.",
             "Waiting for backup power keyword to complete sequence...",
             "  * Command: quantum-auth [backup_word]"
           );
@@ -2691,4 +2769,81 @@ function showGlitchNotification(msg: string) {
   setTimeout(() => {
     toast.remove();
   }, 4500);
+}
+
+/* ==========================================================
+   TRAGIC FAIL & DECOY EASTER EGG SCREENS
+   ========================================================== */
+
+function getFailScreenHTML(): string {
+  return `
+    <div class="fail-screen" style="width:100vw; height:100vh; background:#000; color:#ff3333; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:var(--font-mono); position:relative; overflow:hidden; padding:20px; box-sizing:border-box; text-align:center;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle, rgba(120, 0, 0, 0.4) 0%, #000 100%); pointer-events:none; z-index:1;"></div>
+      <div class="crt-static" style="position:absolute; width:100%; height:100%; top:0; left:0; background:linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size:100% 4px, 6px 100%; z-index:2; pointer-events:none;"></div>
+      
+      <div style="z-index:10; max-width:800px; display:flex; flex-direction:column; align-items:center; gap:20px; border:2px solid #ff3333; background:rgba(20, 0, 0, 0.9); border-radius:12px; padding:40px; box-shadow:0 0 50px rgba(255, 0, 0, 0.5); backdrop-filter:blur(8px);">
+        <h1 style="font-size:2.8rem; margin:0; text-transform:uppercase; letter-spacing:4px; font-weight:900; text-shadow:0 0 15px #ff3333;">[ SYSTEM SHUTDOWN ]</h1>
+        <h2 style="font-size:1.3rem; margin:0; text-transform:uppercase; letter-spacing:2px; font-weight:700;">☣️ NEUROTOXIN DETONATION COMPLETE</h2>
+        
+        <div style="width:100%; height:2px; background:#ff3333; margin:10px 0;"></div>
+        
+        <p style="font-size:0.85rem; line-height:1.6; color:#ffa3a3; margin:0; text-align:left; font-family:var(--font-mono);">
+          [LOG] Emergency core purge sequence executed.<br>
+          [LOG] G.L.A.D.I.S. Core stabilization algorithm failed.<br>
+          [LOG] Lethal neurotoxin vapor released at maximum rate (100%).<br>
+          [LOG] Human subject pulse rate: 0 bpm. Vital signs offline.<br>
+          [STATUS] <span style="font-weight:bold; text-decoration:underline;">TEST TERMINATED. SUBJECT ELIMINATED.</span>
+        </p>
+
+        <div style="width:100%; height:2px; background:#ff3333; margin:10px 0;"></div>
+        
+        <p style="font-size:1rem; color:#ff3333; font-weight:bold; margin:0; text-shadow:0 0 10px rgba(255, 51, 51, 0.7);">
+          "케이크는 진짜로 기만용 거짓말이었습니다."
+        </p>
+
+        <button id="failRetryBtn" style="margin-top:20px; border:2px solid #ff3333; background:transparent; color:#ff3333; font-family:var(--font-mono); font-weight:bold; font-size:0.9rem; padding:12px 30px; cursor:pointer; text-transform:uppercase; transition:all 0.2s ease-in-out; box-shadow:0 0 15px rgba(255, 0, 0, 0.2); outline:none;">
+          🔄 SYSTEM COLD BOOT: 원격 세션 복구 및 재시도
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function setupFailScreenListeners() {
+  const failRetryBtn = document.getElementById('failRetryBtn');
+  if (failRetryBtn) {
+    failRetryBtn.addEventListener('click', () => {
+      audio.playBeep(440, 0.1, 'sine');
+      stateManager.reset();
+      isOsLocked = true; // Lock back to sign-in screen on cold boot for premium feeling
+      renderApp();
+    });
+  }
+}
+
+function getDecoyEasterEggHTML(): string {
+  return `
+    <div class="modal-overlay" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; z-index:10000; font-family:var(--font-mono);">
+      <div style="width:420px; border:2px solid #e0a800; background:#1e1a0e; padding:30px; border-radius:12px; box-shadow:0 0 35px rgba(224, 168, 0, 0.4); text-align:center; color:#fff; z-index: 10001;">
+        <span style="font-size:3.5rem; display:block; margin-bottom:15px;">🍰</span>
+        <h3 style="color:#e0a800; margin:0 0 10px 0; font-size:1.15rem; font-weight:bold; letter-spacing:1px;">🍰 이스터에그 감지! 🍰</h3>
+        <p style="font-size:0.8rem; line-height:1.6; color:#ffe5b4; margin:0 0 20px 0; font-family:var(--font-mono);">
+          "위키를 아주 열심히 읽으셨군요! 하지만 CAKE는 G.L.A.D.I.S.의 기만용 미끼(Decoy)입니다. 실제 기동 중인 모스 오디오 비콘을 해독하십시오."
+        </p>
+        <button id="closeDecoyBtn" style="border:2px solid #e0a800; background:transparent; color:#e0a800; font-family:var(--font-mono); font-weight:bold; font-size:0.75rem; padding:8px 20px; cursor:pointer; text-transform:uppercase; transition:all 0.15s ease-in-out;">
+          확인 완료
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function setupDecoyEasterEggListeners() {
+  const closeDecoyBtn = document.getElementById('closeDecoyBtn');
+  if (closeDecoyBtn) {
+    closeDecoyBtn.addEventListener('click', () => {
+      showDecoyEasterEgg = false;
+      renderApp();
+    });
+  }
 }
