@@ -17,6 +17,7 @@ let activeWindows: AppWindow[] = [
   { id: 'notes', title: 'Notes.txt', isOpen: false, x: 30, y: 50, focused: false },
   { id: 'terminal', title: 'Terminal.exe', isOpen: false, x: 90, y: 90, focused: false },
   { id: 'config', title: 'System.cfg', isOpen: false, x: 160, y: 40, focused: false },
+  { id: 'schematic', title: 'battery_schematic.jpg', isOpen: false, x: 50, y: 80, focused: false },
 ];
 
 let activeWikiTab: string = 'home';
@@ -345,9 +346,7 @@ function getLinuxDesktopScreenHTML() {
                 <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
 
-                <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">⚠️ 비상 복구 규격</div>
-                <button class="wiki-nav-btn ${activeWikiTab === 'neurotoxin_control' ? 'active' : ''}" data-tab-id="neurotoxin_control" style="padding:6px 12px; font-size:0.75rem; padding-left:20px; color:#ba1a1a;">신경독 통제 지침</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'override' ? 'active' : ''}" data-tab-id="override" style="padding:6px 12px; font-size:0.75rem; padding-left:20px; color:#1a73e8; font-weight:bold;">비상 오버라이드 규범</button>
+
               </div>
               <!-- Article View -->
               <div class="wiki-article-view">
@@ -442,7 +441,29 @@ function getLinuxDesktopScreenHTML() {
                       </button>
                     </div>
                   </div>
+
+                  ${state.stage === 'SELF_DESTRUCT' || state.stage === 'QUANTUM_LOCK' ? `
+                    <!-- Msg 3: Vance emergency intervention -->
+                    <div style="display:flex; flex-direction:column; gap:4px; animation: pulse 2.5s infinite; border-left: 3px solid #e53935; padding-left: 8px; margin-top: 14px;">
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:bold; color:#ef5350;">⚠️ Supervisor Vance</span>
+                        <span style="font-size:0.65rem; color:#888;">방금 전</span>
+                      </div>
+                      <div style="background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.2); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:95%; color:#ffcdd2; font-size:0.78rem; line-height:1.5;">
+                        AP-09! G.L.A.D.I.S.가 자폭 신경독 카운트다운을 켰네! 화면의 노란색 <span style="color:#ffeb3b; font-weight:bold;">[CLAIM CAKE] (케이크 받기)</span> 버튼은 함정이니 절대 누르지 말게!
+                        <br><br>
+                        지금 녀석의 제어 격벽이 CSS 가상 요소로 격리되어 있군! 어서 Terminal.exe를 열고 다음 명령을 입력해 우회 코드를 알아내 주입해 차단하게!
+                        <br><br>
+                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">get --css body::after</code>
+                        <br><br>
+                        코드를 얻으면 즉시 이 명령을 내려 밸브를 파쇄해 가스 분사를 멈추게:
+                        <br>
+                        <code style="font-family:var(--font-mono); background:#000; color:#39ff14; padding:2px 6px; display:inline-block; font-size:0.75rem;">aperture-override --force --code [우회코드]</code>
+                      </div>
+                    </div>
+                  ` : ''}
                 </div>
+              </div>
               </div>
             </div>
           </div>
@@ -702,6 +723,7 @@ function getGladisSubDesktopHTML(state: any): string {
   const notesWin = activeWindows.find(w => w.id === 'notes')!;
   const terminalWin = activeWindows.find(w => w.id === 'terminal')!;
   const configWin = activeWindows.find(w => w.id === 'config')!;
+  const schematicWin = activeWindows.find(w => w.id === 'schematic')!;
 
   const isConfigUnlocked = state.stage !== 'DESKTOP';
 
@@ -741,6 +763,14 @@ function getGladisSubDesktopHTML(state: any): string {
             <svg style="width:32px; height:32px;" viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.47,2.42C14.43,2.18 14.22,2 14,2H10C9.78,2 9.57,2.18 9.53,2.42L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.53,21.58C9.57,21.82 9.78,22 10,22H14C14.22,22 14.43,21.82 14.47,21.58L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/></svg>
             <span>System.cfg</span>
           </button>
+
+          <!-- Battery Schematic icon (ONLY visible in Stage 6 / QUANTUM_LOCK) -->
+          ${state.stage === 'QUANTUM_LOCK' ? `
+            <button class="desktop-icon" data-remote-win-id="schematic" style="padding:4px; font-size:0.75rem; border: 1px dashed #e65100; border-radius: 6px; background: rgba(230,81,0,0.05);">
+              <svg style="width:32px; height:32px; color:#e65100;" viewBox="0 0 24 24"><path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.54L9.25,13.12L6.5,16.5H17.5L13.96,12.29Z"/></svg>
+              <span style="color:#e65100; font-weight:bold;">battery_schematic.jpg</span>
+            </button>
+          ` : ''}
         </div>
 
         <!-- Draggable Core Windows positioned absolutely within the workspace -->
@@ -779,6 +809,13 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
             </div>
             <div class="window-content terminal-app" id="terminalAppContainer" style="height:250px; width:100%; border-radius:0;">
               <div class="terminal-output" id="terminalOutput" style="font-size:0.75rem; line-height:1.4;">
+                ${state.stage === 'DESKTOP' ? `
+                  <div style="background:#420002; border:1px solid #ba1a1a; padding:6px; border-radius:4px; color:#ffdad6; font-size:0.68rem; margin-bottom:8px; line-height:1.3; font-family:var(--font-mono);">
+                    ⚠️ [CRT DISPLAY GEOMETRY OUT OF BOUNDS]<br>
+                    * Error: Aspect ratio exceeds hardware sync matrix.<br>
+                    * Solution: Physically compress browser viewport width below 550px to merge sync beacons.
+                  </div>
+                ` : ''}
                 ${terminalHistory.map(line => `<div class="terminal-line">${line}</div>`).join('')}
               </div>
               <div class="terminal-input-bar" style="padding:2px 6px;">
@@ -807,11 +844,63 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
                   <button class="md3-button secondary" id="stopAudioBtn" style="padding:4px 12px; font-size:0.75rem;">Stop</button>
                 </div>
               </div>
-              <div class="input-group">
+              <div class="input-group" style="margin-bottom: 8px;">
                 <label class="input-label" style="font-size:0.75rem;" for="morseInput">인증 패스코드 입력 (8-Bit Passcode)</label>
                 <div style="display:flex; gap:6px;">
                   <input type="text" class="md3-input" id="morseInput" style="padding:4px 8px; font-size:0.75rem; flex:1;" placeholder="코드를 입력하십시오..." autocomplete="off" />
                   <button class="md3-button" id="submitMorseBtn" style="padding:4px 12px; font-size:0.75rem;">Verify</button>
+                </div>
+              </div>
+              
+              <!-- Built-in Morse Reference Ledger -->
+              <div style="margin-top:10px; border-top:1px solid #cbd5e1; padding-top:8px; text-align:left;">
+                <span style="font-size:0.7rem; font-weight:bold; color:#475569; display:block; margin-bottom:4px;">📡 8-bit Morse Code Reference Ledger:</span>
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; font-size:0.65rem; font-family:var(--font-mono); background:#f8fafc; padding:6px; border-radius:4px; border:1px solid #e2e8f0; text-align:center;">
+                  <div><strong>A:</strong> <code>.-</code></div>
+                  <div><strong>C:</strong> <code>-.-.</code></div>
+                  <div><strong>E:</strong> <code>.</code></div>
+                  <div><strong>K:</strong> <code>-.-</code></div>
+                </div>
+                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block;">* Tip: G.L.A.D.I.S.'s favorite fake reward (4 letters). Play signal to listen.</span>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- D. battery_schematic.jpg remote Window -->
+        ${schematicWin && schematicWin.isOpen ? `
+          <div class="window-frame ${schematicWin.focused ? 'focused' : ''}" id="win-schematic" style="left:${schematicWin.x}px; top:${schematicWin.y}px; width:340px; position:absolute; z-index:15; display:flex; flex-direction:column;">
+            <div class="window-header" style="height:32px;">
+              <div class="window-title" style="font-size:0.75rem;">battery_schematic.jpg</div>
+              <div class="window-controls">
+                <button class="window-btn close-remote-win-btn" data-win-id="schematic" style="width:16px;height:16px;font-size:0.65rem;">×</button>
+              </div>
+            </div>
+            <div class="window-content schematic-app" style="padding:10px; background:#faf8f5; color:#3e2723; text-align:center; font-family:var(--font-sans); display:block; overflow:hidden;">
+              <div style="border:2px dashed #8d6e63; padding:8px; border-radius:6px; background:#efebe9;">
+                <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Schematic</h4>
+                
+                <!-- Potato Drawing in CSS -->
+                <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin:10px 0;">
+                  <div style="width:50px; height:36px; background:#d7ccc8; border:3px solid #8d6e63; border-radius:50% 40% 45% 50%; position:relative; box-shadow:inset -3px -3px 0 rgba(0,0,0,0.1);">
+                    <div style="position:absolute; width:3px; height:3px; background:#8d6e63; border-radius:50%; top:8px; left:12px;"></div>
+                    <div style="position:absolute; width:3px; height:3px; background:#8d6e63; border-radius:50%; top:20px; left:28px;"></div>
+                    <div style="position:absolute; width:2px; height:2px; background:#8d6e63; border-radius:50%; top:12px; right:12px;"></div>
+                  </div>
+                  <div style="height:2px; width:30px; background:#ffb74d; border-top:2px dotted #e65100;"></div>
+                  <div style="width:36px; height:36px; border:3px solid #5d4037; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:bold; color:#2e7d32;">
+                    1.1V
+                  </div>
+                </div>
+
+                <div style="text-align:left; font-size:0.68rem; line-height:1.4; color:#4e342e;">
+                  <strong>[HARDWARE DIRECTIVE]</strong><br>
+                  * Source: Organic Zinc-Copper Electrolyte Cell (Potato)<br>
+                  * Output: 1.12 Volts DC<br>
+                  * Downscale Clock Limit: 1.1 MHz<br>
+                  <div style="background:#fff3e0; border-left:3px solid #ff9800; padding:4px; border-radius:4px; font-weight:bold; font-family:var(--font-mono); color:#e65100; font-size:0.68rem; text-align:center; margin-top:6px;">
+                    EMERGENCY_BACKUP_AUTH: POTATO
+                  </div>
                 </div>
               </div>
             </div>
@@ -843,17 +932,28 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
 }
 
 function getWikiTabContentHTML(): string {
+  const state = stateManager.getState();
+  if (state.stage !== 'LINUX_DESKTOP' && state.stage !== 'BOOT' && state.stage !== 'PORT_BRIDGE') {
+    return `
+      <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:24px; border-radius:12px; text-align:center; color:#410002; margin-top:20px;">
+        <span style="font-size:3rem; user-select:none;">🚫</span>
+        <h3 style="color:#ba1a1a; margin:12px 0 6px 0; font-size:1.1rem; font-weight:bold;">사내 인트라넷 보안 연결 해제됨 (Access Revoked)</h3>
+        <p style="font-size:0.8rem; line-height:1.6; margin:0 0 16px 0;">
+          G.L.A.D.I.S. 핵심 방화벽이 외부 원격 침입 흔적을 식별하여 인트라넷 위키 포털 연결을 강제 격리 조치했습니다.<br>
+          <strong>[오류 코드]: AP-BLOCK-FIREWALL-403</strong>
+        </p>
+        <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.72rem; text-align:left; line-height:1.4;">
+          * 원인: 가상 데스크톱 터널 개방 감지<br>
+          * 조치: 호스트 브라우저 웹 세션 무기한 차단<br>
+          * 알림: 더 이상 외부 위키를 참고할 수 없습니다. 시스템 내부 복구 툴과 로컬 피드백을 통해 복구를 완료하십시오.
+        </div>
+      </div>
+    `;
+  }
+
   switch (activeWikiTab) {
     case 'home':
       return `
-        <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:12px; border-radius:6px; margin-bottom:16px; color:#410002; font-size:0.75rem; line-height:1.5; display:flex; gap:10px; align-items:center;">
-          <span style="font-size:1.5rem; user-select:none;">☣️</span>
-          <div>
-            <strong style="color:#ba1a1a;">🚨 [경보] 메인 코어 G.L.A.D.I.S. 자폭 안전 격벽 긴급 기동 프로토콜 안내</strong><br>
-            현재 시스템 인격 제어부 이상으로 인해 연구소 내 신경독 방출 밸브 오버랩 격리가 활성화되었습니다. 즉각 원격 셧다운 시퀀스를 수립하십시오. 콜드 리부트와 상세 6단계 세부 회복 공정은 <span class="wiki-link" data-go-tab="override" style="font-weight:bold; color:#ba1a1a;">G.L.A.D.I.S. 비상 오버라이드 규범 (AP-L5-RECOVERY)</span>을 필히 복호화 참조하십시오.
-          </div>
-        </div>
-
         <h3 class="wiki-title-large" style="margin-top:0;">🏠 에퍼쳐 사이언스 인트라넷 위키 포털 (Aperture Science Wiki Portal)</h3>
         <p class="wiki-paragraph" style="font-size:0.8rem; line-height:1.6;">
           <strong>Aperture Portal</strong>에 오신 것을 환영합니다! 본 위키 포털은 에퍼쳐 사이언스(Aperture Science, Inc.) 연구 개발 부서, 생산 시설 관리팀 및 강화 학습 센터 피실험자 케어 모듈을 통합 관리하는 사내 전용 정보 아카이브 시스템입니다.
@@ -974,11 +1074,15 @@ function getWikiTabContentHTML(): string {
           [규격 14]: 젤 시식 엄격 금지 (Do NOT Eat Gels)
           * 반발성 젤(Repulsion Gel) 혹은 가속성 젤(Propulsion Gel)을 탕비실 요거트로 오인하여 섭취할 경우, 위장이 초당 12,000회 진동하여 영양 흡수가 불가능해지며 영구 골격 상실 증후군에 걸립니다. 적발 즉시 잔여 보수를 전액 압수하고 소화 시스템 교체 동역학 실험체로 승격됩니다.
 
-          [규격 62]: 라이벌 기업 발설 시 징계 (Strict Censorship)
-          * 사내에서 단어 "블랙 메사(Black Mesa)" 혹은 "블랙"과 "메사"의 연쇄 연상 단어를 발화, 작문, 파싱하는 임직원은 15%의 급여 삭감과 함께 4200m 지하 소금 먼지 청소 봉사 90일에 처해집니다. 그 기생충들의 언급은 에퍼쳐의 신성한 과학 기품을 훼손시킵니다.
+          [규격 62]: 젤 노출 임직원 구속 징계
+          * 젤 운송 트럭 근처에서 10m 이내로 장비 없이 대기한 직원은 화학적 가속 반작용 위험군으로 식별되어 24시간 동안 소금 소독 감금실에 격리 수용됩니다.
 
           [규격 99]: 약속된 과학 보상물 케이크 관련 (Enrichment Cake)
           * 피실험자와 하급 연구 부하들에게 dangling(제시 유혹)용으로 세팅된 케이크는 철저히 부서 승인을 받아야 합니다. 비공인 케이크 제작용 향료 및 화학 믹싱 행위는 엄단하며, "케이크는 거짓말(The Cake is a Lie)"이라는 붉은 낙서를 벽면에 도포하는 자는 즉각 기만 방지 심리학 테스트의 강제 피실험자로 전환됩니다.
+        </div>
+        
+        <div style="font-size:0.65rem; color:#888; margin-top:20px; border-top:1px solid #e2e8f0; padding-top:8px; line-height:1.4;">
+          * [전산실 관리 항목 90]: 메인 시스템 전산 물리 제어 불능 등 극단적 비상 상황 발생 시 사내 콜드 리부트 대응 매뉴얼은 비공개 기밀 규격인 <span class="wiki-link" data-go-tab="override" style="color:#94a3b8; text-decoration:underline; cursor:pointer;">비상 오버라이드 규범 (AP-L5-RECOVERY)</span>을 필히 수립하여 대응하시기 바랍니다. (인격 제어구 오작동으로 인한 긴급 차단 코드는 <span class="wiki-link" data-go-tab="neurotoxin_control" style="color:#94a3b8; text-decoration:underline; cursor:pointer;">신경독 통제 지침</span>을 교차 검증하십시오.)
         </div>
       `;
 
@@ -1479,6 +1583,7 @@ function setupLinuxDesktopListeners() {
   const remoteNotesIcon = document.querySelector('[data-remote-win-id="notes"]');
   const remoteTerminalIcon = document.querySelector('[data-remote-win-id="terminal"]');
   const remoteConfigIcon = document.querySelector('[data-remote-win-id="config"]');
+  const remoteSchematicIcon = document.querySelector('[data-remote-win-id="schematic"]');
 
   if (remoteNotesIcon) {
     remoteNotesIcon.addEventListener('click', () => {
@@ -1498,6 +1603,12 @@ function setupLinuxDesktopListeners() {
       openRemoteWindow('config');
     });
   }
+  if (remoteSchematicIcon) {
+    remoteSchematicIcon.addEventListener('click', () => {
+      audio.playBeep(900, 0.04);
+      openRemoteWindow('schematic');
+    });
+  }
 
   // Close sub-window buttons inside remote space
   const closeRemoteBtns = document.querySelectorAll('.close-remote-win-btn');
@@ -1512,7 +1623,7 @@ function setupLinuxDesktopListeners() {
   });
 
   // Focus managers for G.L.A.D.I.S. remote windows
-  const remoteFrames = document.querySelectorAll('#win-notes, #win-terminal, #win-config');
+  const remoteFrames = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic');
   remoteFrames.forEach(f => {
     f.addEventListener('mousedown', (e) => {
       e.stopPropagation();
@@ -1844,7 +1955,7 @@ function focusRemoteWindow(winId: string) {
   activeWindows = activeWindows.map(w => {
     return { ...w, focused: w.id === winId };
   });
-  const subframes = document.querySelectorAll('#win-notes, #win-terminal, #win-config');
+  const subframes = document.querySelectorAll('#win-notes, #win-terminal, #win-config, #win-schematic');
   subframes.forEach(f => {
     if (f.id === `win-${winId}`) f.classList.add('focused');
     else f.classList.remove('focused');
@@ -2163,6 +2274,7 @@ async function handleTerminalCommand(cmdString: string) {
         "  cat [file]              - Print file content.",
         "  clear                   - Clear screen buffer.",
         "  sysinfo                 - Print system configuration.",
+        "  morse-decode            - Automated 8-bit morse audio decoder tool (Stage 4).",
         "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 hint tool).",
         "  aperture-override --force --code [code] - Emergency core bypass (Stage 5).",
         "  quantum-solve [val]     - Solve the Magic Square center wave parameter (Stage 6).",
@@ -2212,6 +2324,22 @@ async function handleTerminalCommand(cmdString: string) {
 
     case 'clear':
       terminalHistory = [];
+      break;
+
+    case 'morse-decode':
+      if (state.stage === 'CONFIG') {
+        terminalHistory.push(
+          "[📡 LISTENING TO ACTIVE INTRA-SYSTEM AUDIO BEACON...]",
+          "Analyzing tone duration intervals...",
+          "  -.-.  ==> C",
+          "  .-    ==> A",
+          "  -.-   ==> K",
+          "  .     ==> E",
+          "[DECODED INTERCEPT KEYWORD: CAKE]"
+        );
+      } else {
+        terminalHistory.push("[ERROR] Decoder offline. No active Morse audio beacon detected on current frequency.");
+      }
       break;
 
     case 'sysinfo':
@@ -2269,7 +2397,20 @@ async function handleTerminalCommand(cmdString: string) {
     case 'quantum-solve':
       const qVal = parts[1];
       if (!qVal) {
-        terminalHistory.push("Usage: quantum-solve [value]");
+        terminalHistory.push(
+          "Usage: quantum-solve [value]",
+          "",
+          "  [ Quantum Lattice Balance Matrix ]",
+          "  +---+---+---+",
+          "  | 8 | 1 | 6 |",
+          "  +---+---+---+",
+          "  | 3 | ? | 7 |",
+          "  +---+---+---+",
+          "  | 4 | 9 | 2 |",
+          "  +---+---+---+",
+          "  Wave balance condition: Sum of all rows, cols, diagonals must sum to 15.",
+          "  Find the missing center value (?) and solve: quantum-solve [value]"
+        );
       } else {
         terminalHistory.push(`Injecting matrix resonance coefficient: ${qVal} ...`);
         const success = await stateManager.checkStage6Val(qVal);
