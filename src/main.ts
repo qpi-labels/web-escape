@@ -97,6 +97,18 @@ let isOsLocked = true;
 let startTime: number | null = null;
 let clearTime: number | null = null;
 let showMessengerToast = false;
+let shownVanceStage3Toast = false;
+let shownVanceStage5Toast = false;
+
+function getToastText(stage: string, gladisUpdateState: string): string {
+  if (stage === 'SELF_DESTRUCT') {
+    return "자폭 타이머가 작동했네! [CLAIM CAKE]는 기만 단추니 절대 속지 말게! 빨리 터미널로 우회코드를 파싱하게!";
+  }
+  if (stage === 'DESKTOP' && gladisUpdateState === 'UPDATED') {
+    return "G.L.A.D.I.S.가 보안 핫패치 방벽을 올렸네! 터미널에서 gladis_patch.log 로그를 보고 5자리 패스코드를 추론해 보게!";
+  }
+  return "G.L.A.D.I.S.가 복구 지침(README.txt)을 지워버렸네! 빨리 보안 채널에 복구 지시를 확인하게!";
+}
 let isGladisScriptDownloaded = false;
 let isDownloadAlertOpen = false;
 let isDownloadingProgress = false;
@@ -159,7 +171,32 @@ function renderApp() {
   const appDiv = document.getElementById('app');
   if (!appDiv) return;
 
+  // 1. Save input state to prevent loss of focus & text during full DOM redraws
+  const activeElement = document.activeElement as HTMLElement | null;
+  const activeId = activeElement ? activeElement.id : null;
+  let activeValue: string | null = null;
+  let selectionStart: number | null = null;
+  let selectionEnd: number | null = null;
+
+  if (activeElement && (activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement)) {
+    activeValue = activeElement.value;
+    selectionStart = activeElement.selectionStart;
+    selectionEnd = activeElement.selectionEnd;
+  }
+
   const state = stateManager.getState();
+
+  // 1.5. Dynamic notifications for Vance's emergency chat messages on stage changes
+  if (state.stage === 'SELF_DESTRUCT' && !shownVanceStage5Toast) {
+    shownVanceStage5Toast = true;
+    showMessengerToast = true;
+    audio.playBeep(880, 0.08);
+  }
+  if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED' && !shownVanceStage3Toast) {
+    shownVanceStage3Toast = true;
+    showMessengerToast = true;
+    audio.playBeep(880, 0.08);
+  }
 
   if (state.isFailed) {
     appDiv.className = "";
@@ -210,6 +247,30 @@ function renderApp() {
         startCanvasVisualizer();
       }
       break;
+  }
+
+  // Auto-scroll chat & terminal to their bottom positions to avoid scroll resets on speedrun timer redraws
+  const termOutput = document.getElementById('terminalOutput');
+  if (termOutput) {
+    termOutput.scrollTop = termOutput.scrollHeight;
+  }
+  const chatContainer = document.getElementById('chatMessagesContainer');
+  if (chatContainer) {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  // 2. Restore active element value, selection and focus
+  if (activeId) {
+    const newActiveElement = document.getElementById(activeId);
+    if (newActiveElement) {
+      if (activeValue !== null && (newActiveElement instanceof HTMLInputElement || newActiveElement instanceof HTMLTextAreaElement)) {
+        newActiveElement.value = activeValue;
+        if (selectionStart !== null && selectionEnd !== null) {
+          newActiveElement.setSelectionRange(selectionStart, selectionEnd);
+        }
+      }
+      newActiveElement.focus();
+    }
   }
 }
 
@@ -454,7 +515,7 @@ function getLinuxDesktopScreenHTML() {
                 </div>
 
                 <!-- Chat Messages Scroll -->
-                <div class="chat-messages-container" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; font-size:0.8rem; line-height:1.4;">
+                <div class="chat-messages-container" id="chatMessagesContainer" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; font-size:0.8rem; line-height:1.4;">
                   <!-- System Notification -->
                   <div style="background:rgba(255,235,59,0.04); border:1px dashed rgba(255,235,59,0.2); padding:10px; border-radius:6px; color:#ffeb3b; font-size:0.75rem; text-align:center;">
                     ⚠️ [경고] 시스템 관리자에 의해 이전 사내 공지 및 '#general' 채널 내 공식 README.txt 문서는 G.L.A.D.I.S. 코어 모듈에 의해 서버 레벨에서 강제 영구 삭제되었습니다.
@@ -673,7 +734,7 @@ function getLinuxDesktopScreenHTML() {
             <button style="border:none; background:none; color:#999; cursor:pointer; font-size:0.8rem;" id="closeToastBtn">×</button>
           </div>
           <span style="font-size:0.88rem; color:#fff; font-weight:bold; margin-bottom:4px;">Supervisor Vance</span>
-          <span style="font-size:0.78rem; color:#ccc; line-height:1.4;">"G.L.A.D.I.S.가 복구 지침(README.txt)을 지워버렸네! 빨리 보안 채널에 복구 지시를 확인하게!"</span>
+          <span style="font-size:0.78rem; color:#ccc; line-height:1.4;">"${getToastText(state.stage, state.gladisUpdateState)}"</span>
         </div>
       ` : ''}
 
@@ -925,16 +986,23 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               </div>
             </div>
             <div class="window-content config-app" style="padding:10px; font-size:0.8rem; gap:10px; width:100%; height:calc(100% - 32px); overflow-y:auto;">
-              <div class="md3-card" style="padding:10px; border-radius:8px;">
-                <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:4px;">주파수 비콘 (Audio Beacon Decoder)</h4>
-                <canvas class="waveform-canvas" id="waveCanvas" style="height:60px; margin-bottom:8px;"></canvas>
-                <div class="audio-controls" style="gap:6px;">
-                  <button class="md3-button" id="playAudioBtn" style="padding:4px 12px; font-size:0.75rem;">Play Signal</button>
-                  <button class="md3-button secondary" id="stopAudioBtn" style="padding:4px 12px; font-size:0.75rem;">Stop</button>
+              <div class="md3-card" style="padding:12px; border-radius:8px; background:rgba(0,0,0,0.03); border:1px solid #ced0db;">
+                <h4 style="font-size:0.8rem; color:var(--md-sys-color-primary); margin-bottom:6px; font-weight:bold;">⚙️ 원격 복구 서명 데이터 로그 (Recovery Dump Logs)</h4>
+                <div style="background:#1e1e1e; color:#00ff66; padding:10px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; line-height:1.4; border:1px solid #111; margin-bottom:8px; text-align:left; white-space:pre-line;">
+                  [SYS_LOAD] INIT G.L.A.D.I.S. core systems...
+                  [ERR_C-04] <span style="font-weight:bold; color:#ff3b30;">F</span>oundation containment matrix corrupt
+                  [ERR_C-18] <span style="font-weight:bold; color:#ff3b30;">X</span>eno-sensor calibration timed out
+                  [ERR_C-09] <span style="font-weight:bold; color:#ff3b30;">U</span>ser-override diagnostics required
+                  [ERR_C-22] <span style="font-weight:bold; color:#ff3b30;">H</span>azardous neurotoxin gas vents ARMED
                 </div>
+                <span style="font-size:0.65rem; color:#555; line-height:1.4; display:block;">
+                  * 에러 코드 라인의 메시지 첫 글자(Red Color)를 차례대로 나열하십시오.
+                  <br>
+                  * 나열한 4글자에 사내 <strong>Caesar ROT-3 복호화 규칙</strong>을 적용하십시오.
+                </span>
               </div>
-              <div class="input-group" style="margin-bottom: 8px;">
-                <label class="input-label" style="font-size:0.75rem;" for="morseInput">인증 패스코드 입력 (8-Bit Passcode)</label>
+              <div class="input-group" style="margin-bottom: 8px; margin-top: 10px;">
+                <label class="input-label" style="font-size:0.75rem;" for="morseInput">인증 패스코드 입력 (Decrypted 4-Letter Key)</label>
                 <div style="display:flex; gap:6px;">
                   <input type="text" class="md3-input" id="morseInput" style="padding:4px 8px; font-size:0.75rem; flex:1;" placeholder="코드를 입력하십시오..." autocomplete="off" />
                   <button class="md3-button" id="submitMorseBtn" style="padding:4px 12px; font-size:0.75rem;">Verify</button>
@@ -943,14 +1011,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               
               <!-- Built-in Morse Reference Ledger -->
               <div style="margin-top:10px; border-top:1px solid #cbd5e1; padding-top:8px; text-align:left;">
-                <span style="font-size:0.7rem; font-weight:bold; color:#475569; display:block; margin-bottom:4px;">📡 8-bit Morse Code Reference Ledger:</span>
-                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; font-size:0.65rem; font-family:var(--font-mono); background:#f8fafc; padding:6px; border-radius:4px; border:1px solid #e2e8f0; text-align:center;">
-                  <div><strong>C:</strong> <code>-.-.</code></div>
-                  <div><strong>U:</strong> <code>..-</code></div>
-                  <div><strong>R:</strong> <code>.-.</code></div>
-                  <div><strong>E:</strong> <code>.</code></div>
-                </div>
-                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block; line-height:1.3;">* Tip: G.L.A.D.I.S. v3.12 보안 조치에 따른 오디오 비콘 해청용 (4 letters). 이스터에그 주의.</span>
+                <span style="font-size:0.6rem; color:#64748b; margin-top:3px; display:block; line-height:1.3;">* 안내: Caesar ROT-3 복호화 가이드는 브라우저의 '모스 부호 목록표' 하단에 상세 설명되어 있으니 복구가 필요할 시 참고하십시오.</span>
               </div>
             </div>
           </div>
@@ -1018,7 +1079,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
 
 function getWikiTabContentHTML(): string {
   const state = stateManager.getState();
-  if (state.stage !== 'LINUX_DESKTOP' && state.stage !== 'BOOT' && state.stage !== 'PORT_BRIDGE') {
+  if (state.stage !== 'LINUX_DESKTOP' && state.stage !== 'BOOT' && state.stage !== 'PORT_BRIDGE' && activeWikiTab !== 'morse_ledger') {
     return `
       <div style="background:#ffdad6; border:1px solid #ba1a1a; padding:24px; border-radius:12px; text-align:center; color:#410002; margin-top:20px;">
         <span style="font-size:3rem; user-select:none;">🚫</span>
@@ -1422,7 +1483,7 @@ function getWikiTabContentHTML(): string {
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 4: 저주파 모스 비콘 복호화 검증 (Morse Beacon Passcode)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 사내 사전 알파벳 규격에 대칭 복호화하여 취득한 4자 동기 보정 어휘 키워드인 <code style="font-family:var(--font-mono); font-weight:bold; color:#0f172a;">CURE</code>를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
+          안전 모드 활성화로 인해 코어가 발신하는 오디오 모스(Morse) 신호를 수집하십시오. 획득한 모스 시퀀스를 사내 '모스 부호 목록표'를 참조하여 번역하고, system.cfg에 명시된 Caesar ROT-3 shift 해독법에 맞춰 복호화한 4자 동기 보정 어휘 키워드(Passcode)를 시스템 검증 모듈 인풋박스에 입력하고 Verify를 클릭하여 통과시킵니다. (주의: 위키 문서상에 언급되는 CAKE는 G.L.A.D.I.S.의 미끼(Decoy)이므로 절대 주입하지 마십시오. 주입 시 기만 이스터에그 오류가 발생합니다. 오답을 3회 연속 주입할 시 안전 보증을 위해 오디오 기동 모듈이 15초간 과열 락아웃 상태에 들어갑니다.)
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
@@ -1441,7 +1502,7 @@ function getWikiTabContentHTML(): string {
 
         <h4 style="font-weight: bold; font-size: 0.88rem; margin-top: 15px; margin-bottom: 6px; color: #0f172a; border-left: 4px solid var(--md-sys-color-primary); padding-left: 6px;">2. 최고 안전 권고안 (Trivia & Security Directive)</h4>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.6;">
-          성격 보정용 비상 패스코드가 <strong>"CURE"</strong>로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
+          성격 보정용 비상 패스코드가 특정 복호 키로 고정된 비하인드에 따르면, 설립자 케이브 존슨 생전의 비서 회의실 복도 게시판에 "약속된 초콜릿 케이크는 당사의 재무 위기로 인해 지급할 수 없으므로 **그것은 사실이 아님(The Cake is a Lie)**"이라는 법무 부서의 비밀 감사 리포트 메모가 유출되어 엔지니어들 사이에 거대한 기만 코드의 대명사 밈(Meme)이 되었습니다.
         </p>
       `;
   }
@@ -2596,10 +2657,7 @@ async function handleTerminalCommand(cmdString: string) {
         terminalHistory.push(
           "[AUDIO DIAGNOSTICS MODULE CONFIG]",
           "주파수 재생(Play Signal) 시 나오는 소리 신호는 오리지널 8-bit 모스 부호입니다.",
-          " v3.12 핫패치 조치 사항: 자동 디코더 'morse-decode'가 강제로 무력화되었습니다.",
-          "  * 복구 힌트: 터미널로 수집된 모스 시퀀스를 획득하고, 위키의 '모스 부호 목록표'를 참조하여 해독하십시오.",
-          "  * G.L.A.D.I.S. 시스템 키 변조: 해독된 원본 문자열에 Caesar ROT-3 shift (각 알파벳 뒤로 3칸 밀림 -> 복호화하려면 앞으로 3칸 당겨야 함, 예: F -> C)를 적용하여 정답을 유추하십시오.",
-          "  * 힌트: G.L.A.D.I.S. 인격 치료 및 안정 유기 복구 비콘 (4글자)."
+          " v3.12 핫패치 조치 사항: 자동 디코더 'morse-decode'가 강제로 무력화되었습니다."
         );
       } else if (targetFile === 'diagnostics.lnk') {
         terminalHistory.push(
@@ -2704,10 +2762,13 @@ async function handleTerminalCommand(cmdString: string) {
       break;
 
     case 'base64-decode':
-      const base64Str = parts[1];
-      if (!base64Str) {
+      let rawInput = parts.slice(1).join(' ').trim();
+      if (!rawInput) {
         terminalHistory.push("Usage: base64-decode [base64_string]");
       } else {
+        // Auto-sanitize copy-pasted results (remove quotes, strip PART_A: / PART_B: / PART_C:)
+        let base64Str = rawInput.replace(/^['"]|['"]$/g, '').trim(); // strip outer quotes
+        base64Str = base64Str.replace(/^PART_[A-C]:\s*/i, '').trim(); // strip PART_A: / PART_B: / PART_C:
         try {
           const decoded = atob(base64Str);
           terminalHistory.push(`Decoding Base64 string "${base64Str}"...`, `Result: "${decoded}"`);
