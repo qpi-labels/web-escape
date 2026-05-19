@@ -717,8 +717,12 @@ html, body {
   max-width: 600px;
 }
 
-.body-secret-token::after {
-  content: "SECRET_CODE: NEUROTOXIN_BYPASS_99";
+body::after {
+  content: "PART_A: TkVVUk9UT1hJTg==";
+  display: none;
+}
+#app::after {
+  content: "PART_B: X0JZUEFTU185OQ==";
   display: none;
 }
 

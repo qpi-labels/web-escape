@@ -335,6 +335,7 @@ function getLinuxDesktopScreenHTML() {
                 <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">G.L.A.D.I.S. 스펙 명세</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'morse_ledger' ? 'active' : ''}" data-tab-id="morse_ledger" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">모스 부호 목록표</button>
 
 
               </div>
@@ -809,15 +810,14 @@ function getGladisSubDesktopHTML(state: any): string {
               </div>
             </div>
             <div class="window-content notepad-view" style="font-size:0.8rem; line-height:1.4; padding:12px; height:180px;">
-[인격 유지 장치 일지]
-G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충족되어야 통과합니다.
+[보안 시스템 긴급 복구 가이드]
+G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 강제로 차단하고 방어 핫패치 v3.12를 실시간 배포했습니다.
 
-1. **시야의 축소 (Stage 3)**:
-"네가 보는 브라우저창 자체를 구겨 낮추면, 주파수 검증 비콘이 드러난다."
-(브라우저 가로 폭을 550px 이하로 극단적으로 대폭 축소해 보십시오.)
+1. **보안 로그 분석 (Stage 3)**:
+원격 접속이 감지되면 단말기가 잠시(10초) 고립됩니다. 패치 배포 완료 후 터미널(Terminal.exe)을 실행하여 \`ls\` 명령을 입력해 G.L.A.D.I.S.가 도발용으로 남겨둔 \`gladis_patch.log\`를 찾으십시오.
 
-2. **주소창(URL) 주입**:
-줄여서 알아낸 인증 토큰값을 복사하여, 브라우저 주소창(URL)의 파라미터로 "?auth=[토큰]" 형식으로 주입하고 새로고침하십시오.
+2. **논리 코드 분석 및 인증**:
+로그 내부의 수수께끼를 분석하여 5자리 암호(ABCDE)를 직접 해독하십시오. 그리고 터미널에 \`auth-config [정답]\` 명령을 주입하여 가상 통제 구성을 수동으로 복구하십시오.
             </div>
           </div>
         ` : ''}
@@ -834,10 +834,10 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
             <div class="window-content terminal-app" id="terminalAppContainer" style="height:250px; width:100%; border-radius:0;">
               <div class="terminal-output" id="terminalOutput" style="font-size:0.75rem; line-height:1.4;">
                 ${state.stage === 'DESKTOP' ? `
-                  <div style="background:#420002; border:1px solid #ba1a1a; padding:6px; border-radius:4px; color:#ffdad6; font-size:0.68rem; margin-bottom:8px; line-height:1.3; font-family:var(--font-mono);">
-                    ⚠️ [CRT DISPLAY GEOMETRY OUT OF BOUNDS]<br>
-                    * Error: Aspect ratio exceeds hardware sync matrix.<br>
-                    * Solution: Physically compress browser viewport width below 550px to merge sync beacons.
+                  <div style="background:rgba(255,152,0,0.06); border:1px solid #ff9800; padding:8px; border-radius:6px; color:#ffe0b2; font-size:0.68rem; margin-bottom:8px; line-height:1.4; font-family:var(--font-mono);">
+                    ⚠️ [G.L.A.D.I.S. SYSTEM SECURITY UPDATE IN PROGRESS]<br>
+                    * Warning: Remote security patch v3.12 has been hot-deployed.<br>
+                    * Action: Standard bypass configurations blocked. Inspect the newly created log file via 'ls' and resolve the dynamic logic matrix using: auth-config [passcode]
                   </div>
                 ` : ''}
                 ${terminalHistory.map(line => `<div class="terminal-line">${line}</div>`).join('')}
@@ -902,29 +902,25 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
             </div>
             <div class="window-content schematic-app" style="padding:10px; background:#faf8f5; color:#3e2723; text-align:center; font-family:var(--font-sans); display:block; overflow:hidden;">
               <div style="border:2px dashed #8d6e63; padding:8px; border-radius:6px; background:#efebe9;">
-                <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Schematic</h4>
+                <h4 style="font-size:0.75rem; margin:0 0 6px 0; color:#5d4037; font-weight:bold;">🔬 G.L.A.D.I.S. Backup Battery Coordinate Ledger</h4>
                 
-                <!-- Potato Drawing in CSS -->
-                <div style="display:flex; justify-content:center; align-items:center; gap:12px; margin:10px 0;">
-                  <div style="width:50px; height:36px; background:#d7ccc8; border:3px solid #8d6e63; border-radius:50% 40% 45% 50%; position:relative; box-shadow:inset -3px -3px 0 rgba(0,0,0,0.1);">
-                    <div style="position:absolute; width:3px; height:3px; background:#8d6e63; border-radius:50%; top:8px; left:12px;"></div>
-                    <div style="position:absolute; width:3px; height:3px; background:#8d6e63; border-radius:50%; top:20px; left:28px;"></div>
-                    <div style="position:absolute; width:2px; height:2px; background:#8d6e63; border-radius:50%; top:12px; right:12px;"></div>
-                  </div>
-                  <div style="height:2px; width:30px; background:#ffb74d; border-top:2px dotted #e65100;"></div>
-                  <div style="width:36px; height:36px; border:3px solid #5d4037; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:bold; color:#2e7d32;">
-                    1.1V
+                <!-- Coordinate Matrix Grid -->
+                <div style="font-size:0.6rem; font-family:var(--font-mono); margin:6px auto; width:130px; background:#fff; border:1px solid #cbd5e1; border-radius:4px; padding:4px;">
+                  <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:1px; background:#e2e8f0; font-weight:bold; color:#1e293b; text-align:center;">
+                    <div style="background:#f1f5f9;"></div><div style="background:#f1f5f9;">1</div><div style="background:#f1f5f9;">2</div><div style="background:#f1f5f9;">3</div><div style="background:#f1f5f9;">4</div><div style="background:#f1f5f9;">5</div>
+                    <div style="background:#f1f5f9;">1</div><div>P</div><div>A</div><div>B</div><div>C</div><div>D</div>
+                    <div style="background:#f1f5f9;">2</div><div>E</div><div>O</div><div>F</div><div>G</div><div>H</div>
+                    <div style="background:#f1f5f9;">3</div><div>T</div><div>I</div><div>J</div><div>K</div><div>L</div>
+                    <div style="background:#f1f5f9;">4</div><div>M</div><div>N</div><div>Q</div><div>R</div><div>S</div>
+                    <div style="background:#f1f5f9;">5</div><div>U</div><div>V</div><div>W</div><div>X</div><div>Y</div>
                   </div>
                 </div>
 
                 <div style="text-align:left; font-size:0.68rem; line-height:1.4; color:#4e342e;">
-                  <strong>[HARDWARE DIRECTIVE]</strong><br>
-                  * Source: Organic Zinc-Copper Electrolyte Cell (Potato)<br>
-                  * Output: 1.12 Volts DC<br>
-                  * Downscale Clock Limit: 1.1 MHz<br>
-                  <div style="background:#fff3e0; border-left:3px solid #ff9800; padding:4px; border-radius:4px; font-weight:bold; font-family:var(--font-mono); color:#e65100; font-size:0.68rem; text-align:center; margin-top:6px;">
-                    EMERGENCY_BACKUP_AUTH: POTATO
-                  </div>
+                  <strong>[LATTICE COORDINATE KEY]</strong><br>
+                  * Mapping: Grid values calculated by row-column index pair (Y, X).<br>
+                  * Sequence: <code style="background:#fff3e0; padding:2px 4px; border-radius:4px; color:#e65100; font-weight:bold; font-family:var(--font-mono); font-size:0.7rem;">(1,1) (2,2) (3,1) (1,2) (3,1) (2,2)</code><br>
+                  * Action: Decode sequence and authenticate backup key using: <code style="font-family:var(--font-mono); font-size:0.65rem; color:#ba1a1a;">quantum-auth [backup_word]</code>
                 </div>
               </div>
             </div>
@@ -1260,6 +1256,51 @@ function getWikiTabContentHTML(): string {
 
         <p class="wiki-paragraph" style="font-size:0.76rem;">
           이 매커니즘은 감자의 산성 전해질이 방출하는 극미량의 마이크로볼트 전압만으로 코어를 구동하게 만들어, 폭주 중이던 대량 파괴용 신경독 밸브 작동 회로를 물리적인 기동 전압 미달 상태로 정지시키는 가장 우수하고 환경 친화적인 오프라인 수동 차단 안전장치입니다.
+        </p>
+      `;
+
+    case 'morse_ledger':
+      return `
+        <h3 class="wiki-title-large">📡 에퍼쳐 모스 부호 참조 장부 (Aperture Morse Lookup Ledger)</h3>
+        <p class="wiki-paragraph">
+          본 장부는 에퍼쳐 사이언스 인격 진단용 서브 오디오 비콘 시스템의 8-bit 모스 부호 주파수 신호를 물리적으로 번역하기 위한 사내 전용 lookup Ledger입니다.
+        </p>
+
+        <h4 style="font-size:0.9rem; margin-top:14px; margin-bottom:6px; color:var(--md-sys-color-primary); border-bottom:1px solid #e2e8f0; padding-bottom:4px;">🎯 알파벳 모스 부호 번역 규격표</h4>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; font-size:0.72rem; font-family:var(--font-mono); background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #cbd5e1; text-align:center;">
+          <div><strong>A:</strong> <code>.-</code></div>
+          <div><strong>B:</strong> <code>-...</code></div>
+          <div><strong>C:</strong> <code>-.-.</code></div>
+          <div><strong>D:</strong> <code>-..</code></div>
+          <div><strong>E:</strong> <code>.</code></div>
+          <div><strong>F:</strong> <code>..-.</code></div>
+          <div><strong>G:</strong> <code>--.</code></div>
+          <div><strong>H:</strong> <code>....</code></div>
+          <div><strong>I:</strong> <code>..</code></div>
+          <div><strong>J:</strong> <code>.---</code></div>
+          <div><strong>K:</strong> <code>-.-</code></div>
+          <div><strong>L:</strong> <code>.-..</code></div>
+          <div><strong>M:</strong> <code>--</code></div>
+          <div><strong>N:</strong> <code>-.</code></div>
+          <div><strong>O:</strong> <code>---</code></div>
+          <div><strong>P:</strong> <code>.--.</code></div>
+          <div><strong>Q:</strong> <code>--.-</code></div>
+          <div><strong>R:</strong> <code>.-.</code></div>
+          <div><strong>S:</strong> <code>...</code></div>
+          <div><strong>T:</strong> <code>-</code></div>
+          <div><strong>U:</strong> <code>..-</code></div>
+          <div><strong>V:</strong> <code>...-</code></div>
+          <div><strong>W:</strong> <code>.--</code></div>
+          <div><strong>X:</strong> <code>-..-</code></div>
+          <div><strong>Y:</strong> <code>-.--</code></div>
+          <div><strong>Z:</strong> <code>--..</code></div>
+        </div>
+
+        <h4 style="font-size:0.85rem; color:#ba1a1a; margin-top:14px;">🔑 Caesar ROT-3 Shift 복호화 복구 가이드</h4>
+        <p class="wiki-paragraph" style="font-size:0.75rem; line-height:1.5;">
+          G.L.A.D.I.S. v3.12 보안 조치에 따라, 모스 오디오 채널에서 인터셉트된 원본 모스 코드는 임의로 Caesar ROT-3 암호화(알파벳 문자 인덱스 순서가 3칸 뒤로 밀린 형태)가 적용되어 전송됩니다.<br>
+          * <strong>암호화 작동 원리:</strong> 각 원본 글자에 알파벳 순서상 +3 Shift를 부여합니다. (예: A -> D, B -> E, C -> F...)<br>
+          * <strong>복호화 방법:</strong> 획득한 암호 문자열의 각 알파벳을 반대 방향인 앞으로 3칸 당깁니다. (-3 Shift, 예: D -> A, E -> B, F -> C...)
         </p>
       `;
 
@@ -2301,8 +2342,9 @@ async function handleTerminalCommand(cmdString: string) {
         "  clear                   - Clear screen buffer.",
         "  sysinfo                 - Print system configuration.",
         "  auth-config [code]      - Authorize dynamic access code (Stage 3 logic riddle).",
-        "  morse-decode            - Automated 8-bit morse audio decoder tool (Stage 4).",
-        "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 hint tool).",
+        "  morse-decode            - Captured raw Morse beacon listener tool (Stage 4).",
+        "  get --css [selector]    - Query document CSS pseudo-elements (Stage 5 body::after / #app::after).",
+        "  base64-decode [string]  - Base64 string decoding tool (Stage 5).",
         "  aperture-override --force --code [code] - Emergency core bypass (Stage 5).",
         "  quantum-solve [val]     - Solve the Magic Square center wave parameter (Stage 6).",
         "  quantum-auth [word]     - Authenticate backup secondary keyword (Stage 6)."
@@ -2327,25 +2369,26 @@ async function handleTerminalCommand(cmdString: string) {
         terminalHistory.push("cat: missing operand. Usage: cat [file]");
       } else if (targetFile === 'notes.txt') {
         terminalHistory.push(
-          "[인격 유지 장치 일지]",
-          "1. 시야의 축소: 창 크기를 가로 550px 이하로 찌그러뜨리면 주파수 검증 비콘이 노출됩니다.",
-          "2. 주소창 주입: 획득한 주파수 토큰을 URL에 ?auth=[토큰] 형식으로 붙이고 주입하십시오."
+          "[보안 시스템 긴급 복구 가이드]",
+          "1. 보안 로그 분석: 원격 접속 패치 v3.12 진행 완료 후 gladis_patch.log를 획득하십시오.",
+          "2. 논리 코드 분석: 수수께끼를 분석하여 auth-config [정답] 형태로 입력해 주입하십시오."
         );
       } else if (targetFile === 'gladis_patch.log') {
         if (state.stage === 'DESKTOP' && state.gladisUpdateState === 'UPDATED') {
           terminalHistory.push(
             "[ G.L.A.D.I.S. HOTPATCH 3.12 ]",
-            "기존 우회 토큰 폐기 완료. 새로운 동적 접근 코드가 생성되었습니다.",
+            "기존 우회 토큰 및 창 크기 강제 축소 메커니즘을 완전히 폐기하고 보완 핫패치를 완료했습니다.",
             "",
-            "인간 대상자를 위한 특별 배려(비꼬기 모드 활성화):",
-            "새로운 코드는 5자리 숫자입니다.",
-            "1. 첫 번째 숫자는 세 번째 숫자의 정확히 절반입니다.",
-            "2. 두 번째 숫자와 마지막 숫자는 동일하며, 홀수(Odd)입니다.",
-            "3. 네 번째 숫자는 제가 당신의 생존 확률로 계산한 '0'입니다.",
-            "4. 다섯 자리 숫자의 총합은 제 연산 코어의 갯수인 16입니다.",
+            "인간 대상자를 위한 논리력 측정용 dynamic access code (5자리 수 ABCDE):",
+            "1. 각 자릿수 A, B, C, D, E는 1부터 9까지의 서로 다른 자연수입니다.",
+            "2. 연속한 세 자릿수 관계:",
+            "   - A + B = C",
+            "   - B + C = D",
+            "   - C + D = E",
+            "3. 첫째 자리와 다섯째 자리의 곱(A * E)은 홀수(Odd)입니다.",
             "",
             "* 명령어: auth-config [5자리숫자]",
-            "풀어보시죠. 당신의 뇌세포가 처리하기엔 과부하가 걸리겠지만요."
+            "당신의 작은 뇌세포가 처리하기엔 무리겠지만요."
           );
         } else {
           terminalHistory.push("cat: gladis_patch.log: Permission denied or file currently locked by security hotfix.");
@@ -2354,16 +2397,20 @@ async function handleTerminalCommand(cmdString: string) {
         terminalHistory.push(
           "[AUDIO DIAGNOSTICS MODULE CONFIG]",
           "주파수 재생(Play Signal) 시 나오는 소리 신호는 오리지널 8-bit 모스 부호입니다.",
-          "정답 단어 4자리를 해독한 후 System_Config.cfg 입력창에 넣으십시오.",
-          "힌트: G.L.A.D.I.S.가 가장 좋아하는 디저트이자, 끝없이 제공되겠다고 약속된 거짓말."
+          " v3.12 핫패치 조치 사항: 자동 디코더 'morse-decode'가 강제로 무력화되었습니다.",
+          "  * 복구 힌트: 터미널로 수집된 모스 시퀀스를 획득하고, 위키의 '모스 부호 목록표'를 참조하여 해독하십시오.",
+          "  * G.L.A.D.I.S. 시스템 키 변조: 해독된 원본 문자열에 Caesar ROT-3 shift (각 알파벳 뒤로 3칸 밀림 -> 복호화하려면 앞으로 3칸 당겨야 함, 예: D -> A)를 적용하여 정답을 유추하십시오.",
+          "  * 힌트: G.L.A.D.I.S.가 가장 좋아하는 디저트이자, 끝없이 제공하겠다고 약속된 거짓말."
         );
       } else if (targetFile === 'diagnostics.lnk') {
         terminalHistory.push(
           "G.L.A.D.I.S. 자가 진단 코어 가동 오류.",
           "신경독 누출을 멈추려면 override bypass 패스코드가 필수적입니다.",
-          "우회 코드는 document body의 ::after 가상 선택자 content 내부에 하드코딩되어 강제 격리되었습니다.",
-          "F12 CSS Styles 탭에서 body::after를 찾거나, 아래 명령을 입력하여 원격 파싱하십시오:",
-          "  get --css body::after"
+          "우회 코드는 document body의 ::after 및 #app::after 가상 선택자 content 내부에 나눠서 하드코딩되었습니다.",
+          "아래 명령을 입력하여 원격 파싱해 해독한 후 합쳐 결합하십시오:",
+          "  get --css body::after",
+          "  get --css #app::after",
+          "  base64-decode [디코딩할문자열]"
         );
       } else {
         terminalHistory.push(`cat: ${targetFile}: No such file or directory`);
@@ -2409,12 +2456,12 @@ async function handleTerminalCommand(cmdString: string) {
       if (state.stage === 'CONFIG') {
         terminalHistory.push(
           "[📡 LISTENING TO ACTIVE INTRA-SYSTEM AUDIO BEACON...]",
-          "Analyzing tone duration intervals...",
-          "  -.-.  ==> C",
-          "  .-    ==> A",
-          "  -.-   ==> K",
-          "  .     ==> E",
-          "[DECODED INTERCEPT KEYWORD: CAKE]"
+          "Analyzing frequency audio tone duration intervals...",
+          "  Raw Morse Sequence captured:",
+          "  ..-.   -..   -.   ....",
+          "",
+          "[ALERT] Automated character decoder offline due to v3.12 hotpatch.",
+          "Please refer to the Aperture Morse Ledger in the Wiki and system.cfg Caesar shifting rules."
         );
       } else {
         terminalHistory.push("[ERROR] Decoder offline. No active Morse audio beacon detected on current frequency.");
@@ -2424,7 +2471,7 @@ async function handleTerminalCommand(cmdString: string) {
     case 'sysinfo':
       terminalHistory.push(
         "OS Name: G.L.A.D.I.S. Embedded Sandbox",
-        "OS Version: 3.11-override",
+        "OS Version: 3.12-override",
         "Hardware Platform: Aperture Enrichment Lab Server",
         "Integrity Status: SECURE_CORE_BREACHED",
         "Neurotoxin Capacity: 100% (READY)"
@@ -2432,14 +2479,36 @@ async function handleTerminalCommand(cmdString: string) {
       break;
 
     case 'get':
-      if (parts[1] === '--css' && parts[2] === 'body::after') {
-        terminalHistory.push(
-          "Querying DOM stylesheet pseudo-elements...",
-          "Retrieving content for CSS rule: body::after { ... }",
-          "Result: content = \"SECRET_CODE: NEUROTOXIN_BYPASS_99\""
-        );
+      if (parts[1] === '--css') {
+        if (parts[2] === 'body::after') {
+          terminalHistory.push(
+            "Querying DOM stylesheet rule: body::after { ... }",
+            "Result: content = \"PART_A: TkVVUk9UT1hJTg==\""
+          );
+        } else if (parts[2] === '#app::after') {
+          terminalHistory.push(
+            "Querying DOM stylesheet rule: #app::after { ... }",
+            "Result: content = \"PART_B: X0JZUEFTU185OQ==\""
+          );
+        } else {
+          terminalHistory.push("Usage: get --css [body::after | #app::after]");
+        }
       } else {
-        terminalHistory.push("Usage: get --css body::after");
+        terminalHistory.push("Usage: get --css [selector]");
+      }
+      break;
+
+    case 'base64-decode':
+      const base64Str = parts[1];
+      if (!base64Str) {
+        terminalHistory.push("Usage: base64-decode [base64_string]");
+      } else {
+        try {
+          const decoded = atob(base64Str);
+          terminalHistory.push(`Decoding Base64 string "${base64Str}"...`, `Result: "${decoded}"`);
+        } catch (e) {
+          terminalHistory.push(`[ ERROR ] Invalid Base64 character sequence: "${base64Str}"`);
+        }
       }
       break;
 
@@ -2480,15 +2549,16 @@ async function handleTerminalCommand(cmdString: string) {
           "Usage: quantum-solve [value]",
           "",
           "  [ Quantum Lattice Balance Matrix ]",
-          "  +---+---+---+",
-          "  | 8 | 1 | 6 |",
-          "  +---+---+---+",
-          "  | 3 | ? | 7 |",
-          "  +---+---+---+",
-          "  | 4 | 9 | 2 |",
-          "  +---+---+---+",
-          "  Wave balance condition: Sum of all rows, cols, diagonals must sum to 15.",
-          "  Find the missing center value (?) and solve: quantum-solve [value]"
+          "  +----+----+----+",
+          "  | 14 |  X | 12 |",
+          "  +----+----+----+",
+          "  |  Y | 11 |  Z |",
+          "  +----+----+----+",
+          "  | 10 | 15 |  8 |",
+          "  +----+----+----+",
+          "  Wave balance condition: Sum of all rows, cols, diagonals must match the master quantum constant sum (33).",
+          "  Solve for variables X, Y, Z and calculate Resonance Key = (X * Y) + Z.",
+          "  Inject key: quantum-solve [key]"
         );
       } else {
         terminalHistory.push(`Injecting matrix resonance coefficient: ${qVal} ...`);
@@ -2497,7 +2567,7 @@ async function handleTerminalCommand(cmdString: string) {
           isQuantumSolved = true;
           terminalHistory.push(
             "[ SUCCESS ] Quantum lattice wave balanced symmetrically!",
-            "All columns, rows, and diagonals summed to 15.",
+            "All columns, rows, and diagonals matched quantum sum constant 33.",
             "Waiting for backup power keyword to complete sequence...",
             "  * Command: quantum-auth [backup_word]"
           );

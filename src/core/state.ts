@@ -18,6 +18,11 @@ export interface GameState {
   devToolsWarningsCount: number;
   gladisUpdateState: 'NONE' | 'UPDATING' | 'UPDATED';
   gladisUpdateProgress: number;
+  isFailed: boolean;
+  stage4Attempts: number;
+  stage4LockoutTimer: number;
+  stage5Attempts: number;
+  stage6Attempts: number;
 }
 
 let gladisSpeakCallback: ((msg: string) => void) | null = null;
@@ -38,11 +43,17 @@ class StateManager {
     unlockedApps: ['notes.txt', 'terminal.exe'],
     devToolsWarningsCount: 0,
     gladisUpdateState: 'NONE',
-    gladisUpdateProgress: 0
+    gladisUpdateProgress: 0,
+    isFailed: false,
+    stage4Attempts: 0,
+    stage4LockoutTimer: 0,
+    stage5Attempts: 0,
+    stage6Attempts: 0
   };
 
   private listeners: (() => void)[] = [];
   private timerInterval: any = null;
+  private lockoutInterval: any = null;
 
   constructor() {}
 
@@ -61,12 +72,21 @@ class StateManager {
     this.listeners.forEach(l => l());
   }
 
-  // Reset core remote overrides when link closed
+  // Reset core remote overrides when link closed or failed retry
   reset() {
     this.stopCountdown();
+    if (this.lockoutInterval) {
+      clearInterval(this.lockoutInterval);
+      this.lockoutInterval = null;
+    }
     this.state.stage = 'LINUX_DESKTOP';
     this.state.timerRemaining = 120;
     this.state.unlockedApps = ['notes.txt', 'terminal.exe'];
+    this.state.isFailed = false;
+    this.state.stage4Attempts = 0;
+    this.state.stage4LockoutTimer = 0;
+    this.state.stage5Attempts = 0;
+    this.state.stage6Attempts = 0;
     this.notify();
   }
 
@@ -87,7 +107,7 @@ class StateManager {
       this.startGladisUpdate();
     } else if (newStage === 'CONFIG') {
       audio.playSuccess();
-      gladisSpeak("비정상적인 해상도 조작이군요. 꼼수로 세션 동적 동화를 해내다니, 비겁하군요. 하지만 제 보조 시스템 설정의 모스 비콘 신호는 절대 해독할 수 없을 겁니다.");
+      gladisSpeak("비정상적인 가상 브라우저 동적 주소 주입이군요. 꼼수로 세션 동화를 해내다니, 비겁하군요. 하지만 제 보조 시스템 설정의 모스 비콘 신호는 절대 해독할 수 없을 겁니다.");
     } else if (newStage === 'SELF_DESTRUCT') {
       if (!this.state.unlockedApps.includes('diagnostics.lnk')) {
         this.state.unlockedApps.push('diagnostics.lnk');
@@ -156,43 +176,107 @@ class StateManager {
   async checkStage3Auth(token: string): Promise<boolean> {
     if (this.state.stage !== 'DESKTOP') return false;
     const normalized = token.trim();
-    if (normalized === "25405") {
+    if (normalized === "31459") {
       await this.transitionTo('CONFIG');
       return true;
     }
     return false;
   }
 
-  // Stage 4 Check: Morse code decryption (CAKE)
-  async checkStage4Decrypt(key: string): Promise<boolean> {
-    if (this.state.stage !== 'CONFIG') return false;
-    const hash = await sha256(key);
+  // Stage 4 Check: Morse code decryption (CURE) & CAKE decoy check
+  async checkStage4Decrypt(key: string): Promise<{ success: boolean; isDecoy?: boolean; lockout?: boolean }> {
+    if (this.state.stage !== 'CONFIG') return { success: false };
+    if (this.state.stage4LockoutTimer > 0) return { success: false, lockout: true };
+
+    const normalized = key.trim().toUpperCase();
+    if (normalized === 'CAKE') {
+      audio.playError();
+      return { success: false, isDecoy: true };
+    }
+
+    const hash = await sha256(normalized);
     if (hash === STAGE_HASHES.STAGE4_KEY) {
       await this.transitionTo('SELF_DESTRUCT');
-      return true;
+      return { success: true };
     }
-    return false;
+
+    // Fail attempt
+    this.state.stage4Attempts++;
+    audio.playError();
+    if (this.state.stage4Attempts >= 3) {
+      this.state.stage4Attempts = 0;
+      this.state.stage4LockoutTimer = 15;
+      gladisSpeak("[SYSTEM OVERHEAT] 잘못된 검증 키가 연속 3회 유입되었습니다. 안전을 위해 오디오 데이터 채널을 15초간 격리 차단합니다.");
+      this.startStage4LockoutCountdown();
+      this.notify();
+      return { success: false, lockout: true };
+    } else {
+      gladisSpeak(`검증 실패. 잘못된 키워드입니다. (남은 기회: ${3 - this.state.stage4Attempts}회)`);
+    }
+    this.notify();
+    return { success: false };
   }
 
-  // Stage 5 Check: DOM extraction (NEUROTOXIN_BYPASS_99)
+  private startStage4LockoutCountdown() {
+    if (this.lockoutInterval) clearInterval(this.lockoutInterval);
+    this.lockoutInterval = setInterval(() => {
+      if (this.state.stage4LockoutTimer > 0) {
+        this.state.stage4LockoutTimer--;
+        if (this.state.stage4LockoutTimer === 0) {
+          clearInterval(this.lockoutInterval);
+          this.lockoutInterval = null;
+          gladisSpeak("오디오 모듈이 충분히 냉각되었습니다. 모스 비콘 청취 채널이 재활성화되었습니다.");
+        }
+        this.notify();
+      } else {
+        clearInterval(this.lockoutInterval);
+        this.lockoutInterval = null;
+      }
+    }, 1000);
+  }
+
+  // Stage 5 Check: DOM extraction (NEUROTOXIN_BYPASS_99_SECURE)
   async checkStage5Bypass(code: string): Promise<boolean> {
     if (this.state.stage !== 'SELF_DESTRUCT') return false;
-    const hash = await sha256(code);
+    const normalized = code.trim().toUpperCase();
+    const hash = await sha256(normalized);
     if (hash === STAGE_HASHES.STAGE5_BYPASS) {
       await this.transitionTo('QUANTUM_LOCK');
       return true;
     }
+
+    // Wrong attempt
+    this.state.stage5Attempts++;
+    audio.playError();
+    if (this.state.stage5Attempts >= 2) {
+      this.triggerFailure();
+    } else {
+      gladisSpeak(`[경고] 잘못된 바이패스 해독 토큰입니다. (허용 한도 잔여: ${2 - this.state.stage5Attempts}회)`);
+    }
+    this.notify();
     return false;
   }
 
-  // Stage 6 Check A: Quantum Matrix Center Value (5)
+  // Stage 6 Check A: Quantum Matrix Resonance Key (1089)
   async checkStage6Val(val: string): Promise<boolean> {
     if (this.state.stage !== 'QUANTUM_LOCK') return false;
     const hash = await sha256(val);
-    return hash === STAGE_HASHES.STAGE6_QUANTUM_VAL;
+    if (hash === STAGE_HASHES.STAGE6_QUANTUM_VAL) {
+      return true;
+    }
+
+    this.state.stage6Attempts++;
+    audio.playError();
+    if (this.state.stage6Attempts >= 2) {
+      this.triggerFailure();
+    } else {
+      gladisSpeak(`[경고] 양자 대칭 위상 공명 주입 불합치! 그리드 붕괴 위험 감지. (잔여 기회: ${2 - this.state.stage6Attempts}회)`);
+    }
+    this.notify();
+    return false;
   }
 
-  // Stage 6 Check B: Quantum Backup Word (POTATO) -> Transition to Escape!
+  // Stage 6 Check B: Quantum Backup Word (APERTURE) -> Transition to Escape!
   async checkStage6Word(word: string): Promise<boolean> {
     if (this.state.stage !== 'QUANTUM_LOCK') return false;
     const hash = await sha256(word);
@@ -200,6 +284,15 @@ class StateManager {
       await this.transitionTo('ESCAPED');
       return true;
     }
+
+    this.state.stage6Attempts++;
+    audio.playError();
+    if (this.state.stage6Attempts >= 2) {
+      this.triggerFailure();
+    } else {
+      gladisSpeak(`[경고] 마스터 셧다운 배터리 동축 키워드가 일치하지 않습니다. (잔여 기회: ${2 - this.state.stage6Attempts}회)`);
+    }
+    this.notify();
     return false;
   }
 
@@ -234,7 +327,7 @@ class StateManager {
         }
         this.notify();
       } else {
-        this.triggerSelfDestructFailure();
+        this.triggerFailure();
       }
     }, 1000);
   }
@@ -246,20 +339,17 @@ class StateManager {
     }
   }
 
-  triggerSelfDestructFailure(isTrap = false) {
+  // Active Tragic Failure state
+  triggerFailure() {
     this.stopCountdown();
-    this.state.stage = 'BOOT'; // Reset or Boot fail
-    this.state.timerRemaining = 120;
-    audio.playError();
-    if (isTrap) {
-      gladisSpeak("하하하! 역시 어리석은 유기체군요! 진짜 케이크를 줄 거라고 믿었나요? 자폭 프로토콜 강제 즉시 실행. 테스트를 종료합니다. 안녕히 가세요.");
-    } else {
-      gladisSpeak("자폭 프로토콜 실행 완료. 신경독 가스가 방출되었습니다. 이번 테스트 대상자는 다소 미흡했군요. 다음 대상자를 준비하겠습니다.");
+    if (this.lockoutInterval) {
+      clearInterval(this.lockoutInterval);
+      this.lockoutInterval = null;
     }
-    
-    setTimeout(() => {
-      window.location.reload();
-    }, 6000);
+    this.state.isFailed = true;
+    audio.playError();
+    gladisSpeak("시스템 치명적 오류. 자폭 시퀀스 발동으로 신경독이 챔버 전체에 완전히 분사되었습니다. 테스트는 종결되었습니다.");
+    this.notify();
   }
 }
 
