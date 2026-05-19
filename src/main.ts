@@ -135,6 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
       return "ERROR: CODE CORRUPTED OR ACCESS DENIED.";
     }
   };
+
+  // Real-time topbar speedrun timer loop
+  setInterval(() => {
+    const timerSpan = document.getElementById('live-speedrun-timer');
+    if (timerSpan) {
+      if (startTime) {
+        const elapsed = clearTime ? (clearTime - startTime) : (Date.now() - startTime);
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        const tenths = Math.floor((elapsed % 1000) / 100);
+        const minStr = String(minutes).padStart(2, '0');
+        const secStr = String(seconds).padStart(2, '0');
+        timerSpan.textContent = ` [⏱️ ${minStr}:${secStr}.${tenths}]`;
+      } else {
+        timerSpan.textContent = "";
+      }
+    }
+  }, 100);
 });
 
 function renderApp() {
@@ -287,7 +305,10 @@ function getLinuxDesktopScreenHTML() {
           <span>Activities</span>
           <span style="color:#ff9800;font-weight:bold;">Aperture_Core_Diagnostic</span>
         </div>
-        <div class="linux-topbar-center">${timeString}</div>
+        <div class="linux-topbar-center" style="display:flex; align-items:center; gap:6px;">
+          <span>${timeString}</span>
+          <span id="live-speedrun-timer" style="color:#39ff14; font-family:var(--font-mono); font-weight:bold;"></span>
+        </div>
         <div class="linux-topbar-right">
           <span>📶</span>
           <span>🔋 99%</span>
@@ -2561,6 +2582,9 @@ async function handleTerminalCommand(cmdString: string) {
             "   - B + C = D",
             "   - C + D = E",
             "3. 첫째 자리와 다섯째 자리의 곱(A * E)은 홀수(Odd)입니다.",
+            "",
+            "💡 [비상 가이드라인 패널 우회 힌트]:",
+            "   - 첫째 자리 A는 3 입니다.",
             "",
             "* 명령어: auth-config [5자리숫자]",
             "당신의 작은 뇌세포가 처리하기엔 무리겠지만요."
