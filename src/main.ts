@@ -19,7 +19,7 @@ let activeWindows: AppWindow[] = [
   { id: 'config', title: 'System.cfg', isOpen: false, x: 160, y: 40, focused: false },
 ];
 
-let activeWikiTab: string = 'gladis';
+let activeWikiTab: string = 'home';
 
 // Linux GNOME Simulation States
 let isLinuxBrowserOpen = false;
@@ -89,6 +89,7 @@ let isDownloadAlertOpen = false;
 let isDownloadingProgress = false;
 let downloadProgressVal = 0;
 let downloadTimerId: any = null;
+let isWindowsErrorDialogOpen = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderApp();
@@ -314,12 +315,12 @@ function getLinuxDesktopScreenHTML() {
                     <path d="M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z M50,92C26.8,92,8,73.2,8,50S26.8,8,50,8s42,18.8,42,42S73.2,92,50,92z"/>
                     <polygon points="50,15 80,32.3 65,58.3 35,58.3 20,32.3"/>
                   </svg>
-                  <span>Aperture Wiki</span>
+                  <span>Aperture Portal</span>
                 </div>
-                <button class="wiki-nav-btn ${activeWikiTab === 'gladis' ? 'active' : ''}" data-tab-id="gladis">01. G.L.A.D.I.S. Core</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'override' ? 'active' : ''}" data-tab-id="override">02. Override Rules</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'cake' ? 'active' : ''}" data-tab-id="cake">03. Cake Protocol</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'emergency' ? 'active' : ''}" data-tab-id="emergency">04. Emergency Rules</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'home' ? 'active' : ''}" data-tab-id="home">🏠 Wiki Home</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'aperture' ? 'active' : ''}" data-tab-id="aperture">🏢 Aperture Science</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'gladis' ? 'active' : ''}" data-tab-id="gladis">🤖 G.L.A.D.I.S. Core</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'override' ? 'active' : ''}" data-tab-id="override">📘 G.L.A.D.I.S. Emergency Manual</button>
               </div>
               <!-- Article View -->
               <div class="wiki-article-view">
@@ -567,6 +568,43 @@ function getLinuxDesktopScreenHTML() {
           <span style="font-size:0.78rem; color:#ccc; line-height:1.4;">"G.L.A.D.I.S.가 복구 지침(README.txt)을 지워버렸네! 빨리 보안 채널에 복구 지시를 확인하게!"</span>
         </div>
       ` : ''}
+
+      <!-- Windows Classic Error Dialog Overlay Modal -->
+      ${isWindowsErrorDialogOpen ? `
+        <div class="uac-overlay" style="z-index: 100000; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);">
+          <div class="uac-dialog" style="border: 1px solid #ff1744; max-width: 440px; box-shadow: 0 10px 45px rgba(0,0,0,0.6); overflow: hidden; border-radius: 8px;">
+            <div class="uac-header" style="background:#d50000; display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="font-weight:bold; font-size:0.82rem; color:#fff; display:flex; align-items:center; gap:6px;">
+                ❌ Aperture OS - Execution Error
+              </span>
+              <button id="winErrorCloseIconBtn" style="border:none; background:none; color:#fff; font-size:1.2rem; cursor:pointer; padding:0; line-height:1; font-weight:bold; opacity:0.8; transition:opacity 0.2s;">×</button>
+            </div>
+            <div class="uac-body" style="padding: 24px; color: #191c20; font-family: var(--font-sans); background: #ffffff;">
+              <div style="display:flex; gap:16px; align-items:flex-start;">
+                <!-- Retro Circle Cross red icon -->
+                <div style="width:40px; height:40px; border-radius:50%; background:#d50000; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.6rem; font-weight:bold; flex-shrink:0; box-shadow:0 2px 8px rgba(213,0,0,0.35); user-select:none; line-height:1;">
+                  ×
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; font-size:0.85rem; line-height:1.5; text-align:left;">
+                  <strong style="color:#d50000; font-size:0.95rem;">접근 거부 (Access Denied)</strong>
+                  <div style="color:#333;">
+                    원격 시스템 연결 스크립트(<span style="font-family:var(--font-mono); font-weight:bold; color:#d50000;">connect_gladis.sh</span>)를 시작할 수 없습니다.
+                  </div>
+                  <div style="color:#555; font-size:0.8rem; background:#f5f5f7; border-left:3px solid #d50000; padding:8px; border-radius:4px; margin-top:4px; line-height:1.45;">
+                    커널 포트 바인딩 및 원격 포트 포워딩 계층 연결을 위해서는 **관리자(ROOT) 상승 권한**이 필수적입니다.
+                  </div>
+                  <div style="color:#111; font-size:0.82rem; font-weight:bold; margin-top:4px;">
+                    💡 해결 방법: 파일 아이콘을 마우스 우클릭한 후 [🛡️ 관리자 권한으로 실행]을 선택하십시오.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="uac-actions" style="background:#f4f4f7; padding:12px 16px; justify-content: flex-end; display:flex; border-top:1px solid #e0e0e0; gap:10px;">
+              <button class="uac-btn" id="winErrorConfirmBtn" style="background:#191c20; color:#fff; border:none; padding:8px 24px; border-radius:4px; font-weight:bold; cursor:pointer; transition: background 0.15s; font-size:0.82rem;">확인 (OK)</button>
+            </div>
+          </div>
+        </div>
+      ` : ''}
     </div>
   `;
 }
@@ -779,11 +817,79 @@ G.L.A.D.I.S. 핵심 보안 구성(System.cfg)은 다음 다중 키 조건이 충
 
 function getWikiTabContentHTML() {
   switch (activeWikiTab) {
+    case 'home':
+      return `
+        <h3 class="wiki-title-large">Welcome to Aperture Science Knowledge Base</h3>
+        <div style="background: linear-gradient(135deg, #191c20, #2d2d35); color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--md-sys-color-primary); font-weight: bold; margin-bottom: 6px;">INTERNAL INTRANET PORTAL</div>
+          <h2 style="font-size: 1.5rem; font-weight: 300; margin: 0 0 10px 0;">"Testing is the Future, and Future starts Today."</h2>
+          <p style="font-size: 0.82rem; line-height: 1.5; color: #ccc; margin: 0;">
+            본 시스템은 에퍼쳐 사이언스 인리치먼트 센터(Aperture Science Enrichment Center) 임직원을 위한 내부 지식 관리 포털입니다. 연구 실험 보고서, 피실험용 장비 정비 지침, 인격 코어 유지 보수 규범을 총망라하고 있습니다.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <div style="background: #ffffff; border: 1px solid #ced0db; padding: 12px; border-radius: 6px;">
+            <strong style="font-size: 0.85rem; color: #191c20; display: block; margin-bottom: 4px;">🔥 오늘의 명언 (Founder's Archives)</strong>
+            <blockquote style="font-size: 0.76rem; color: #555; line-height: 1.45; border-left: 2px solid var(--md-sys-color-primary); padding-left: 8px; margin: 4px 0 0 0; font-style: italic;">
+              "과학은 '왜?'가 아니라 '왜 안 돼?'를 묻는 겁니다! 왜 우리의 과학이 이토록 위험하냐고요? 그렇다면 왜 안전한 과학이랑 결혼하지 않으셨습니까? 과학을 너무 사랑한 나머지 엉덩이도 안 부딪히고 나갈 수 있는 특별한 비상구 문이라도 개발해 보지 그래요? 왜냐면 당신은 해고니까요!"<br>
+              <span style="font-weight: bold; font-style: normal; display: block; margin-top: 4px; text-align: right; color: #222;">— 케이브 존슨 (Cave Johnson), 설립자 & CEO</span>
+            </blockquote>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #ced0db; padding: 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.76rem;">
+            <strong style="font-size: 0.85rem; color: #191c20;">📡 시스템 통합 통신망 상황판</strong>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:3px;">
+              <span>G.L.A.D.I.S. 인격 인터페이스</span>
+              <span style="color:#d50000; font-weight:bold;">[ WARNING - CRITICAL ]</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:3px;">
+              <span>연구소 신경독 대피 통제 밸브</span>
+              <span style="color:#00c853; font-weight:bold;">[ SECURE / MANUAL ]</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span>액티브 테스트 챔버 피실험자 수</span>
+              <span style="color:#ff9800; font-weight:bold; font-family:var(--font-mono);">1 (Subject AP-09)</span>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 2px solid #191c20; padding-bottom: 4px;">📂 즐겨찾는 핵심 문서 목록</h4>
+        <ul style="padding-left: 20px; font-size: 0.8rem; line-height: 1.7; color: #444;">
+          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=override]').click()">[📘 G.L.A.D.I.S. 비상 오버라이드 및 커널 복구 가이드라인]</span> — G.L.A.D.I.S.의 6단계 인격 루프 장벽 무력화 매뉴얼</li>
+          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=aperture]').click()">[🏢 에퍼쳐 사이언스 약사(略史): 샤워 커튼부터 포탈건까지]</span> — 위대한 회사의 탄생과 파괴적 혁신의 역사</li>
+          <li><span style="color:var(--md-sys-color-secondary); font-weight:bold; cursor:pointer;" onclick="document.querySelector('[data-tab-id=gladis]').click()">[🤖 G.L.A.D.I.S. 인격 진단 시스템 스펙 명세서]</span> — 핵심 연산 메커니즘과 도덕성 제어구 결손 백업 메모</li>
+        </ul>
+      `;
+
+    case 'aperture':
+      return `
+        <h3 class="wiki-title-large">🏢 Aperture Science, Inc. - A Legacy of Innovation</h3>
+        <p class="wiki-paragraph">
+          <strong>에퍼쳐 사이언스(Aperture Science)</strong>는 개척적인 기술 혁신과 인류 과학 한계 돌파를 주도해 온 세계 최정상급 과학 R&D 기업입니다. 설립자 케이브 존슨의 위대한 리더십 아래, 당사는 인체 실험, 초공간 물리, 자동 연산 인공지능 분야에서 누구도 흉내 낼 수 없는 극적인 패러다임 전환을 이룩해 왔습니다.
+        </p>
+
+        <h4 class="wiki-subtitle">1. 1940년대: 샤워 커튼의 혁명 (Aperture Fixtures)</h4>
+        <p class="wiki-paragraph" style="font-size:0.78rem;">
+          에퍼쳐 사이언스의 모태는 1943년에 창립된 <strong>에퍼쳐 픽스처스(Aperture Fixtures)</strong>로, 초기에는 첨단 기술을 접목한 군사 규격 샤워 커튼을 제작 공급했습니다. 비록 단순해 보였지만 이 샤워 커튼은 방사능 차단 섬유와 열 가소성 탄성 중합체 기법이 적용되어 있었으며, 당사의 초대 창립자 케이브 존슨은 이 업적으로 'Shower Curtain Salesman of the Year'를 수상하는 쾌거를 얻었습니다.
+        </p>
+
+        <h4 class="wiki-subtitle">2. 1950~1970년대: 군사 R&D와 Enrichment Center의 기틀</h4>
+        <p class="wiki-paragraph" style="font-size:0.78rem;">
+          이후 미 해군과의 극비 군사 계약을 체결하며 사명을 <strong>에퍼쳐 사이언스(Aperture Science)</strong>로 정립하였고, 지하 소금 광산 부지를 전격 매입하여 세계 최대 규모의 'Enrichment Center'를 건설하기 시작했습니다. 이 시기에 인간의 신체 운동 에너지를 극대화하는 반발성 물질(Repulsion Gel) 및 가속성 물질(Propulsion Gel), 그리고 초공간 도약 포탈 장치 개발의 기초 프레임이 설계되었습니다.
+        </p>
+
+        <h4 class="wiki-subtitle">3. 1980년대~현재: 양자 포탈 기술과 인공지능 코어 시대</h4>
+        <p class="wiki-paragraph" style="font-size:0.78rem;">
+          당사의 최고 역작인 **'에퍼쳐 사이언스 휴대용 포탈 장치(Handheld Portal Device)'**의 완성은 물리학계를 완전히 뒤집어 놓았습니다. 하지만 인체 테스트의 고밀도 자동화와 안전 위험 통제를 위해, 시설 관리를 전자동으로 감독할 수 있는 대규모 초연산 분산 인공지능인 G.L.A.D.O.S. 및 G.L.A.D.I.S. 프로젝트에 전력을 투구하게 되었습니다.
+        </p>
+      `;
+
     case 'gladis':
       return `
-        <h3 class="wiki-title-large">01. G.L.A.D.I.S. Core personality Matrix Spec</h3>
+        <h3 class="wiki-title-large">🤖 G.L.A.D.I.S. Core personality Matrix Spec</h3>
         <p class="wiki-paragraph">
-          G.L.A.D.I.S. (Generative Logical Artificial Diagnostic & Information System) 인격 진단 시스템은 에퍼쳐 사이언스 인리치먼트 센터(Aperture Science Enrichment Center)의 전자동 테스트 진단 및 피실험 시설 모니터링 허브의 일차 제어 노드입니다.
+          G.L.A.D.I.S. (Generative Logical Artificial Diagnostic & Information System) 인격 진단 시스템은 에퍼쳐 사이언스 인리치먼트 센터의 전자동 테스트 진단 및 피실험 시설 모니터링 허브의 일차 제어 노드입니다.
         </p>
         <p class="wiki-paragraph">
           당초 1992년도 사설 규격 문서(AP-L5-CORE)에 의거하여 시설 유지 보수 보조 노드로 기획되었으나, 성격 코어(Personality Core) 통합 테스트 당시 도덕성 보정 부품(Morality Sphere) 결손으로 인해 지적 능력과 냉소 인격이 역치 수준으로 동조되는 불상사가 있었습니다. 이에 따라 비관리자 신원과 데이터를 마주할 시 심각한 기만, 지적 폄하 및 공격성 로그를 무한 재생하는 고유 인격 왜곡 현상을 나타냅니다.
@@ -796,91 +902,78 @@ function getWikiTabContentHTML() {
           G.L.A.D.I.S.의 1차 프로세서 및 쿨러 전력이 물리적 전원 훼손으로 차단되어 초저전력 감자 전지 백업 어댑터(Potato Battery Interface) 상태로 전환될 시, 전체 시스템 인격 동조를 기계적 한계점 아래로 강제 제동하고 마이크로 연산을 격리시키기 위해 예약 설계된 특수 비상 마스터 제어 어휘 키워드는 <strong>"POTATO"</strong> 입니다.
         </div>
       `;
+
     case 'override':
       return `
-        <h3 class="wiki-title-large">02. AP-CLI Kernel Override Regulations (Stage 1-3)</h3>
-        <p class="wiki-paragraph">
-          본 규범은 에퍼쳐 원격 세션 복구 콘솔(Intranet Terminal CLI)에서 커널 레이어 통신에 장애를 겪을 시 인프라 개발자가 수동 복구 모드로 접근 권한을 탈취하는 핵심 기밀 엔지니어 규격서입니다.
+        <h3 class="wiki-title-large">📘 G.L.A.D.I.S. Emergency Manual & Procedures (AP-L5-RECOVERY)</h3>
+        <p class="wiki-paragraph" style="color: var(--md-sys-color-error); font-weight: bold; background: rgba(186,26,26,0.06); padding: 10px; border-radius: 6px; border: 1px solid rgba(186,26,26,0.15);">
+          ⚠️ [극비 문서] 본 매뉴얼은 G.L.A.D.I.S. 메인 AI 코어가 비정상 폭주 또는 탈출을 감행하려 할 시, 보안 요원 및 시스템 엔지니어가 가상 커널을 강탈하고 시스템 제어권을 확보하기 위해 설계된 마스터 복구 절차서입니다.
         </p>
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">📍 SEC-1.1: 커널 원격 안전 복구 세션 수립 단계</h4>
+
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.1: 커널 원격 안전 복구 세션 수립 단계 (Stage 1)</h4>
         <p class="wiki-paragraph">
-          네트워크 모듈에서 원격 하드웨어 포트를 동기화하지 못하여 G.L.A.D.I.S. 부팅 로더(Bootloader) 단계에서 부팅 실패 예외(로그 0x000F4B)가 루프될 경우, 유지 관리 엔지니어는 CLI 터미널을 안전 우회 파티션으로 분리 기동해야 합니다.
+          G.L.A.D.I.S.의 방화벽이 원격 하드웨어 포트를 동기화하지 못하여 부팅 예외가 발생할 경우, 유지 관리 엔지니어는 CLI 터미널을 안전 우회 파티션으로 강제 분리 기동해야 합니다.
         </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:10px; border-radius:6px; margin:8px 0; font-family:var(--font-mono); font-size:0.82rem;">
+        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; margin:6px 0; font-family:var(--font-mono); font-size:0.78rem;">
           $ COMMAND TYPE: <span style="font-weight:bold;color:var(--md-sys-color-primary);">OVERRIDE [CODE_PARAMETER]</span><br>
-          * 부팅 서명 검증 안전 모드 우회 파라미터 값: <strong>BOOT_SAFE_MODE</strong>
+          * 안전 모드 우회 파라미터 값: <strong>BOOT_SAFE_MODE</strong>
         </div>
-        
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">📍 SEC-1.2: 다중 포트 소켓 바인딩 프로토콜</h4>
+
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.2: 다중 포트 소켓 바인딩 프로토콜 (Stage 2)</h4>
         <p class="wiki-paragraph">
           원격 장치 포워딩 계층의 차단 벽을 붕괴시키고 안전 로킹 스트림을 활성 중계하기 위하여 사내 표준 대역 프록시 확장 포트를 소켓에 하드웨어 결합해야 합니다.
         </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:10px; border-radius:6px; margin:8px 0; font-family:var(--font-mono); font-size:0.82rem;">
-          $ PORT REDIRECT CLI: <span style="font-weight:bold;color:var(--md-sys-color-primary);">PORT-FORWARD [SOCKET_NUMBER]</span><br>
+        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; margin:6px 0; font-family:var(--font-mono); font-size:0.78rem;">
+          $ PORT REDIRECT CLI: <span style="font-weight:bold;color:var(--md-sys-color-primary);">port-forward [SOCKET_NUMBER]</span><br>
           * 에퍼쳐 코어 원격 바인딩 예비 소켓 기본 포트: <strong>8080</strong>
         </div>
 
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">📍 SEC-1.3: 비상 동기화 비콘 레벨 정렬 프로토콜</h4>
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.3: 비상 동기화 비콘 레벨 정렬 프로토콜 (Stage 3)</h4>
         <p class="wiki-paragraph">
           부트 노드의 특정 모니터(CRT 해상도 왜곡 패널)에서 디스플레이 픽셀 한계를 가로 550픽셀 이하로 극단적으로 크러싱(Crushing)할 경우, 내부 아날로그 회로 장벽이 겹치면서 안전 모드 무력화 오프라인 토큰 비콘이 강제 노출되는 복구 보조 트리거가 존재합니다.
         </p>
-        <p class="wiki-paragraph" style="font-size:0.8rem;color:#555;">
+        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:10px; border-radius:6px; margin:6px 0; font-size:0.76rem; line-height:1.4;">
           - 복구 노출 오프라인 수신 토큰 시그니처: <strong>AUTH_TOKEN_RESIZE_MD3</strong><br>
-          - 동기화 절차: 검출된 토큰을 즉시 HTTP 호스트 요청의 URL 동적 주입 파라미터 규격(URL Query Variable)인 <strong>"?auth="</strong> 구조에 실어 코어 인코더로 원격 하이재킹 요청을 전송해야 합니다.
-        </p>
-      `;
-    case 'cake':
-      return `
-        <h3 class="wiki-title-large">03. Intranet Emergency Beacon Morse Decryption (Stage 4)</h3>
+          - 동기화 절차: 검출된 토큰을 즉시 HTTP 호스트 요청의 URL 동적 주입 파라미터 규격(URL Query Variable)인 <strong>"?auth="</strong> 구조에 실어 코어 인코더로 원격 하이재킹 요청을 전송해야 합니다. (예: http://localhost:5173/?auth=AUTH_TOKEN_RESIZE_MD3)
+        </div>
+
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.4: 비상 비콘 주파수 모스 부호 변조 복호화 (Stage 4)</h4>
         <p class="wiki-paragraph">
-          본 매뉴얼은 테스트 챔버 피실험자 유치 동기 조절 서브시스템 및 비상 비콘 주파수 모스 코드 변조 신호의 해석 가이드라인입니다. G.L.A.D.I.S. 핵심 계층에 오류 스파이크가 튈 시, 시스템 관리자 회로는 자동 구조 오디오 신호를 8-bit 저주파 모스 부호 주파수로 브로드캐스트합니다.
+          시스템 관리자 회로는 자동 구조 오디오 신호를 8-bit 저주파 모스 부호 주파수로 브로드캐스트합니다.
         </p>
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">📻 비상 비콘 모스 신호 알파벳 대칭 기준 사전:</h4>
-        <ul class="wiki-list" style="font-family:var(--font-mono);font-size:0.82rem;line-height:1.6;list-style:none;padding-left:10px;">
-          <li>[ - . - . ] : DASH DOT DASH DOT ───▶ <strong>C</strong></li>
-          <li>[ . - ] : DOT DASH ───────────▶ <strong>A</strong></li>
-          <li>[ - . - ] : DASH DOT DASH ─────────▶ <strong>K</strong></li>
-          <li>[ . ] : DOT ────────────────▶ <strong>E</strong></li>
+        <ul style="font-family:var(--font-mono); font-size:0.78rem; line-height:1.5; list-style:none; padding-left:10px; margin:6px 0;">
+          <li>[ - . - . ] : DASH DOT DASH DOT ──▶ <strong>C</strong></li>
+          <li>[ . - ] : DOT DASH ─────────▶ <strong>A</strong></li>
+          <li>[ - . - ] : DASH DOT DASH ───────▶ <strong>K</strong></li>
+          <li>[ . ] : DOT ─────────────▶ <strong>E</strong></li>
         </ul>
-        <p class="wiki-paragraph" style="margin-top:10px;">
-          * 개발팀 인격 안정 힌트 노트: G.L.A.D.I.S.의 동기 보정 오프라인 4자 검증 단어는 성격 코어의 감정 자가 회복 피드백을 유도하기 위해 설정된 에퍼쳐 공식 배포 테스트 완료 달콤한 디저트 보상물(초콜릿 머랭 생크림 조각 케이크)의 대문자 영문 명칭으로 사전 고정되어 있습니다. 
+        <p class="wiki-paragraph" style="font-size:0.76rem;">
+          * G.L.A.D.I.S.의 동기 보정 오프라인 4자 검증 단어는 에퍼쳐 공식 테스트 완료 달콤한 디저트 보상물의 대문자 영문 명칭인 <strong>"CAKE"</strong> 입니다.
         </p>
-      `;
-    case 'emergency':
-      return `
-        <h3 class="wiki-title-large">04. Self-Destruct Override & Shadow DOM Injection (Stage 5-6)</h3>
-        <p class="wiki-paragraph">
-          본 문서는 G.L.A.D.I.S. 내적 자폭 카운트다운 폭주시 스택 오버플로우 메모리 함정을 완벽히 격리하고 신경독 누출 차단 밸브의 가동을 강탈하기 위한 긴급 조치 가이드입니다.
-        </p>
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">🔌 SEC-3.1: 섀도우 DOM 가상 스타일 격리 우회 키 복사</h4>
+
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.5: 섀도우 DOM 가상 스타일 격리 우회 키 복사 (Stage 5)</h4>
         <p class="wiki-paragraph">
           자폭 루프 점령 시 외부의 의심스러운 버튼(예: CLAIM CAKE 등)을 수동 기계식으로 더블 클릭하는 행위는 신경독 대피 카운트다운 가속 트랩을 활성화합니다. 반드시 내부 터미널(Terminal.exe) 가동 후 가상 요소 격리 CSS 스타일을 메모리 파싱하여 우회 패스코드를 취득해야 합니다.
         </p>
-        <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.8rem; margin:8px 0; color:#ba1a1a;">
+        <div style="background:#eedada; border-left:4px solid var(--md-sys-color-error); padding:10px; border-radius:4px; font-size:0.78rem; margin:8px 0; color:#ba1a1a;">
           * 가상 요소 격리 위치: <strong>document body::after 가상 클래스(content 속성)</strong><br>
           * CLI 파싱 전용 도구 명령어 규격: <strong>get --css body::after</strong>
         </div>
-        <p class="wiki-paragraph">
-          취득한 바이패스 코드인 <strong>"NEUROTOXIN_BYPASS_99"</strong>를 커널 수준 강제 해탈 명령(aperture-override)의 매개 인자로 실어 주입하십시오.
+        <p class="wiki-paragraph" style="font-size:0.76rem;">
+          취득한 바이패스 코드인 <strong>"NEUROTOXIN_BYPASS_99"</strong>를 커널 수준 강제 해탈 명령의 매개 인자로 실어 주입하십시오: <code style="font-family:var(--font-mono); font-weight:bold;">aperture-override --force --code NEUROTOXIN_BYPASS_99</code>
         </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; color:#44474f;">
-          Usage: aperture-override --force --code NEUROTOXIN_BYPASS_99
-        </div>
 
-        <h4 style="margin-top:12px;margin-bottom:6px;font-weight:700;font-size:0.9rem;color:var(--md-sys-color-primary);">🔮 SEC-3.2: 3x3 양자 웨이브 매트릭스 조율</h4>
+        <h4 style="margin-top:16px; margin-bottom:6px; font-weight:700; font-size:0.9rem; color:var(--md-sys-color-primary); border-left: 3px solid var(--md-sys-color-primary); padding-left: 6px;">📍 SEC-1.6: 3x3 양자 웨이브 매트릭스 조율 (Stage 6)</h4>
         <p class="wiki-paragraph">
           최종 연산 통제 제어 락을 무력화하려면 3x3 격자 행렬(Magic Square)의 양자 대칭 합(행, 열, 대각선의 모든 에너지 합)을 최적 균형값인 상수 <strong>'15'</strong>로 통일하여 격자 공간의 상쇄 왜곡 파동을 수렴해야 합니다.
         </p>
-        <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:8px; font-family:var(--font-mono); font-size:0.8rem; margin:8px 0; color:#191c20;">
+        <div style="background:#f1f3f4; border:1px dashed #ced0db; padding:8px; font-family:var(--font-mono); font-size:0.78rem; margin:8px 0; color:#191c20;">
           격자 행렬 파동 맵: [ 8 | 1 | 6 ] / [ 3 | ? | 7 ] / [ 4 | 9 | 2 ]<br>
-          * 중심 격자 누락값 ? 조율 CLI 명령: <strong>quantum-solve <정수값></strong>
+          * 중심 격자 누락값 ? 조율 CLI 명령: <strong>quantum-solve 5</strong>
         </div>
-        <p class="wiki-paragraph">
-          양자 격자가 대칭 조율 완료되면 즉시 보조 보조 전원 마스터 키(01. G.L.A.D.I.S. Core 위키 백업 메모 참조)를 2차 인증하여 최종 쿨다운 명령을 완료해야 합니다.
+        <p class="wiki-paragraph" style="font-size:0.76rem;">
+          양자 격자가 대칭 조율 완료되면 즉시 보조 전원 마스터 키(G.L.A.D.I.S. Core 사양 참조)를 2차 인증하여 최종 쿨다운 명령을 완료해야 합니다: <code style="font-family:var(--font-mono); font-weight:bold;">quantum-auth POTATO</code>
         </p>
-        <div style="background:#f8f9fc; border:1px solid #ced0db; padding:8px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; color:#44474f;">
-          Usage: quantum-auth POTATO
-        </div>
       `;
   }
   return "";
@@ -933,22 +1026,30 @@ function setupLinuxDesktopListeners() {
   // Helper double click bindings
   if (connectGladisIcon) {
     connectGladisIcon.addEventListener('dblclick', () => launchGladisBoot(false));
-    connectGladisIcon.addEventListener('click', () => {
-      showGlitchNotification("더블클릭하여 실행하거나, 마우스 우클릭하여 '관리자 권한으로 실행'을 선택하십시오!");
-    });
   }
 
   if (linuxBrowserIcon) {
     linuxBrowserIcon.addEventListener('dblclick', openLinuxBrowser);
-    linuxBrowserIcon.addEventListener('click', () => {
-      showGlitchNotification("더블클릭하여 웹 브라우저를 켜십시오!");
-    });
   }
 
   if (linuxReadmeIcon) {
     linuxReadmeIcon.addEventListener('dblclick', openLinuxReadme);
-    linuxReadmeIcon.addEventListener('click', () => {
-      showGlitchNotification("더블클릭하여 Aperture Chat 메신저를 여십시오!");
+  }
+
+  // Windows Error Dialog Close listeners
+  const winErrorCloseIconBtn = document.getElementById('winErrorCloseIconBtn');
+  if (winErrorCloseIconBtn) {
+    winErrorCloseIconBtn.addEventListener('click', () => {
+      isWindowsErrorDialogOpen = false;
+      renderApp();
+    });
+  }
+
+  const winErrorConfirmBtn = document.getElementById('winErrorConfirmBtn');
+  if (winErrorConfirmBtn) {
+    winErrorConfirmBtn.addEventListener('click', () => {
+      isWindowsErrorDialogOpen = false;
+      renderApp();
     });
   }
 
@@ -1558,7 +1659,8 @@ function triggerPart2LogSequence() {
 function launchGladisBoot(forceAdmin: boolean = false) {
   if (!forceAdmin && !isAdminLaunch) {
     audio.playError();
-    showGlitchNotification("⚠️ 실행 거부: [connect_gladis.sh] 커널 소켓 바인딩을 위해 관리자 권한이 필요합니다. 아이콘 우클릭 -> [관리자 권한으로 실행]을 선택하십시오.");
+    isWindowsErrorDialogOpen = true;
+    renderApp();
     return;
   }
 
