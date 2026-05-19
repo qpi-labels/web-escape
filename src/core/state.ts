@@ -39,7 +39,7 @@ function gladisSpeak(msg: string) {
 class StateManager {
   private state: GameState = {
     stage: 'LINUX_DESKTOP',
-    timerRemaining: 120,
+    timerRemaining: 160,
     unlockedApps: ['notes.txt', 'terminal.exe'],
     devToolsWarningsCount: 0,
     gladisUpdateState: 'NONE',
@@ -80,7 +80,7 @@ class StateManager {
       this.lockoutInterval = null;
     }
     this.state.stage = 'LINUX_DESKTOP';
-    this.state.timerRemaining = 120;
+    this.state.timerRemaining = 160;
     this.state.unlockedApps = ['notes.txt', 'terminal.exe'];
     this.state.isFailed = false;
     this.state.stage4Attempts = 0;
@@ -302,7 +302,8 @@ class StateManager {
     audio.playError();
     
     if (this.state.stage === 'SELF_DESTRUCT') {
-      gladisSpeak("개발자 도구 치트 행위 감지. 시스템 우회 장치를 무력화하려 시도하는군요. 정말 어리석습니다, 테스트 대상자님.");
+      this.state.timerRemaining = Math.max(5, this.state.timerRemaining - 15);
+      gladisSpeak("개발자 도구 치트 행위 감지. 자폭 카운트다운 15초 단축 페널티를 부여합니다. 정말 어리석습니다, 테스트 대상자님.");
     } else {
       gladisSpeak("비인간적 행위 감지. 개발자 도구를 여셨군요. 시스템 코드를 훔쳐보려는 어리석은 노력이 정말 눈물겹습니다. 하지만 핵심 데이터는 모두 안전하게 해싱되어 있답니다.");
     }
@@ -312,7 +313,28 @@ class StateManager {
   // Start self destruct timer
   private startCountdown() {
     this.stopCountdown();
+    this.state.timerRemaining = 160;
     audio.playSelfDestructAlarm();
+
+    this.timerInterval = setInterval(() => {
+      if (this.state.stage === 'SELF_DESTRUCT') {
+        if (this.state.timerRemaining > 0) {
+          this.state.timerRemaining--;
+          
+          // Play sweep alarm sound every 15 seconds, and every second in the last 10 seconds
+          if (this.state.timerRemaining % 15 === 0 || this.state.timerRemaining <= 10) {
+            audio.playSelfDestructAlarm();
+          }
+
+          if (this.state.timerRemaining === 0) {
+            this.triggerFailure();
+          }
+        }
+        this.notify();
+      } else {
+        this.stopCountdown();
+      }
+    }, 1000);
   }
 
   private stopCountdown() {

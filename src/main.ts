@@ -940,7 +940,7 @@ function getGladisSubDesktopHTML(state: any): string {
         <div>📡 G.L.A.D.I.S. Remote Core Stream</div>
         <div style="display:flex; gap:12px; align-items:center;">
           ${state.stage === 'SELF_DESTRUCT' ? `
-            <span style="color:#ba1a1a; font-weight:bold; background:#ffdad6; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">☣️ 자폭 시퀀스 가동됨 (Self-Destruct Active)</span>
+            <span style="color:#ba1a1a; font-weight:bold; background:#ffdad6; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">☣️ 자폭 임박: ${state.timerRemaining}초 (Self-Destruct Active)</span>
           ` : ''}
           ${state.stage === 'QUANTUM_LOCK' ? `
             <span style="color:#e65100; font-weight:bold; background:#fff3e0; padding:2px 8px; border-radius:4px; font-family:var(--font-mono);">양자 얽힘 잠금 활성</span>
@@ -1147,7 +1147,7 @@ G.L.A.D.I.S. 코어 모듈이 오작동하여 시스템 원격 구성 권한을 
               <button style="position:absolute; top:10px; right:10px; border:none; background:none; color:#ba1a1a; font-size:1.1rem; cursor:pointer; font-weight:bold; line-height:1;" id="closeEmergencyOverlayBtn">×</button>
               <h3 style="color:#ba1a1a; font-size:1.1rem; margin-bottom:6px;">☣️ CORE SELF DESTRUCT ☣️</h3>
               <p style="font-size:0.75rem; line-height:1.4; margin-bottom:10px;">
-                인격 제어 핵심 루프 강제 조작으로 비상 가스가 유출됩니다. 자폭 시퀀스가 활성화되었습니다.
+                인격 제어 핵심 루프 강제 조작으로 비상 가스가 유출됩니다. 자폭 시퀀스가 가동되었습니다. 남은 시간: <span style="font-weight:bold; color:#ba1a1a;">${state.timerRemaining}초</span>
               </p>
               <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px; border:1px solid #ced0db; font-size:0.7rem; margin-bottom:10px; text-align:left;">
                 <strong>OVERRIDE PROTOCOL:</strong><br>
@@ -1576,7 +1576,7 @@ function getWikiTabContentHTML(): string {
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 5: Shadow DOM 스타일 가상 격리 캡처 및 가스 차단 (CSS Pseudo Isolation Bypass)</h5>
         <p class="wiki-paragraph" style="font-size:0.74rem; line-height:1.5; margin-left:10px;">
-          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css body::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css #app::after</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get --css .window-frame::after</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
+          코어 자폭 시퀀스 활성화 도중, 가짜 보상 청구 버튼(CLAIM CAKE)을 직접 더블 클릭하여 승인하려 들면 즉시 신경독 대피 카운트다운 실패로 사망 스크린에 가두어집니다. 이를 회피하고 실제 밸브 오버라이드 바이패스 코드를 얻기 위해 터미널에 <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key body</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key app</code>, <code style="font-family:var(--font-mono); font-weight:bold; color:#1a73e8;">get-key window</code> 명령을 순차 수행하여 3개로 파편화된 Base64 토큰 조각들을 획득하십시오. 각각 base64-decode [토큰] 유틸리티 명령어로 디코딩한 뒤 순서대로 결합하여 (예: <code style="font-family:var(--font-mono); font-weight:bold; color:#ba1a1a;">NEUROTOXIN_BYPASS_99_SECURE</code>) 터미널 쉘에 차단 명령을 주입하십시오. (오답 2회 입력 시 신경독 질식으로 사망하며 Tragic Fail 상태로 직행합니다.)
         </p>
 
         <h5 style="font-weight:bold; font-size:0.83rem; margin:10px 0 4px 0; color:var(--md-sys-color-primary);">Stage 6: 격자 양자 대칭 조율 및 셧다운 (Quantum Balancing & Shutdown)</h5>
@@ -2827,7 +2827,7 @@ async function handleTerminalCommand(cmdString: string) {
         if (success) {
           terminalHistory.push(
             "[ SUCCESS ] Code authorization accepted! System.cfg storage interface unlocked.",
-            "Type 'ls' to view the newly unlocked diagnostics configuration file."
+            "바탕화면의 'System.cfg' 아이콘을 더블 클릭하여 복구 설정을 여십시오."
           );
         } else {
           audio.playError();
