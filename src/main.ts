@@ -540,7 +540,7 @@ function getLinuxDesktopScreenHTML() {
 
                 <div style="font-size:0.62rem; color:#475569; font-weight:bold; padding:8px 12px 2px 12px; text-transform:uppercase; letter-spacing:0.5px;">🤖 인공지능 연구소</div>
                 <button class="wiki-nav-btn ${activeWikiTab === 'glados' ? 'active' : ''}" data-tab-id="glados" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDOS 시스템</button>
-                <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDIS 스펙 명세</button>
+                <button class="wiki-nav-btn ${activeWikiTab === 'gladis_spec' ? 'active' : ''}" data-tab-id="gladis_spec" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">GLaDIS 시스템</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morality_sphere' ? 'active' : ''}" data-tab-id="morality_sphere" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">도덕성 제어구 결손</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'potato_battery' ? 'active' : ''}" data-tab-id="potato_battery" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">감자 배터리 어댑터</button>
                 <button class="wiki-nav-btn ${activeWikiTab === 'morse_ledger' ? 'active' : ''}" data-tab-id="morse_ledger" style="padding:6px 12px; font-size:0.75rem; padding-left:20px;">모스 부호 목록표</button>
