@@ -602,7 +602,7 @@ function getLinuxDesktopScreenHTML() {
 
                 <div class="chat-channel-item ${activeChatTab === 'wife' ? 'active' : ''}" id="chatWifeTab" style="background:${activeChatTab === 'wife' ? 'rgba(0,188,212,0.1)' : 'transparent'}; color:${activeChatTab === 'wife' ? '#00bcd4' : '#eee'}; font-weight:${activeChatTab === 'wife' ? 'bold' : 'normal'}; padding:6px 10px; border-radius:6px; display:flex; align-items:center; gap:6px; cursor:pointer; margin-top:4px;">
                   <span style="width:8px; height:8px; background:#ff80ab; border-radius:50%;"></span>
-                  아내 (Emma) <span style="font-size:0.6rem; background:#f44336; color:#fff; padding:1px 5px; border-radius:10px; font-weight:bold; margin-left:auto;">1</span>
+                  가족 <span style="font-size:0.6rem; background:#f44336; color:#fff; padding:1px 5px; border-radius:10px; font-weight:bold; margin-left:auto;">1</span>
                 </div>
               </div>
 
@@ -617,9 +617,9 @@ function getLinuxDesktopScreenHTML() {
                     <span style="font-size:0.75rem; color:#888;">Supervisor Vance와 종단간 암호화 보안 채널이 수립되었습니다.</span>
                   ` : `
                     <span style="font-size:0.9rem; font-weight:bold; display:flex; align-items:center; gap:8px; color:#fff;">
-                      💬 Direct Message: 아내 (Emma) <span style="font-size:0.65rem; background:#ff80ab; color:#fff; padding:2px 6px; border-radius:10px;">Family Channel</span>
+                      💬 Direct Message: 가족 <span style="font-size:0.65rem; background:#ff80ab; color:#fff; padding:2px 6px; border-radius:10px;">Family Channel</span>
                     </span>
-                    <span style="font-size:0.75rem; color:#888;">아내(Emma) 계정으로 전송된 비공식 다이렉트 메시지함입니다.</span>
+                    <span style="font-size:0.75rem; color:#888;">외부 단말기로부터 전송된 비공식 다이렉트 메시지함입니다.</span>
                   `}
                 </div>
 
@@ -776,6 +776,10 @@ function getLinuxDesktopScreenHTML() {
                       <div style="display:flex; flex-direction:column; gap:4px;">
                         <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
                           나 릴리 ㅋㅋㅋ 엄마 폰 훔쳐왔당
+                        </div>
+                      </div><div style="display:flex; flex-direction:column; gap:4px;">
+                        <div style="background:rgba(255,64,129,0.05); border:1px solid rgba(255,64,129,0.1); padding:10px 14px; border-radius:0 12px 12px 12px; max-width:80%; color:#ffd54f; font-size:0.78rem; align-self:flex-start;">
+                          엄마가 내 계정도 만들어줬어!
                         </div>
                       </div>
                       <!-- Lily 3 -->
